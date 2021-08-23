@@ -2,14 +2,12 @@
   <h1>SignUp</h1>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "SignUp",
-  mounted() {
-    console.log("test");
-  },
+  mounted() {},
 });
 </script>
 

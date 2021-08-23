@@ -2,14 +2,12 @@
   <h1>SCAN</h1>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "Scan",
-  mounted() {
-    console.log("test");
-  },
+  mounted() {},
 });
 </script>
 
