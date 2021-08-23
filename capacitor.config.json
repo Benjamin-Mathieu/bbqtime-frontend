@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "bbqtime",
+	"webDir": "dist",
+	"bundledWebRuntime": false
+}

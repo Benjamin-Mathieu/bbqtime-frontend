@@ -1,0 +1,7 @@
+{
+  "name": "bbqtime",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
