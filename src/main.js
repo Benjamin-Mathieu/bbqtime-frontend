@@ -1,4 +1,4 @@
-import { createApp, provide, VueElement } from 'vue';
+import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store/store';
@@ -24,19 +24,10 @@ import '@ionic/vue/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-import axios from 'axios';
-
 const app = createApp(App)
   .use(IonicVue)
   .use(router)
   .use(store);
-
-
-// declare module '@vue/runtime-core' {
-//   interface ComponentCustomProperties {
-//     axios: any;
-//   }
-// }
 
 router.isReady().then(() => {
   app.mount('#app');
