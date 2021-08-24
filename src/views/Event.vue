@@ -7,15 +7,8 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "Event",
-  computed: {
-    api() {
-      return this.$store.state.api;
-    },
-  },
   mounted() {
-    console.log("test");
-
-    this.$store.dispatch("get");
+    this.$store.dispatch("getEvents");
   },
 });
 </script>

@@ -18,9 +18,11 @@ const store = createStore({
         }
     },
     actions: {
-        get() {
-            let users = APIProvider.getUsers();
-            console.log(users);
+        getUsers() {
+            APIProvider.getUsers();
+        },
+        getEvents() {
+            APIProvider.getEvents();
         }
     }
 });
