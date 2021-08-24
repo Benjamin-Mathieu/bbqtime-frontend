@@ -7,17 +7,15 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "Event",
+  computed: {
+    api() {
+      return this.$store.state.api;
+    },
+  },
   mounted() {
     console.log("test");
 
-    // this.$axios
-    //   .get("/events", {})
-    //   .then((response) => {
-    //     console.log(response.data); //contenu des data
-    //   })
-    //   .catch((error) => {
-    //     alert(error.response.data); //Contenu de de l'erreur
-    //   });
+    this.$store.dispatch("get");
   },
 });
 </script>
