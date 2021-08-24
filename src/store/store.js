@@ -6,15 +6,15 @@ const store = createStore({
     state() {
         return {
             token: false,
-            userConnected: false,
+            userInformation: false,
         };
     },
     mutations: {
         setToken(state, token) {
             state.token = token
         },
-        setUserConnected(state, userConnected) {
-            state.userConnected = userConnected
+        setUserInformation(state, userInformation) {
+            state.userInformation = userInformation
         }
     },
     actions: {

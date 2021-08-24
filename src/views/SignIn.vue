@@ -15,6 +15,7 @@
 <script>
 import { defineComponent } from "vue";
 import { Http } from "@capacitor-community/http";
+import jwt_decode from "jwt-decode";
 
 export default defineComponent({
   name: "SignIn",
@@ -26,7 +27,6 @@ export default defineComponent({
   },
   methods: {
     authUser() {
-      console.log(this.email, this.password);
       const options = {
         url: "http://localhost:3000/users/login",
         headers: {
@@ -40,7 +40,17 @@ export default defineComponent({
       };
 
       const resp = Http.post(options)
-        .then((resp) => console.log(resp.data))
+        .then((resp) => {
+          let decoded = jwt_decode(resp.data.token);
+
+          this.$store.commit("setToken", resp.data.token);
+          this.$store.commit("setUserInformation", decoded);
+
+          console.log(
+            this.$store.state.token,
+            this.$store.state.userInformation
+          );
+        })
         .catch((err) => console.log(err));
       return resp;
     },
