@@ -1,29 +1,18 @@
 import { Http } from '@capacitor-community/http';
 
-const doGet = () => {
-    console.log('doget ok');
-    // const options = {
-    //     url: 'http://localhost:3000/users',
-    //     headers: { 'X-Fake-Header': 'Max was here' },
-    //     params: { size: 'XL' },
-    // };
+class APIProvider {
+    getUsers() {
+        const options = {
+            url: 'http://localhost:3000/users',
+        };
 
-    const response = Http.get('http://localhost:3000/users');
-    return response;
+        const response = Http.get(options)
+            .then(data => console.log(data))
+            .catch(err => console.log(err));
+        return response;
+        // or...
+        // const response = await Http.request({ ...options, method: 'GET' })
+    };
+}
 
-    // or...
-    // const response = await Http.request({ ...options, method: 'GET' })
-};
-
-export default doGet;
-
-// class APIProvider {
-
-//     getUsers() {
-//         HTTP.get(url + '/users')
-//             .then(resp => {
-//                 console.log(resp);
-//             })
-//             .catch(err => console.log(err));
-//     }
-// }
+export default new APIProvider;
