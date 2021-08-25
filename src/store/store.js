@@ -5,8 +5,9 @@ import APIProvider from '../services/api';
 const store = createStore({
     state() {
         return {
-            token: false,
-            userInformation: false,
+            token: null,
+            userInformation: null,
+            isLoggedIn: !!localStorage.getItem("user")
         };
     },
     mutations: {
@@ -23,6 +24,9 @@ const store = createStore({
         },
         getEvents() {
             APIProvider.getEvents();
+        },
+        getCategories() {
+            APIProvider.getCategories();
         }
     }
 });
