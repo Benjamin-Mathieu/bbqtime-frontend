@@ -16,6 +16,7 @@
 <script>
 import { defineComponent } from "vue";
 import { Http } from "@capacitor-community/http";
+import QrCode from "../services/qrcode";
 
 export default defineComponent({
   name: "Add Event",
@@ -41,7 +42,11 @@ export default defineComponent({
         },
       };
 
-      Http.post(options);
+      Http.post(options)
+        .then((resp) => {
+          QrCode.generate(resp.data.id);
+        })
+        .catch((err) => console.log(err));
     },
   },
 });
