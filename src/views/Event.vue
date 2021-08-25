@@ -1,5 +1,6 @@
 <template>
-  <h1>Event</h1>
+  <h1>Evènements</h1>
+  <ion-button href="/add-event">Créer un évènement</ion-button>
 </template>
 
 <script>
