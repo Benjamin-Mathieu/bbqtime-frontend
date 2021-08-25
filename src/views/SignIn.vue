@@ -46,6 +46,8 @@ export default defineComponent({
           this.$store.commit("setToken", resp.data.token);
           this.$store.commit("setUserInformation", decoded);
 
+          localStorage.setItem("user", JSON.stringify(resp.data));
+
           console.log(
             this.$store.state.token,
             this.$store.state.userInformation
