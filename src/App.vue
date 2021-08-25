@@ -14,16 +14,6 @@ export default defineComponent({
     IonApp,
     IonRouterOutlet,
   },
-  mounted() {
-    // axios.create({
-    //   baseURL: "http://localhost:3000",
-    // });
-    // axios
-    //   .get("/users", {})
-    //   .then((resp) => {
-    //     console.log(resp);
-    //   })
-    //   .catch((err) => console.log(err));
-  },
+  mounted() {},
 });
 </script>

@@ -2,28 +2,19 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
-        <ion-title>Blank</ion-title>
+        <ion-title>BBQ Time</ion-title>
+        <ion-buttons slot="start">
+          <ion-menu-button auto-hide="false"></ion-menu-button>
+        </ion-buttons>
       </ion-toolbar>
     </ion-header>
 
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">BBQ Time</ion-title>
-        </ion-toolbar>
-      </ion-header>
-
       <div id="container">
-        <strong>Ready to create an app?</strong>
-        <p>
-          Start with Ionic
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://ionicframework.com/docs/components"
-            >UI Components</a
-          >
-        </p>
+        <ion-button size="large" href="/sign-up">Créer un compte</ion-button>
+        <ion-button size="large" href="/sign-in" fill="outline"
+          >Connexion</ion-button
+        >
       </div>
     </ion-content>
   </ion-page>
@@ -36,6 +27,7 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
+  IonButton,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 
@@ -47,10 +39,9 @@ export default defineComponent({
     IonPage,
     IonTitle,
     IonToolbar,
+    IonButton,
   },
-  mounted() {
-    console.log("test");
-  },
+  mounted() {},
 });
 </script>
 
