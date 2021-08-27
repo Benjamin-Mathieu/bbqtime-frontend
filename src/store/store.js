@@ -1,5 +1,4 @@
 import { createStore } from 'vuex';
-import APIProvider from '../services/api';
 
 // Create a new store instance.
 const store = createStore({
@@ -7,7 +6,7 @@ const store = createStore({
         return {
             token: null,
             userInformation: null,
-            isLoggedIn: !!localStorage.getItem("user")
+            userIsLoggedIn: null
         };
     },
     mutations: {
@@ -16,18 +15,21 @@ const store = createStore({
         },
         setUserInformation(state, userInformation) {
             state.userInformation = userInformation
+        },
+        setUserIsLoggedIn(state, userIsLoggedIn) {
+            state.userIsLoggedIn = userIsLoggedIn
+        },
+    },
+    getters: {
+        getLoginStatus(state) {
+            if (state.userIsLoggedIn) {
+                return "Connected"
+            } else {
+                return "Disconnected"
+            }
         }
     },
     actions: {
-        getUsers() {
-            APIProvider.getUsers();
-        },
-        getEvents() {
-            APIProvider.getEvents();
-        },
-        getCategories() {
-            APIProvider.getCategories();
-        }
     }
 });
 

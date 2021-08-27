@@ -1,23 +1,25 @@
 <template>
   <h1>SignIn</h1>
   <form @submit.prevent="authUser()" method="post">
-    <input v-model="email" type="text" placeholder="E-mail" required />
-    <input
-      v-model="password"
-      type="password"
-      placeholder="Mot de passe"
-      required
-    />
-    <button type="submit">Connexion</button>
+    <ion-item>
+      <ion-label position="floating">E-mail</ion-label>
+      <ion-input type="email" v-model="email" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Mot de passe</ion-label>
+      <ion-input type="password" v-model="password" required></ion-input>
+    </ion-item>
+    <ion-button type="submit">Connexion</ion-button>
   </form>
 </template>
 
 <script>
 import { defineComponent } from "vue";
-import { Http } from "@capacitor-community/http";
-import jwt_decode from "jwt-decode";
+import { IonLabel, IonInput, IonItem } from "@ionic/vue";
+import APIProvider from "../services/api";
 
 export default defineComponent({
+  components: { IonLabel, IonInput, IonItem },
   name: "SignIn",
   data() {
     return {
@@ -27,34 +29,11 @@ export default defineComponent({
   },
   methods: {
     authUser() {
-      const options = {
-        url: "http://localhost:3000/users/login",
-        headers: {
-          Accept: "application/json",
-          "Content-type": "application/json",
-        },
-        data: {
-          email: this.email,
-          password: this.password,
-        },
-      };
-
-      const resp = Http.post(options)
-        .then((resp) => {
-          let decoded = jwt_decode(resp.data.token);
-
-          this.$store.commit("setToken", resp.data.token);
-          this.$store.commit("setUserInformation", decoded);
-
-          localStorage.setItem("user", JSON.stringify(resp.data));
-
-          console.log(
-            this.$store.state.token,
-            this.$store.state.userInformation
-          );
-        })
-        .catch((err) => console.log(err));
-      return resp;
+      APIProvider.loginUser(this.email, this.password);
+      this.$store.commit("setUserIsLoggedIn", true);
+      this.$store.commit("setToken", localStorage.getItem("token"));
+      this.$store.commit("setUserInformation", localStorage.getItem("user"));
+      this.$router.push("/event");
     },
   },
 });

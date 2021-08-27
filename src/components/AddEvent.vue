@@ -22,8 +22,8 @@ export default defineComponent({
   name: "Add Event",
   data() {
     return {
-      name: "Nouveau évènement",
-      password: "1235",
+      name: "",
+      password: "",
     };
   },
   mounted() {},
