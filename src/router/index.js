@@ -6,7 +6,7 @@ import Event from '../views/Event.vue';
 import Shop from '../views/Shop.vue';
 import SignIn from '../views/SignIn.vue';
 import SignUp from '../views/SignUp.vue';
-import AddEvent from "../components/AddEvent";
+import Order from "../views/Order";
 
 const routes = [
   {
@@ -34,11 +34,6 @@ const routes = [
     component: Event
   },
   {
-    path: '/add-event',
-    name: 'Add Event',
-    component: AddEvent
-  },
-  {
     path: '/shop',
     name: 'Shop',
     component: Shop
@@ -52,6 +47,11 @@ const routes = [
     path: '/sign-up',
     name: 'SignUp',
     component: SignUp
+  },
+  {
+    path: '/order',
+    name: 'Order',
+    component: Order
   },
 ];
 
