@@ -16,7 +16,6 @@
           <ion-item href="/event">Evènements</ion-item>
           <ion-item href="/categorie">Catégories</ion-item>
           <ion-item href="/scan">Scan</ion-item>
-          <Logout></Logout>
         </ion-list>
       </ion-content>
     </ion-menu>
@@ -28,6 +27,7 @@
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-title size="large">BBQ Time</ion-title>
+        <Logout v-if="this.$store.state.userIsLoggedIn" slot="end"></Logout>
       </ion-toolbar>
     </ion-header>
 
