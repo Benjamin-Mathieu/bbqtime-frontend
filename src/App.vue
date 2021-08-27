@@ -8,12 +8,15 @@
         </ion-toolbar>
       </ion-header>
       <ion-content>
-        <ion-list>
+        <ion-list v-if="!this.$store.state.userIsLoggedIn">
           <ion-item href="/sign-in"> Connexion </ion-item>
           <ion-item href="/sign-up">Inscription</ion-item>
+        </ion-list>
+        <ion-list v-else>
           <ion-item href="/event">Evènements</ion-item>
           <ion-item href="/categorie">Catégories</ion-item>
           <ion-item href="/scan">Scan</ion-item>
+          <Logout></Logout>
         </ion-list>
       </ion-content>
     </ion-menu>
@@ -48,6 +51,7 @@ import {
   IonButtons,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
+import Logout from "./components/Logout.vue";
 
 export default defineComponent({
   name: "App",
@@ -63,6 +67,17 @@ export default defineComponent({
     IonContent,
     IonMenuButton,
     IonButtons,
+    Logout,
+  },
+  mounted() {
+    // Check if user already logged in
+    if (localStorage.getItem("token")) {
+      this.$store.commit("setUserIsLoggedIn", true);
+      this.$store.commit("setToken", localStorage.getItem("token"));
+      this.$store.commit("setUserInformation", localStorage.getItem("user"));
+    } else {
+      this.$store.commit("setUserIsLoggedIn", false);
+    }
   },
   methods: {
     openFirst() {
