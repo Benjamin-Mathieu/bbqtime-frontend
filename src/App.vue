@@ -3,19 +3,23 @@
     <!-- Menu -->
     <ion-menu side="start" menu-id="first" content-id="main">
       <ion-header>
-        <ion-toolbar color="primary">
-          <ion-title>Menu</ion-title>
-        </ion-toolbar>
+        <ion-item href="/home">Home</ion-item>
       </ion-header>
       <ion-content>
         <ion-list v-if="!this.$store.state.userIsLoggedIn">
-          <ion-item href="/sign-in"> Connexion </ion-item>
-          <ion-item href="/sign-up">Inscription</ion-item>
+          <ion-item href="/event">Evènements</ion-item>
+          <ion-item href="/order">Commandes</ion-item>
+          <ion-item href="/shop"> Panier </ion-item>
+          <ion-button href="/sign-up">Inscription</ion-button>
+          <ion-button href="/sign-in">Connexion</ion-button>
         </ion-list>
         <ion-list v-else>
           <ion-item href="/event">Evènements</ion-item>
-          <ion-item href="/categorie">Catégories</ion-item>
+          <ion-item href="/order">Commandes</ion-item>
+          <ion-item href="/shop"> Panier </ion-item>
           <ion-item href="/scan">Scan</ion-item>
+          <ion-item>Mon compte</ion-item>
+          <ion-item>Paramètres</ion-item>
         </ion-list>
       </ion-content>
     </ion-menu>
