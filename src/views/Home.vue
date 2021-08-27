@@ -1,47 +1,38 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>BBQ Time</ion-title>
-        <ion-buttons slot="start">
-          <ion-menu-button auto-hide="false"></ion-menu-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-
     <ion-content :fullscreen="true">
       <div id="container">
-        <ion-button size="large" href="/sign-up">Créer un compte</ion-button>
-        <ion-button size="large" href="/sign-in" fill="outline"
+        <ion-card>
+          <ion-card-header>
+            <ion-button size="large" href="/scan">Scan QR Code</ion-button>
+          </ion-card-header>
+
+          <ion-card-content>
+            <input type="text" name="code" placeholder="Entrer un code" />
+            <ion-button>GO</ion-button>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-button size="medium" href="/sign-in" fill="outline"
           >Connexion</ion-button
         >
+        <ion-button size="medium" href="/sign-up">Créer un compte</ion-button>
       </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
-import {
-  IonContent,
-  IonHeader,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  IonButton,
-} from "@ionic/vue";
+import { IonContent, IonPage, IonButton } from "@ionic/vue";
 import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "Home",
   components: {
     IonContent,
-    IonHeader,
     IonPage,
-    IonTitle,
-    IonToolbar,
     IonButton,
   },
-  mounted() {},
 });
 </script>
 
