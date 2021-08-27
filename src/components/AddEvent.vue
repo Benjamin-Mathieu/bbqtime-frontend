@@ -16,6 +16,7 @@
 import { defineComponent } from "vue";
 import { Http } from "@capacitor-community/http";
 import QrCode from "../services/qrcode";
+import popup from "../services/popup";
 
 export default defineComponent({
   name: "AddEvent",
@@ -44,6 +45,7 @@ export default defineComponent({
       Http.post(options)
         .then((resp) => {
           QrCode.generate(resp.data.id);
+          popup.showPopUp("Evènement crée");
         })
         .catch((err) => console.log(err));
     },
