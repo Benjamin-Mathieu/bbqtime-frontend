@@ -1,4 +1,6 @@
 import { createStore } from 'vuex';
+// import APIProvider from '../services/api';
+import axios from "axios";
 
 // Create a new store instance.
 const store = createStore({
@@ -6,7 +8,8 @@ const store = createStore({
         return {
             token: null,
             userInformation: null,
-            userIsLoggedIn: null
+            userIsLoggedIn: null,
+            events: []
         };
     },
     mutations: {
@@ -19,6 +22,9 @@ const store = createStore({
         setUserIsLoggedIn(state, userIsLoggedIn) {
             state.userIsLoggedIn = userIsLoggedIn
         },
+        setEvents(state, events) {
+            state.events = events
+        }
     },
     getters: {
         getLoginStatus(state) {
@@ -27,9 +33,19 @@ const store = createStore({
             } else {
                 return "Disconnected"
             }
-        }
+        },
     },
     actions: {
+        async getEvents({ commit }) {
+            let data = await axios({
+                method: "get",
+                url: 'http://localhost:3000/events',
+                headers: {
+                    'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsIm5hbWUiOiJCZW5qYW1pbiIsImZpcnN0bmFtZSI6Ik1hdGhpZXUiLCJlbWFpbCI6InRlc3Rwb3N0QGdtYWlsLmNvbSIsImlhdCI6MTYyOTk4NjA0Mn0.FHXlk6qXvkhBjzhlVIFuHxX_U9ui7ca2R4uupCpe6Qo'
+                }
+            });
+            commit("setEvents", data.data.events)
+        }
     }
 });
 

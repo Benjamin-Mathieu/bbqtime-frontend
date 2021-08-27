@@ -1,17 +1,25 @@
 <template>
   <h1>Evènements</h1>
 
-  <ion-button href="/add-event">Créer un évènement</ion-button>
+  <div v-for="event in this.$store.state.events" :key="event.id">
+    <div>
+      <p>NOM => {{ event.name }} ID => {{ event.id }}</p>
+    </div>
+  </div>
+
+  <AddEvent></AddEvent>
 </template>
 
 <script>
 import { defineComponent } from "vue";
-import APIProvider from "../services/api";
+import AddEvent from "../components/AddEvent.vue";
+// import APIProvider from "../services/api";
 
 export default defineComponent({
   name: "Event",
+  components: { AddEvent },
   mounted() {
-    APIProvider.getEvents();
+    this.$store.dispatch("getEvents");
   },
 });
 </script>

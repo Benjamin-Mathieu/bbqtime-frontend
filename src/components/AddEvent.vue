@@ -1,5 +1,4 @@
 <template>
-  <h1>SignUp</h1>
   <form @submit.prevent="addEvent()" method="post">
     <input
       v-model="name"
@@ -19,7 +18,7 @@ import { Http } from "@capacitor-community/http";
 import QrCode from "../services/qrcode";
 
 export default defineComponent({
-  name: "Add Event",
+  name: "AddEvent",
   data() {
     return {
       name: "",
