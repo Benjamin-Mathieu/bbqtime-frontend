@@ -37,7 +37,13 @@
 
 <script>
 import { defineComponent } from "vue";
-import { IonContent, IonPage, IonSegment, IonSegmentButton } from "@ionic/vue";
+import {
+  IonContent,
+  IonPage,
+  IonSegment,
+  IonSegmentButton,
+  IonLabel,
+} from "@ionic/vue";
 import FormEvent from "../components/FormEvent.vue";
 import FormCategorie from "../components/FormCategorie.vue";
 import FormMenu from "../components/FormMenu.vue";
@@ -49,6 +55,7 @@ export default defineComponent({
     IonPage,
     IonSegment,
     IonSegmentButton,
+    IonLabel,
     FormEvent,
     FormCategorie,
     FormMenu,

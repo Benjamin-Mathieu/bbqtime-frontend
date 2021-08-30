@@ -37,10 +37,13 @@
           <ion-input type="number" v-model="quantity" required></ion-input>
         </ion-item>
         <ion-item>
-          <ion-label>Catégories</ion-label>
-          <ion-select placeholder="Select One">
-            <ion-select-option value="f">Poulet</ion-select-option>
-            <ion-select-option value="m">Boeuf</ion-select-option>
+          <ion-select placeholder="Catégories">
+            <ion-select-option
+              v-for="categorie in this.$store.state.categories"
+              :key="categorie.id"
+              :value="categorie.id"
+              >{{ categorie.libelle }}</ion-select-option
+            >
           </ion-select>
         </ion-item>
       </ion-card-content>
@@ -51,7 +54,6 @@
 
 <script>
 import { defineComponent } from "vue";
-import { Http } from "@capacitor-community/http";
 import {
   IonLabel,
   IonItem,
@@ -61,8 +63,11 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonCardContent,
+  IonSelect,
+  IonSelectOption,
+  IonTextarea,
 } from "@ionic/vue";
-import popup from "../services/popup";
+// import popup from "../services/popup";
 
 export default defineComponent({
   name: "FormMenu",
@@ -75,35 +80,31 @@ export default defineComponent({
     IonCardHeader,
     IonCardTitle,
     IonCardContent,
+    IonSelect,
+    IonSelectOption,
+    IonTextarea,
   },
   data() {
     return {
       name: "",
+      price: "",
+      description: "",
+      quantity: "",
+      category_id: "",
     };
   },
-  mounted() {},
+  mounted() {
+    this.$store.dispatch("getCategories");
+  },
   methods: {
-    addInfoEvent() {
-      const options = {
-        url: "http://localhost:3000/categorie",
-        headers: {
-          Accept: "application/json",
-          "Content-type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-        data: {
-          libelle: this.name,
-        },
+    addMenu() {
+      const menu = {
+        libelle: this.name,
+        price: this.price,
+        description: this.description,
+        quantity: this.quantity,
       };
-
-      Http.post(options)
-        .then((resp) => {
-          console.log(resp);
-          popup.showPopUp("Catégorie ajoutée");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      this.$store.dispatch("postMenu", menu);
     },
   },
 });

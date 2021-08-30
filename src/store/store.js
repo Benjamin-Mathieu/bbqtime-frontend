@@ -10,7 +10,9 @@ const store = createStore({
             userInformation: null,
             userIsLoggedIn: null,
             events: [],
-            orders: []
+            orders: [],
+            categories: [],
+            menus: []
         };
     },
     mutations: {
@@ -28,6 +30,12 @@ const store = createStore({
         },
         setOrders(state, orders) {
             state.orders = orders
+        },
+        setCategories(state, categories) {
+            state.categories = categories
+        },
+        setMenus(state, menus) {
+            state.menus = menus
         }
     },
     getters: {
@@ -59,6 +67,48 @@ const store = createStore({
                 }
             });
             commit("setOrders", req.data.orders)
+        },
+        async getCategories({ commit }) {
+            let req = await axios({
+                method: "get",
+                url: 'http://localhost:3000/categories',
+                headers: {
+                    'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsIm5hbWUiOiJCZW5qYW1pbiIsImZpcnN0bmFtZSI6Ik1hdGhpZXUiLCJlbWFpbCI6InRlc3Rwb3N0QGdtYWlsLmNvbSIsImlhdCI6MTYyOTk4NjA0Mn0.FHXlk6qXvkhBjzhlVIFuHxX_U9ui7ca2R4uupCpe6Qo'
+                }
+            });
+            commit("setCategories", req.data.categories)
+        },
+        async postCategorie({ commit }, name) {
+            let req = await axios({
+                method: "post",
+                url: 'http://localhost:3000/categories',
+                data: {
+                    libelle: name
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsIm5hbWUiOiJCZW5qYW1pbiIsImZpcnN0bmFtZSI6Ik1hdGhpZXUiLCJlbWFpbCI6InRlc3Rwb3N0QGdtYWlsLmNvbSIsImlhdCI6MTYyOTk4NjA0Mn0.FHXlk6qXvkhBjzhlVIFuHxX_U9ui7ca2R4uupCpe6Qo'
+                }
+            });
+            commit("setCategories", req.data.categorie[0].libelle)
+        },
+        async postMenu({ commit }, menu) {
+            let req = await axios({
+                method: "post",
+                url: 'http://localhost:3000/plats',
+                data: {
+                    libelle: menu.libelle,
+                    price: menu.price,
+                    description: menu.description,
+                    quantity: menu.quantity,
+                    category_id: 8,
+                    event_id: 35,
+                    photo_url: "public/uploads/menu.jpg"
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsIm5hbWUiOiJCZW5qYW1pbiIsImZpcnN0bmFtZSI6Ik1hdGhpZXUiLCJlbWFpbCI6InRlc3Rwb3N0QGdtYWlsLmNvbSIsImlhdCI6MTYyOTk4NjA0Mn0.FHXlk6qXvkhBjzhlVIFuHxX_U9ui7ca2R4uupCpe6Qo'
+                }
+            });
+            commit("setMenus", req.data.menu)
         }
     }
 });
