@@ -7,7 +7,9 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "Order",
-  mounted() {},
+  mounted() {
+    this.$store.dispatch("getOrders");
+  },
 });
 </script>
 

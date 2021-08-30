@@ -9,7 +9,8 @@ const store = createStore({
             token: null,
             userInformation: null,
             userIsLoggedIn: null,
-            events: []
+            events: [],
+            orders: []
         };
     },
     mutations: {
@@ -24,6 +25,9 @@ const store = createStore({
         },
         setEvents(state, events) {
             state.events = events
+        },
+        setOrders(state, orders) {
+            state.orders = orders
         }
     },
     getters: {
@@ -37,14 +41,24 @@ const store = createStore({
     },
     actions: {
         async getEvents({ commit }) {
-            let data = await axios({
+            let req = await axios({
                 method: "get",
                 url: 'http://localhost:3000/events',
                 headers: {
                     'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsIm5hbWUiOiJCZW5qYW1pbiIsImZpcnN0bmFtZSI6Ik1hdGhpZXUiLCJlbWFpbCI6InRlc3Rwb3N0QGdtYWlsLmNvbSIsImlhdCI6MTYyOTk4NjA0Mn0.FHXlk6qXvkhBjzhlVIFuHxX_U9ui7ca2R4uupCpe6Qo'
                 }
             });
-            commit("setEvents", data.data.events)
+            commit("setEvents", req.data.events)
+        },
+        async getOrders({ commit }) {
+            let req = await axios({
+                method: "get",
+                url: 'http://localhost:3000/orders',
+                headers: {
+                    'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsIm5hbWUiOiJCZW5qYW1pbiIsImZpcnN0bmFtZSI6Ik1hdGhpZXUiLCJlbWFpbCI6InRlc3Rwb3N0QGdtYWlsLmNvbSIsImlhdCI6MTYyOTk4NjA0Mn0.FHXlk6qXvkhBjzhlVIFuHxX_U9ui7ca2R4uupCpe6Qo'
+                }
+            });
+            commit("setOrders", req.data.orders)
         }
     }
 });
