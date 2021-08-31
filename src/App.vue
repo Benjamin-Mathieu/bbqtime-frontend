@@ -7,17 +7,17 @@
       </ion-header>
       <ion-content>
         <ion-list v-if="!this.$store.state.userIsLoggedIn">
-          <ion-item href="/event">Evènements</ion-item>
-          <ion-item href="/order">Commandes</ion-item>
-          <ion-item href="/shop"> Panier </ion-item>
-          <ion-button href="/sign-up">Inscription</ion-button>
-          <ion-button href="/sign-in">Connexion</ion-button>
+          <router-link to="/event">Evènements</router-link>
+          <router-link to="/order"><ion-item>Commandes</ion-item></router-link>
+          <router-link to="/shop"><ion-item>Panier</ion-item></router-link>
+          <router-link to="/sign-up"><ion-item>Inscription</ion-item></router-link>
+          <router-link to="/sign-in"><ion-item>Connexion</ion-item></router-link>
         </ion-list>
         <ion-list v-else>
-          <ion-item href="/event">Evènements</ion-item>
-          <ion-item href="/order">Commandes</ion-item>
-          <ion-item href="/shop"> Panier </ion-item>
-          <ion-item href="/scan">Scan</ion-item>
+          <router-link to="/event"><ion-item>Evènements</ion-item></router-link>
+          <router-link to="/order"><ion-item>Commandes</ion-item></router-link>
+          <router-link to="/shop"><ion-item>Panier</ion-item></router-link>
+          <router-link to="/scan"><ion-item>Scan</ion-item></router-link>
           <ion-item>Mon compte</ion-item>
           <ion-item>Paramètres</ion-item>
         </ion-list>
