@@ -25,17 +25,17 @@ const store = createStore({
         setUserIsLoggedIn(state, userIsLoggedIn) {
             state.userIsLoggedIn = userIsLoggedIn
         },
-        setEvents(state, events) {
-            state.events = events
+        setEvents(state, event) {
+            state.events.push(event)
         },
         setOrders(state, orders) {
             state.orders = orders
         },
-        setCategories(state, categories) {
-            state.categories = categories
+        setCategories(state, categorie) {
+            state.categories.push(categorie)
         },
-        setMenus(state, menus) {
-            state.menus = menus
+        setMenus(state, menu) {
+            state.menus.push(menu)
         }
     },
     getters: {
@@ -46,6 +46,15 @@ const store = createStore({
                 return "Disconnected"
             }
         },
+        categories: state => {
+            return state.categories;
+        },
+        events: state => {
+            return state.events;
+        },
+        menus: state => {
+            return state.menus;
+        }
     },
     actions: {
         async getEvents({ commit }) {
@@ -53,7 +62,7 @@ const store = createStore({
                 method: "get",
                 url: 'http://localhost:3000/events',
                 headers: {
-                    'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsIm5hbWUiOiJCZW5qYW1pbiIsImZpcnN0bmFtZSI6Ik1hdGhpZXUiLCJlbWFpbCI6InRlc3Rwb3N0QGdtYWlsLmNvbSIsImlhdCI6MTYyOTk4NjA0Mn0.FHXlk6qXvkhBjzhlVIFuHxX_U9ui7ca2R4uupCpe6Qo'
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
             });
             commit("setEvents", req.data.events)
@@ -63,7 +72,7 @@ const store = createStore({
                 method: "get",
                 url: 'http://localhost:3000/orders',
                 headers: {
-                    'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsIm5hbWUiOiJCZW5qYW1pbiIsImZpcnN0bmFtZSI6Ik1hdGhpZXUiLCJlbWFpbCI6InRlc3Rwb3N0QGdtYWlsLmNvbSIsImlhdCI6MTYyOTk4NjA0Mn0.FHXlk6qXvkhBjzhlVIFuHxX_U9ui7ca2R4uupCpe6Qo'
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
             });
             commit("setOrders", req.data.orders)
@@ -73,23 +82,23 @@ const store = createStore({
                 method: "get",
                 url: 'http://localhost:3000/categories',
                 headers: {
-                    'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsIm5hbWUiOiJCZW5qYW1pbiIsImZpcnN0bmFtZSI6Ik1hdGhpZXUiLCJlbWFpbCI6InRlc3Rwb3N0QGdtYWlsLmNvbSIsImlhdCI6MTYyOTk4NjA0Mn0.FHXlk6qXvkhBjzhlVIFuHxX_U9ui7ca2R4uupCpe6Qo'
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
             });
             commit("setCategories", req.data.categories)
         },
-        async postCategorie({ commit }, name) {
-            let req = await axios({
+        async postCategorie({ commit }, payload) {
+            await axios({
                 method: "post",
                 url: 'http://localhost:3000/categories',
                 data: {
-                    libelle: name
+                    libelle: payload
                 },
                 headers: {
-                    'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsIm5hbWUiOiJCZW5qYW1pbiIsImZpcnN0bmFtZSI6Ik1hdGhpZXUiLCJlbWFpbCI6InRlc3Rwb3N0QGdtYWlsLmNvbSIsImlhdCI6MTYyOTk4NjA0Mn0.FHXlk6qXvkhBjzhlVIFuHxX_U9ui7ca2R4uupCpe6Qo'
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
             });
-            commit("setCategories", req.data.categorie[0].libelle)
+            commit("setCategories", payload);
         },
         async postMenu({ commit }, menu) {
             let req = await axios({
@@ -105,10 +114,34 @@ const store = createStore({
                     photo_url: "public/uploads/menu.jpg"
                 },
                 headers: {
-                    'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsIm5hbWUiOiJCZW5qYW1pbiIsImZpcnN0bmFtZSI6Ik1hdGhpZXUiLCJlbWFpbCI6InRlc3Rwb3N0QGdtYWlsLmNvbSIsImlhdCI6MTYyOTk4NjA0Mn0.FHXlk6qXvkhBjzhlVIFuHxX_U9ui7ca2R4uupCpe6Qo'
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
             });
-            commit("setMenus", req.data.menu)
+            commit("setMenus", req.data.menu);
+        },
+
+        async postEvent({ commit }, event) {
+            console.log(event);
+            let req = await axios({
+                method: "post",
+                url: 'http://localhost:3000/events',
+                data: {
+                    name: event.name,
+                    address: event.address,
+                    city: event.city,
+                    zipcode: event.zipcode,
+                    date: "2021-08-30 20:30:00",
+                    description: event.description,
+                    photo_url: "public/uploads/event.png",
+                    private: event.isPrivate,
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            });
+            console.log("req =>", req);
+            commit("setEvents", req.data);
+
         }
     }
 });
