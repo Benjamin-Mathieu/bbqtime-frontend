@@ -4,7 +4,6 @@ import store from '../store/store';
 // import jwt_decode from "jwt-decode";
 
 const API_URL = "http://localhost:3000";
-// const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsIm5hbWUiOiJCZW5qYW1pbiIsImZpcnN0bmFtZSI6Ik1hdGhpZXUiLCJlbWFpbCI6InRlc3Rwb3N0QGdtYWlsLmNvbSIsImlhdCI6MTYyOTk4NjA0Mn0.FHXlk6qXvkhBjzhlVIFuHxX_U9ui7ca2R4uupCpe6Qo';
 
 class APIProvider {
 
@@ -21,19 +20,17 @@ class APIProvider {
                 password: password,
             },
         };
-
+        console.log(store);
         const resp = Http.post(options)
             .then((resp) => {
-                // let decoded = jwt_decode(resp.data.token);
-                // Save users data to local storage
-                localStorage.setItem("user", JSON.stringify(resp.data));
-                localStorage.setItem("token", resp.data.token);
-
                 // Use library community/storage if necessary...
                 // Storage.set({
                 //     key: "token",
                 //     value: resp.data.token,
                 // });
+
+                store.commit("setToken", resp.data.token);
+                store.commit("setUserInformation", JSON.stringify(resp.data));
             })
             .catch((err) => console.log(err));
         return resp;

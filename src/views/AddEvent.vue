@@ -152,7 +152,7 @@ export default defineComponent({
       const { role } = await alert.onDidDismiss();
       console.log("onDidDismiss resolved with role", role);
       if (role === "valid") {
-        this.postEvent(this.$store.state.events);
+        this.postEvent();
         this.step++;
       }
     },

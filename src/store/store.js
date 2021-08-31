@@ -9,7 +9,7 @@ const store = createStore({
             token: null,
             userInformation: null,
             userIsLoggedIn: null,
-            events: [],
+            events: {},
             orders: [],
             categories: [],
             menus: []
@@ -17,16 +17,21 @@ const store = createStore({
     },
     mutations: {
         setToken(state, token) {
-            state.token = token
+            state.token = token;
+            localStorage.setItem("token", token);
         },
         setUserInformation(state, userInformation) {
-            state.userInformation = userInformation
+            state.userInformation = userInformation;
+            localStorage.setItem("userInformation", userInformation);
         },
         setUserIsLoggedIn(state, userIsLoggedIn) {
             state.userIsLoggedIn = userIsLoggedIn
         },
         setEvents(state, event) {
-            state.events.push(event)
+            // Object.keys(event).forEach(key => {
+                // Vue.set(state.events, key, event[key]);
+            // })
+            state.events = event;
         },
         setOrders(state, orders) {
             state.orders = orders
@@ -120,28 +125,24 @@ const store = createStore({
             commit("setMenus", req.data.menu);
         },
 
-        async postEvent({ commit }, event) {
-            console.log(event);
-            let req = await axios({
+        async postEvent({ state }) {
+            await axios({
                 method: "post",
                 url: 'http://localhost:3000/events',
                 data: {
-                    name: event.name,
-                    address: event.address,
-                    city: event.city,
-                    zipcode: event.zipcode,
+                    name: state.events.name,
+                    address: state.events.address,
+                    city: state.events.city,
+                    zipcode: state.events.zipcode,
                     date: "2021-08-30 20:30:00",
-                    description: event.description,
+                    description: state.events.description,
                     photo_url: "public/uploads/event.png",
-                    private: event.isPrivate,
+                    private: state.events.isPrivate,
                 },
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
             });
-            console.log("req =>", req);
-            commit("setEvents", req.data);
-
         }
     }
 });
