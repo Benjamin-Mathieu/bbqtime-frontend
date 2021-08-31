@@ -1,5 +1,4 @@
 <template>
-  <h1>Créer un évènement</h1>
   <form @submit.prevent="addInfoEvent()" method="post">
     <ion-item>
       <ion-label position="floating">Nom de l'évènement</ion-label>
@@ -50,13 +49,12 @@
       ></ion-checkbox>
     </ion-item>
 
-    <ion-button type="submit" size="small" slot="end">Valider</ion-button>
+    <ion-button type="submit" size="small">Valider</ion-button>
   </form>
 </template>
 
 <script>
 import { defineComponent } from "vue";
-import { Http } from "@capacitor-community/http";
 import {
   IonLabel,
   IonItem,
@@ -66,8 +64,6 @@ import {
   IonDatetime,
   IonTextarea,
 } from "@ionic/vue";
-import QrCode from "../services/qrcode";
-import popup from "../services/popup";
 
 export default defineComponent({
   name: "FormEvent",
@@ -95,34 +91,20 @@ export default defineComponent({
   mounted() {},
   methods: {
     addInfoEvent() {
-      const options = {
-        url: "http://localhost:3000/events",
-        headers: {
-          Accept: "application/json",
-          "Content-type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-        data: {
-          name: this.name,
-          address: this.address,
-          city: this.city,
-          zipcode: this.zipcode,
-          date: "2021-08-30 20:30:00",
-          description: this.description,
-          photo_url: "",
-          private: this.isPrivate,
-        },
+      const event = {
+        name: this.name,
+        address: this.address,
+        city: this.city,
+        zipcode: this.zipcode,
+        description: this.description,
+        private: this.isPrivate,
       };
 
-      Http.post(options)
-        .then((resp) => {
-          QrCode.generate(resp.data.id);
-          popup.showPopUp("Evènement crée");
-        })
-        .catch((err) => {
-          console.log(err);
-          alert(err);
-        });
+      try {
+        this.$store.commit("setEvents", event);
+      } catch (error) {
+        console.error(error);
+      }
     },
   },
 });

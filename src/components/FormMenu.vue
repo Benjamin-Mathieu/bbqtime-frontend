@@ -41,14 +41,16 @@
             <ion-select-option
               v-for="categorie in this.$store.state.categories"
               :key="categorie.id"
-              :value="categorie.id"
-              >{{ categorie.libelle }}</ion-select-option
+              :value="categorie"
+              >{{ categorie }}</ion-select-option
             >
           </ion-select>
         </ion-item>
       </ion-card-content>
+      <ion-item>
+        <ion-button type="submit" size="small">Ajouter</ion-button>
+      </ion-item>
     </ion-card>
-    <ion-button type="submit" size="small">Ajouter un menu</ion-button>
   </form>
 </template>
 
@@ -67,7 +69,7 @@ import {
   IonSelectOption,
   IonTextarea,
 } from "@ionic/vue";
-// import popup from "../services/popup";
+import popup from "../services/popup";
 
 export default defineComponent({
   name: "FormMenu",
@@ -93,9 +95,6 @@ export default defineComponent({
       category_id: "",
     };
   },
-  mounted() {
-    this.$store.dispatch("getCategories");
-  },
   methods: {
     addMenu() {
       const menu = {
@@ -104,7 +103,13 @@ export default defineComponent({
         description: this.description,
         quantity: this.quantity,
       };
-      this.$store.dispatch("postMenu", menu);
+
+      try {
+        this.$store.commit("setMenus", menu);
+        popup.showPopUp("Menu ajouté");
+      } catch (error) {
+        popup.showPopUp(error);
+      }
     },
   },
 });

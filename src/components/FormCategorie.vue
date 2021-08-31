@@ -1,24 +1,33 @@
 <template>
-  <form @submit.prevent="addCategorie()" method="post">
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>
-          <ion-item>
-            <ion-label>Ajouter une image</ion-label>
-          </ion-item>
-          <input type="file" />
-        </ion-card-title>
-      </ion-card-header>
+  <ion-header>
+    <ion-toolbar>
+      <ion-title><h2>Ajout catégorie</h2></ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <form @submit.prevent="addCategorie()" method="post">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>
+            <ion-item>
+              <ion-label>Ajouter une image</ion-label>
+            </ion-item>
+            <input type="file" />
+          </ion-card-title>
+        </ion-card-header>
 
-      <ion-card-content>
+        <ion-card-content>
+          <ion-item>
+            <ion-label position="floating">Nom de la catégorie</ion-label>
+            <ion-input type="text" v-model="name" required></ion-input>
+          </ion-item>
+        </ion-card-content>
         <ion-item>
-          <ion-label position="floating">Nom de la catégorie</ion-label>
-          <ion-input type="text" v-model="name" required></ion-input>
+          <ion-button type="submit" size="small">Ajouter</ion-button>
         </ion-item>
-      </ion-card-content>
-    </ion-card>
-    <ion-button type="submit" size="small">Ajouter une catégorie</ion-button>
-  </form>
+      </ion-card>
+    </form>
+  </ion-content>
 </template>
 
 <script>
@@ -32,6 +41,10 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonCardContent,
+  IonTitle,
+  IonHeader,
+  IonToolbar,
+  IonContent,
 } from "@ionic/vue";
 import popup from "../services/popup";
 
@@ -46,17 +59,26 @@ export default defineComponent({
     IonCardHeader,
     IonCardTitle,
     IonCardContent,
+    IonTitle,
+    IonHeader,
+    IonToolbar,
+    IonContent,
   },
+
   data() {
     return {
       name: "",
     };
   },
-  mounted() {},
+  computed: {
+    categories() {
+      return this.$store.getters.categories;
+    },
+  },
   methods: {
     addCategorie() {
       try {
-        this.$store.dispatch("postCategorie", this.name);
+        this.$store.commit("setCategories", this.name);
         popup.showPopUp("Catégorie ajouté");
       } catch (error) {
         popup.showPopUp(error);
