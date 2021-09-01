@@ -22,7 +22,9 @@
           <router-link to="/order"><ion-item>Commandes</ion-item></router-link>
           <router-link to="/shop"><ion-item>Panier</ion-item></router-link>
           <router-link to="/scan"><ion-item>Scan</ion-item></router-link>
-          <ion-item>Mon compte</ion-item>
+          <router-link to="/account"
+            ><ion-item>Mon compte</ion-item></router-link
+          >
           <ion-item>Paramètres</ion-item>
         </ion-list>
       </ion-content>

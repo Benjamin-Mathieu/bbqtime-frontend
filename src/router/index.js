@@ -8,6 +8,7 @@ import SignIn from '../views/SignIn.vue';
 import SignUp from '../views/SignUp.vue';
 import Order from "../views/Order";
 import AddEvent from "../views/AddEvent";
+import Account from "../views/Account";
 
 const routes = [
   {
@@ -58,6 +59,11 @@ const routes = [
     path: '/add-event',
     name: 'AddEvent',
     component: AddEvent
+  },
+  {
+    path: '/account',
+    name: 'Account',
+    component: Account
   },
 ];
 
