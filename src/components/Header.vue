@@ -2,24 +2,36 @@
   <ion-header :translucent="true">
     <ion-toolbar>
       <ion-buttons slot="start">
-        <ion-menu-button></ion-menu-button>
+        <ion-menu-button menu="start"></ion-menu-button>
       </ion-buttons>
-      <ion-title size="large">BBQ Time</ion-title>
-      <Logout v-if="this.$store.state.userIsLoggedIn" slot="end"></Logout>
+      <ion-title>
+        <ion-img src="../../public/assets/logo1.png"></ion-img>
+      </ion-title>
+      <ion-buttons slot="end">
+        <ion-menu-button menu="end"></ion-menu-button>
+      </ion-buttons>
     </ion-toolbar>
   </ion-header>
 </template>
 
 <script>
-import { IonHeader } from "@ionic/vue";
+import {
+  IonHeader,
+  IonToolbar,
+  IonButtons,
+  IonMenuButton,
+  IonImg,
+} from "@ionic/vue";
 import { defineComponent } from "vue";
-import Logout from "./Logout.vue";
 
 export default defineComponent({
   name: "Header",
   components: {
     IonHeader,
-    Logout,
+    IonToolbar,
+    IonButtons,
+    IonMenuButton,
+    IonImg,
   },
 });
 </script>

@@ -12,7 +12,8 @@ const store = createStore({
             events: {},
             orders: [],
             categories: [],
-            menus: []
+            menus: [],
+            shop: []
         };
     },
     mutations: {
@@ -41,6 +42,9 @@ const store = createStore({
         },
         setMenus(state, menu) {
             state.menus.push(menu)
+        },
+        setShop(state, shop) {
+            state.shop.push(shop);
         }
     },
     getters: {

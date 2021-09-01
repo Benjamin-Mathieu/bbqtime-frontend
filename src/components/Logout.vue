@@ -4,9 +4,11 @@
 
 <script>
 import { defineComponent } from "vue";
+import { IonButton } from "@ionic/vue";
 
 export default defineComponent({
   name: "Logout",
+  components: { IonButton },
   methods: {
     logoutUser() {
       localStorage.clear();
