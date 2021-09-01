@@ -153,6 +153,8 @@ export default defineComponent({
       console.log("onDidDismiss resolved with role", role);
       if (role === "valid") {
         this.postEvent();
+        this.postCategorie();
+        this.postMenu();
         this.step++;
       }
     },

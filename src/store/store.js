@@ -92,38 +92,6 @@ const store = createStore({
             });
             commit("setCategories", req.data.categories)
         },
-        async postCategorie({ commit }, payload) {
-            await axios({
-                method: "post",
-                url: 'http://localhost:3000/categories',
-                data: {
-                    libelle: payload
-                },
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token")
-                }
-            });
-            commit("setCategories", payload);
-        },
-        async postMenu({ commit }, menu) {
-            let req = await axios({
-                method: "post",
-                url: 'http://localhost:3000/plats',
-                data: {
-                    libelle: menu.libelle,
-                    price: menu.price,
-                    description: menu.description,
-                    quantity: menu.quantity,
-                    category_id: 8,
-                    event_id: 35,
-                    photo_url: "public/uploads/menu.jpg"
-                },
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token")
-                }
-            });
-            commit("setMenus", req.data.menu);
-        },
 
         async postEvent({ state }) {
             await axios({
@@ -143,7 +111,43 @@ const store = createStore({
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
             });
-        }
+        },
+
+        async postCategorie({ state }) {
+            await state.categories.forEach(categorie => {
+                axios({
+                    method: "post",
+                    url: 'http://localhost:3000/categories',
+                    data: {
+                        libelle: categorie
+                    },
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    }
+                });
+            });
+        },
+
+        async postMenu({ state }) {
+            await state.menus.forEach(menu => {
+                axios({
+                    method: "post",
+                    url: 'http://localhost:3000/plats',
+                    data: {
+                        libelle: menu.libelle,
+                        price: menu.price,
+                        description: menu.description,
+                        quantity: menu.quantity,
+                        category_id: 8,
+                        event_id: 35,
+                        photo_url: "public/uploads/menu.jpg"
+                    },
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    }
+                })
+            })
+        },
     }
 });
 
