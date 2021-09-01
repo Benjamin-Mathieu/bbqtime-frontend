@@ -10,6 +10,18 @@ const popups = {
                 header: "Succès"
             })
         return toast.present();
+    },
+
+    async error(message) {
+        const toast = await toastController
+            .create({
+                message: message,
+                duration: 2000,
+                color: "danger",
+                header: "Problème",
+                position: "middle"
+            })
+        return toast.present();
     }
 }
 

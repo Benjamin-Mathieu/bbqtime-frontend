@@ -30,10 +30,6 @@ export default defineComponent({
   methods: {
     authUser() {
       APIProvider.loginUser(this.email, this.password);
-      this.$store.commit("setUserIsLoggedIn", true);
-      this.$store.commit("setToken", localStorage.getItem("token"));
-      this.$store.commit("setUserInformation", localStorage.getItem("user"));
-      this.$router.push("/event");
     },
   },
 });

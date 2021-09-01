@@ -10,8 +10,12 @@
           <router-link to="/event">Evènements</router-link>
           <router-link to="/order"><ion-item>Commandes</ion-item></router-link>
           <router-link to="/shop"><ion-item>Panier</ion-item></router-link>
-          <router-link to="/sign-up"><ion-item>Inscription</ion-item></router-link>
-          <router-link to="/sign-in"><ion-item>Connexion</ion-item></router-link>
+          <router-link to="/sign-up"
+            ><ion-item>Inscription</ion-item></router-link
+          >
+          <router-link to="/sign-in"
+            ><ion-item>Connexion</ion-item></router-link
+          >
         </ion-list>
         <ion-list v-else>
           <router-link to="/event"><ion-item>Evènements</ion-item></router-link>
@@ -76,9 +80,12 @@ export default defineComponent({
   mounted() {
     // Check if user already logged in
     if (localStorage.getItem("token")) {
-      this.$store.commit("setUserIsLoggedIn", true);
       this.$store.commit("setToken", localStorage.getItem("token"));
-      this.$store.commit("setUserInformation", localStorage.getItem("user"));
+      this.$store.commit(
+        "setUserInformation",
+        localStorage.getItem("userInformation")
+      );
+      this.$store.commit("setUserIsLoggedIn", true);
     } else {
       this.$store.commit("setUserIsLoggedIn", false);
     }

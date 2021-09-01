@@ -1,5 +1,6 @@
 import { Http } from '@capacitor-community/http';
 import store from '../store/store';
+import popup from './popup';
 // import axios from "axios";
 // import jwt_decode from "jwt-decode";
 
@@ -29,8 +30,19 @@ class APIProvider {
                 //     value: resp.data.token,
                 // });
 
-                store.commit("setToken", resp.data.token);
-                store.commit("setUserInformation", JSON.stringify(resp.data));
+                console.log(resp);
+                if (resp.status === 200) {
+                    store.commit("setUserIsLoggedIn", true);
+                    store.commit("setToken", resp.data.token);
+                    store.commit("setUserInformation", JSON.stringify(resp.data.informations));
+                    popup.showPopUp("Vous êtes connectés");
+                }
+                if (resp.status === 400) {
+                    popup.error("Cette adresse n'a pas été enregistré !");
+                }
+                if (resp.status === 401) {
+                    popup.error("Mauvais mot de passe !");
+                }
             })
             .catch((err) => console.log(err));
         return resp;

@@ -13,10 +13,19 @@
           </ion-card-content>
         </ion-card>
 
-        <ion-button size="medium" href="/sign-in" fill="outline"
+        <ion-button
+          v-if="!this.$store.state.userIsLoggedIn"
+          size="medium"
+          href="/sign-in"
+          fill="outline"
           >Connexion</ion-button
         >
-        <ion-button size="medium" href="/sign-up">Créer un compte</ion-button>
+        <ion-button
+          v-if="!this.$store.state.userIsLoggedIn"
+          size="medium"
+          href="/sign-up"
+          >Créer un compte</ion-button
+        >
       </div>
     </ion-content>
   </ion-page>
