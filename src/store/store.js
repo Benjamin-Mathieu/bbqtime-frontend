@@ -29,7 +29,7 @@ const store = createStore({
         },
         setEvents(state, event) {
             // Object.keys(event).forEach(key => {
-                // Vue.set(state.events, key, event[key]);
+            // Vue.set(state.events, key, event[key]);
             // })
             state.events = event;
         },
@@ -137,7 +137,7 @@ const store = createStore({
                     date: "2021-08-30 20:30:00",
                     description: state.events.description,
                     photo_url: "public/uploads/event.png",
-                    private: state.events.isPrivate,
+                    private: state.events.private,
                 },
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
