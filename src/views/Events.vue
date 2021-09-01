@@ -1,0 +1,77 @@
+<template>
+  <h1>Evènements</h1>
+
+  <ion-card v-for="event in this.$store.state.events" :key="event.id">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="2">
+          <ion-img
+            alt="event-img"
+            src="../../public/uploads/bbq.jpeg"
+          ></ion-img>
+        </ion-col>
+        <ion-col size="10">
+          <ion-item>
+            <ion-icon slot="start"></ion-icon>
+            <ion-label
+              ><b>{{ event.name }}</b></ion-label
+            >
+            <ion-button fill="outline" slot="end">Détails</ion-button>
+          </ion-item>
+
+          <ion-card-content>
+            <p>
+              {{ event.description }}
+            </p>
+            <p>
+              <b>Localisation:</b>
+              {{ event.zipcode + " " + event.address + " " + event.city }}
+            </p>
+          </ion-card-content>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+  <router-link to="/add-event">
+    <ion-button href="/add-event" fill="solid">Créer un évènement</ion-button>
+  </router-link>
+</template>
+
+<script>
+import { defineComponent } from "vue";
+import {
+  IonCard,
+  IonCardContent,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonButton,
+  IonImg,
+  IonGrid,
+  IonRow,
+  IonCol,
+} from "@ionic/vue";
+
+export default defineComponent({
+  name: "Events",
+  components: {
+    IonCard,
+    IonCardContent,
+    IonIcon,
+    IonItem,
+    IonLabel,
+    IonButton,
+    IonImg,
+    IonGrid,
+    IonRow,
+    IonCol,
+  },
+  mounted() {
+    this.$store.dispatch("getEvents");
+  },
+});
+</script>
+
+<style scoped>
+</style>

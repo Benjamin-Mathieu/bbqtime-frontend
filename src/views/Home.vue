@@ -32,7 +32,14 @@
 </template>
 
 <script>
-import { IonContent, IonPage, IonButton } from "@ionic/vue";
+import {
+  IonContent,
+  IonPage,
+  IonButton,
+  IonCard,
+  IonCardHeader,
+  IonCardContent,
+} from "@ionic/vue";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -41,6 +48,9 @@ export default defineComponent({
     IonContent,
     IonPage,
     IonButton,
+    IonCard,
+    IonCardHeader,
+    IonCardContent,
   },
 });
 </script>

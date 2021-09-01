@@ -2,11 +2,10 @@ import { createRouter, createWebHistory } from '@ionic/vue-router';
 import Home from '../views/Home.vue';
 import Scan from '../views/Scan.vue';
 import Categorie from '../views/Categorie.vue';
-import Event from '../views/Event.vue';
-import Shop from '../views/Shop.vue';
+import Events from '../views/Events.vue';
 import SignIn from '../views/SignIn.vue';
 import SignUp from '../views/SignUp.vue';
-import Order from "../views/Order";
+import Orders from "../views/Orders";
 import AddEvent from "../views/AddEvent";
 import Account from "../views/Account";
 
@@ -31,14 +30,9 @@ const routes = [
     component: Categorie
   },
   {
-    path: '/event',
-    name: 'Event',
-    component: Event
-  },
-  {
-    path: '/shop',
-    name: 'Shop',
-    component: Shop
+    path: '/events',
+    name: 'Events',
+    component: Events
   },
   {
     path: '/sign-in',
@@ -51,9 +45,9 @@ const routes = [
     component: SignUp
   },
   {
-    path: '/order',
+    path: '/orders',
     name: 'Order',
-    component: Order
+    component: Orders
   },
   {
     path: '/add-event',
