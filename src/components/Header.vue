@@ -5,7 +5,7 @@
         <ion-menu-button menu="start"></ion-menu-button>
       </ion-buttons>
       <ion-title>
-        <ion-img src="../../public/assets/logo1.png"></ion-img>
+        <img src="../../public/assets/logo1.png" alt="logo-bbqtime" />
       </ion-title>
       <ion-buttons slot="end">
         <ion-menu-button menu="end"></ion-menu-button>
@@ -20,7 +20,6 @@ import {
   IonToolbar,
   IonButtons,
   IonMenuButton,
-  IonImg,
   IonTitle,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
@@ -32,7 +31,6 @@ export default defineComponent({
     IonToolbar,
     IonButtons,
     IonMenuButton,
-    IonImg,
     IonTitle,
   },
 });

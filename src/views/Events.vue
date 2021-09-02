@@ -12,11 +12,11 @@
             </ion-col>
             <ion-col size="10">
               <ion-item>
-                <ion-icon slot="start"></ion-icon>
                 <ion-label
                   ><b>{{ event.name }}</b> ID {{ event.id }}</ion-label
                 >
-                <ion-icon name="lock-closed"></ion-icon>
+                <ion-icon v-if="event.private" :icon="lockClosed"></ion-icon>
+
                 <ion-button fill="outline" slot="end">Détails</ion-button>
               </ion-item>
 
@@ -59,6 +59,7 @@ import {
   IonRow,
   IonCol,
 } from "@ionic/vue";
+import { lockClosed } from "ionicons/icons";
 
 export default defineComponent({
   name: "Events",
@@ -75,6 +76,11 @@ export default defineComponent({
     IonGrid,
     IonRow,
     IonCol,
+  },
+  setup() {
+    return {
+      lockClosed,
+    };
   },
   mounted() {
     this.$store.dispatch("getEvents");
