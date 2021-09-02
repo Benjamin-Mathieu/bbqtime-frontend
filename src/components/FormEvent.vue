@@ -78,13 +78,14 @@ export default defineComponent({
   },
   data() {
     return {
-      name: "",
-      address: "",
-      city: "",
-      zipcode: "",
+      name: "Test API",
+      address: "99 rue des pins",
+      city: "Epinal",
+      zipcode: "88000",
       date: "",
       hours: "",
-      description: "",
+      description:
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
       isPrivate: true,
     };
   },
@@ -99,6 +100,8 @@ export default defineComponent({
         description: this.description,
         private: this.isPrivate,
       };
+
+      console.log(this.isPrivate);
 
       try {
         this.$store.commit("setEvents", event);

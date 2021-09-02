@@ -92,7 +92,6 @@ export default defineComponent({
       price: "",
       description: "",
       quantity: "",
-      category_id: "",
     };
   },
   methods: {

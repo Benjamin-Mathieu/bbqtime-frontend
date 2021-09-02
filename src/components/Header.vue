@@ -21,6 +21,7 @@ import {
   IonButtons,
   IonMenuButton,
   IonImg,
+  IonTitle,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 
@@ -32,6 +33,7 @@ export default defineComponent({
     IonButtons,
     IonMenuButton,
     IonImg,
+    IonTitle,
   },
 });
 </script>
