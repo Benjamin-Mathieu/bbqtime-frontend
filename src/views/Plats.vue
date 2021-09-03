@@ -25,7 +25,11 @@
                   <ion-label position="floating">Quantité</ion-label>
                   <ion-input type="number" v-model="quantity"></ion-input>
                 </ion-item>
-                <ion-button size="small" fill="outline">
+                <ion-button
+                  @click="addToShop(plat)"
+                  size="small"
+                  fill="outline"
+                >
                   <ion-icon :icon="addCircleOutline"></ion-icon>
                 </ion-button>
               </ion-card-content>
@@ -83,10 +87,39 @@ export default defineComponent({
   data() {
     return {
       quantity: 1,
+      total: 0,
     };
   },
   mounted() {
     this.$store.dispatch("getEventDetails", this.$route.params.id);
+    this.$store.state.shop = [];
+  },
+  methods: {
+    addToShop(addedPlat) {
+      // let idPlatInStore = [];
+      addedPlat.qty = this.quantity;
+      this.$store.commit("setShop", addedPlat);
+
+      this.$store.state.shop = this.$store.state.shop.filter(
+        (x) => x.id !== addedPlat.id
+      );
+
+      // this.$store.state.shop.forEach((plat) => {
+      // let idPlat = Object.values(plat)[0];
+      // idPlatInStore.push(idPlat);
+      // });
+
+      // console.log("array id des plats:", idPlatInStore);
+
+      // // checks whether an element is even
+      // const test = (element) => element == addedPlat.id;
+
+      // if (idPlatInStore.some(test)) {
+      //   console.log("déjà pré");
+      // } else {
+      //   console.log("ajout");
+      // }
+    },
   },
 });
 </script>

@@ -9,6 +9,7 @@ import Orders from "../views/Orders";
 import AddEvent from "../views/AddEvent";
 import Account from "../views/Account";
 import Plats from "../views/Plats";
+import Shop from "../views/Shop";
 
 const routes = [
   {
@@ -65,6 +66,11 @@ const routes = [
     name: 'Account',
     component: Account
   },
+  {
+    path: '/shop',
+    name: 'Shop',
+    component: Shop
+  }
 ];
 
 const router = createRouter({
