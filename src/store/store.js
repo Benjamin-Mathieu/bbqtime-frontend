@@ -10,7 +10,9 @@ const store = createStore({
             userInformation: null,
             userIsLoggedIn: null,
             events: {},
+            eventDetails: [],
             orders: [],
+            orderDetails: [],
             categories: [],
             menus: [],
             shop: []
@@ -34,8 +36,14 @@ const store = createStore({
             // })
             state.events = event;
         },
+        setEventDetails(state, eventDetails) {
+            state.eventDetails = eventDetails;
+        },
         setOrders(state, orders) {
             state.orders = orders
+        },
+        setOrderDetails(state, orderDetails) {
+            state.orderDetails = orderDetails;
         },
         setCategories(state, categorie) {
             state.categories.push(categorie)
@@ -95,6 +103,30 @@ const store = createStore({
                 }
             });
             commit("setCategories", req.data.categories)
+        },
+
+        async getEventDetails({ commit }, id) {
+            let req = await axios({
+                method: "get",
+                url: 'http://localhost:3000/events/' + id,
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            });
+            commit("setEventDetails", req.data.event);
+        },
+
+        async getOrderDetails({ commit }, id) {
+            const orderId = Object.values(id.id).toString();
+            let req = await axios({
+                method: "get",
+                url: 'http://localhost:3000/orders/' + orderId,
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            });
+            console.log(req.data);
+            commit("setOrderDetails", req.data);
         },
 
         async postEvent({ state }) {

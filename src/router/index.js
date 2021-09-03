@@ -1,13 +1,14 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import Home from '../views/Home.vue';
 import Scan from '../views/Scan.vue';
-import Categorie from '../views/Categorie.vue';
+import Categories from '../views/Categories.vue';
 import Events from '../views/Events.vue';
 import SignIn from '../views/SignIn.vue';
 import SignUp from '../views/SignUp.vue';
 import Orders from "../views/Orders";
 import AddEvent from "../views/AddEvent";
 import Account from "../views/Account";
+import Plats from "../views/Plats";
 
 const routes = [
   {
@@ -25,9 +26,14 @@ const routes = [
     component: Scan
   },
   {
-    path: '/categorie',
-    name: 'Categorie',
-    component: Categorie
+    path: '/event/:id/categories',
+    name: 'Categories',
+    component: Categories
+  },
+  {
+    path: '/event/:id/categories/:libelle',
+    name: 'Plats',
+    component: Plats
   },
   {
     path: '/events',

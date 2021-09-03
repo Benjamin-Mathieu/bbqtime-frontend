@@ -17,7 +17,11 @@
                 >
                 <ion-icon v-if="event.private" :icon="lockClosed"></ion-icon>
 
-                <ion-button fill="outline" slot="end">Détails</ion-button>
+                <router-link :to="'/event/' + event.id + '/categories'"
+                  ><ion-button fill="outline" slot="end"
+                    >Détails</ion-button
+                  ></router-link
+                >
               </ion-item>
 
               <ion-card-content>
