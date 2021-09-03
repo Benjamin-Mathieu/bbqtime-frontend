@@ -52,7 +52,11 @@ const store = createStore({
             state.menus.push(menu)
         },
         setShop(state, shop) {
-            state.shop.push(shop);
+            if (state.shop.includes(shop)) {
+                state.shop.qty = shop.qty;
+            } else {
+                state.shop.push(shop);
+            }
         }
     },
     getters: {

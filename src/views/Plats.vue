@@ -96,29 +96,8 @@ export default defineComponent({
   },
   methods: {
     addToShop(addedPlat) {
-      // let idPlatInStore = [];
-      addedPlat.qty = this.quantity;
+      addedPlat.qty = parseInt(this.quantity, 10);
       this.$store.commit("setShop", addedPlat);
-
-      this.$store.state.shop = this.$store.state.shop.filter(
-        (x) => x.id !== addedPlat.id
-      );
-
-      // this.$store.state.shop.forEach((plat) => {
-      // let idPlat = Object.values(plat)[0];
-      // idPlatInStore.push(idPlat);
-      // });
-
-      // console.log("array id des plats:", idPlatInStore);
-
-      // // checks whether an element is even
-      // const test = (element) => element == addedPlat.id;
-
-      // if (idPlatInStore.some(test)) {
-      //   console.log("déjà pré");
-      // } else {
-      //   console.log("ajout");
-      // }
     },
   },
 });
