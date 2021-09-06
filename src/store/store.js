@@ -150,7 +150,7 @@ const store = createStore({
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
-            });
+            })
         },
 
         async postCategorie({ state }) {
@@ -178,8 +178,8 @@ const store = createStore({
                         price: menu.price,
                         description: menu.description,
                         quantity: menu.quantity,
-                        category_id: 8,
-                        event_id: 35,
+                        category_id: 40,
+                        event_id: 40,
                         photo_url: "public/uploads/menu.jpg"
                     },
                     headers: {
@@ -188,6 +188,40 @@ const store = createStore({
                 })
             })
         },
+
+        postOrder({ state }, payload) {
+            axios({
+                method: "post",
+                url: 'http://localhost:3000/orders',
+                data: {
+                    event_id: 44,
+                    cost: payload,
+                    heure: "2021-09-01 20:30:00"
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            })
+                .then(resp => {
+                    state.shop.forEach(plat => {
+
+                        axios({
+                            method: "post",
+                            url: 'http://localhost:3000/order-plats',
+                            data: {
+                                plat_id: plat.id,
+                                order_id: resp.data.id,
+                                quantity: plat.qty
+                            },
+                            headers: {
+                                'Authorization': 'Bearer ' + localStorage.getItem("token")
+                            }
+                        })
+                    })
+                }
+                ).catch(err => console.log(err));
+        },
+
     }
 });
 

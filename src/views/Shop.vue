@@ -19,17 +19,16 @@
                 </ion-button>
               </ion-item>
               <ion-item>
-                <ion-input
-                  type="number"
-                  v-model="quantity"
-                  :value="plat.qty"
-                ></ion-input>
+                <ion-label>Quantité</ion-label>
+                <ion-input type="number" :value="plat.qty"></ion-input>
               </ion-item>
+              <ion-item>Total: {{ plat.qty * plat.price }} €</ion-item>
             </ion-col>
           </ion-row>
         </ion-grid>
       </ion-card>
-      <ion-item> Montant total: {{ getTotal }} € </ion-item>
+      <ion-item> Montant total: {{ getTotalOrder }} € </ion-item>
+      <ion-button fill="solid" @click="postOrder()">Commander</ion-button>
     </ion-content>
   </ion-page>
 </template>
@@ -63,15 +62,15 @@ export default defineComponent({
   },
   data() {
     return {
-      total: 0,
+      totalOrder: 0,
     };
   },
   computed: {
-    getTotal() {
+    getTotalOrder() {
       this.$store.state.shop.forEach((plat) => {
-        this.total += parseInt(plat.price, 10);
+        this.totalOrder = this.totalOrder + parseInt(plat.price, 10) * plat.qty;
       });
-      return this.total;
+      return this.totalOrder;
     },
   },
   methods: {
@@ -79,6 +78,9 @@ export default defineComponent({
       this.$store.state.shop = this.$store.state.shop.filter(
         (x) => x.id !== plat.id
       );
+    },
+    postOrder() {
+      this.$store.dispatch("postOrder", this.totalOrder);
     },
   },
 });
