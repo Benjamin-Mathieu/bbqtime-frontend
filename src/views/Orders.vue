@@ -1,7 +1,9 @@
 <template>
   <h1>Commandes</h1>
+  <h1>Commandes</h1>
+
   <ion-page>
-    <ion-content>
+    <ion-content v-if="this.$store.state.orders.length > 0">
       <ion-card v-for="order in this.$store.state.orders" :key="order.id">
         <ion-grid>
           <ion-row>
@@ -48,10 +50,10 @@
                     >
                   </ion-item>
                   <ion-item>
-                    <b>Quantité: {{ orderplat.plat.quantity }} </b>
+                    <b>Quantité:</b> {{ orderplat.plat.quantity }}
                   </ion-item>
                   <ion-item>
-                    <b>Prix: {{ orderplat.plat.price }} </b>
+                    <b>Prix unitaire: </b> {{ orderplat.plat.price }} €
                   </ion-item>
                 </ion-col>
               </ion-row>
@@ -59,6 +61,13 @@
           </ion-card>
         </ion-grid>
       </ion-card>
+    </ion-content>
+    <ion-content v-else>
+      <ion-card
+        ><ion-card-content
+          >Pas de commande pour le moment</ion-card-content
+        ></ion-card
+      >
     </ion-content>
   </ion-page>
 </template>

@@ -24,7 +24,7 @@
                     '/event/' +
                     plat.event_id +
                     '/categories/' +
-                    plat.categorie.libelle
+                    plat.categorie.id
                   "
                   ><ion-button fill="outline" slot="end" size="small"
                     >Voir plats</ion-button

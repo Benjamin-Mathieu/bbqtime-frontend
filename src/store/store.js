@@ -194,30 +194,17 @@ const store = createStore({
                 method: "post",
                 url: 'http://localhost:3000/orders',
                 data: {
-                    event_id: 44,
+                    event_id: state.eventDetails.id,
                     cost: payload,
-                    heure: "2021-09-01 20:30:00"
+                    heure: "2021-09-01 20:30:00",
+                    plats: state.shop,
                 },
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
             })
                 .then(resp => {
-                    state.shop.forEach(plat => {
-
-                        axios({
-                            method: "post",
-                            url: 'http://localhost:3000/order-plats',
-                            data: {
-                                plat_id: plat.id,
-                                order_id: resp.data.id,
-                                quantity: plat.qty
-                            },
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem("token")
-                            }
-                        })
-                    })
+                    console.log(resp);
                 }
                 ).catch(err => console.log(err));
         },
