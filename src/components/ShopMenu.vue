@@ -3,14 +3,14 @@
     <ion-content>
       <p v-if="this.$store.state.shop.length === 0">Votre panier est vide</p>
 
-      <!-- List of Text Items -->
-      <ion-list>
+      <!-- List of Plat in Shop -->
+      <ion-list v-else>
         <ion-item v-for="plat in this.$store.state.shop" :key="plat.id">
           <ion-label>{{ plat.libelle }} </ion-label>
           <ion-label>{{ plat.price + "€" }} </ion-label>
           <ion-label>{{ plat.qty }} </ion-label>
         </ion-item>
-        <ion-item>Montant total {{ getTotal }}</ion-item>
+        <ion-item>Montant total: {{ getTotal }}</ion-item>
         <router-link to="/shop">
           <ion-button size="medium">Commander</ion-button>
         </router-link>
@@ -34,15 +34,17 @@ export default defineComponent({
   components: { IonMenu, IonContent, IonList, IonItem, IonLabel },
   data() {
     return {
-      total: 0,
+      totalOrder: 0,
     };
   },
   computed: {
     getTotal() {
       this.$store.state.shop.forEach((plat) => {
-        this.total += parseInt(plat.price, 10);
+        console.log("prix =>", plat.price, "qty =>", plat.qty);
+        this.totalOrder = this.totalOrder + parseInt(plat.price, 10) * plat.qty;
+        console.log("totalorder", this.totalOrder);
       });
-      return this.total;
+      return this.totalOrder;
     },
   },
   methods: {

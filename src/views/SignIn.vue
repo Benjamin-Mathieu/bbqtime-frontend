@@ -27,7 +27,7 @@ export default defineComponent({
   data() {
     return {
       email: "testpost@gmail.com",
-      password: "",
+      password: "test",
     };
   },
   methods: {

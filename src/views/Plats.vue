@@ -11,12 +11,14 @@
             :key="plat.id"
             size="6"
           >
-            <ion-card>
+            <ion-card
+              v-if="plat.categorie.id == this.$route.params.idCategorie"
+            >
               <img :src="plat.photo_url" alt="img-plat" />
               <ion-card-header>
                 <ion-card-title
-                  >{{ plat.libelle }} {{ plat.price + "€" }}</ion-card-title
-                >
+                  >{{ plat.libelle }} {{ plat.price + "€" }}
+                </ion-card-title>
               </ion-card-header>
 
               <ion-card-content>
@@ -30,6 +32,7 @@
                   size="small"
                   fill="outline"
                 >
+                  Ajouter au panier
                   <ion-icon :icon="addCircleOutline"></ion-icon>
                 </ion-button>
               </ion-card-content>
@@ -92,7 +95,6 @@ export default defineComponent({
   },
   mounted() {
     this.$store.dispatch("getEventDetails", this.$route.params.id);
-    this.$store.state.shop = [];
   },
   methods: {
     addToShop(addedPlat) {

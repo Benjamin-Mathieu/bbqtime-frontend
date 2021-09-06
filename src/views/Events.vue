@@ -1,6 +1,9 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
+      <h1>okoke</h1>
+      <h1>okoke</h1>
+
       <ion-card v-for="event in this.$store.state.events" :key="event.id">
         <ion-grid>
           <ion-row>
