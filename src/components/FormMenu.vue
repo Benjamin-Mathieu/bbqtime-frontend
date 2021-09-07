@@ -37,13 +37,13 @@
           <ion-input type="number" v-model="quantity" required></ion-input>
         </ion-item>
         <ion-item>
-          <ion-select placeholder="Catégories">
+          <ion-select v-model="categorie" placeholder="Catégories">
             <ion-select-option
               v-for="categorie in this.$store.state.categories"
               :key="categorie.id"
               :value="categorie"
-              >{{ categorie }}</ion-select-option
-            >
+              >{{ categorie }}
+            </ion-select-option>
           </ion-select>
         </ion-item>
       </ion-card-content>
@@ -92,6 +92,8 @@ export default defineComponent({
       price: "",
       description: "",
       quantity: "",
+      photo_url: "public/uploads/test.jpg",
+      categorie: "",
     };
   },
   methods: {
@@ -99,13 +101,18 @@ export default defineComponent({
       const menu = {
         libelle: this.name,
         price: this.price,
+        photo_url: this.photo_url,
         description: this.description,
         quantity: this.quantity,
+        categorie: {
+          libelle: this.categorie,
+        },
       };
 
       try {
         this.$store.commit("setMenus", menu);
         popup.showPopUp("Menu ajouté");
+        this.$store.dispatch("postMenu");
       } catch (error) {
         popup.showPopUp(error);
       }

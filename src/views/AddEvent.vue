@@ -79,7 +79,6 @@ import {
 import FormEvent from "../components/FormEvent.vue";
 import FormCategorie from "../components/FormCategorie.vue";
 import FormMenu from "../components/FormMenu.vue";
-import { mapActions } from "vuex";
 
 export default defineComponent({
   name: "AddEvent",
@@ -103,8 +102,6 @@ export default defineComponent({
     };
   },
   methods: {
-    ...mapActions(["postEvent", "postCategorie", "postMenu"]),
-
     goMenu() {
       this.toggleForm = "menu";
     },
@@ -152,9 +149,6 @@ export default defineComponent({
       const { role } = await alert.onDidDismiss();
       console.log("onDidDismiss resolved with role", role);
       if (role === "valid") {
-        this.postEvent();
-        this.postCategorie();
-        this.postMenu();
         this.step++;
       }
     },

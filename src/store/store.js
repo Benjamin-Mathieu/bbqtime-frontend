@@ -9,7 +9,8 @@ const store = createStore({
             token: null,
             userInformation: null,
             userIsLoggedIn: null,
-            events: {},
+            events: [],
+            eventTmp: {},
             eventDetails: [],
             orders: [],
             orderDetails: [],
@@ -31,10 +32,12 @@ const store = createStore({
             state.userIsLoggedIn = userIsLoggedIn
         },
         setEvents(state, event) {
-            // Object.keys(event).forEach(key => {
-            // Vue.set(state.events, key, event[key]);
-            // })
-            state.events = event;
+            if (Object.keys(event).length > 0) {
+                state.events.push(event);
+            }
+        },
+        setEventTmp(state, eventTmp) {
+            state.eventTmp = eventTmp;
         },
         setEventDetails(state, eventDetails) {
             state.eventDetails = eventDetails;
@@ -138,14 +141,14 @@ const store = createStore({
                 method: "post",
                 url: 'http://localhost:3000/events',
                 data: {
-                    name: state.events.name,
-                    address: state.events.address,
-                    city: state.events.city,
-                    zipcode: state.events.zipcode,
+                    name: state.eventTmp.name,
+                    address: state.eventTmp.address,
+                    city: state.eventTmp.city,
+                    zipcode: state.eventTmp.zipcode,
                     date: "2021-08-30 20:30:00",
-                    description: state.events.description,
+                    description: state.eventTmp.description,
                     photo_url: "public/uploads/event.png",
-                    private: state.events.private,
+                    private: state.eventTmp.private,
                 },
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
@@ -179,7 +182,7 @@ const store = createStore({
                         description: menu.description,
                         quantity: menu.quantity,
                         category_id: 40,
-                        event_id: 40,
+                        event_id: state.eventTmp.id,
                         photo_url: "public/uploads/menu.jpg"
                     },
                     headers: {

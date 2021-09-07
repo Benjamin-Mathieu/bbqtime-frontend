@@ -104,7 +104,8 @@ export default defineComponent({
       console.log(this.isPrivate);
 
       try {
-        this.$store.commit("setEvents", event);
+        this.$store.commit("setEventTmp", event);
+        this.$store.dispatch("postEvent");
       } catch (error) {
         console.error(error);
       }

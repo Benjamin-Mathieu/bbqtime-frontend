@@ -70,16 +70,15 @@ export default defineComponent({
       name: "",
     };
   },
-  computed: {
-    categories() {
-      return this.$store.getters.categories;
-    },
+  mounted() {
+    this.$store.dispatch("getCategories");
   },
   methods: {
     addCategorie() {
       try {
         this.$store.commit("setCategories", this.name);
         popup.showPopUp("Catégorie ajouté");
+        this.$store.dispatch("postCategorie");
       } catch (error) {
         popup.showPopUp(error);
       }
