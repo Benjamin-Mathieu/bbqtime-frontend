@@ -4,7 +4,7 @@
       <h1>okoke</h1>
       <h1>okoke</h1>
 
-      <ion-card v-for="event in this.$store.state.events" :key="event.id">
+      <ion-card v-for="event in this.$store.state.events[0]" :key="event.id">
         <ion-grid>
           <ion-row>
             <ion-col size="2">

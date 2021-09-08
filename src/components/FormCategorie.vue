@@ -19,7 +19,7 @@
         <ion-card-content>
           <ion-item>
             <ion-label position="floating">Nom de la catégorie</ion-label>
-            <ion-input type="text" v-model="name" required></ion-input>
+            <ion-input type="text" v-model="libelle" required></ion-input>
           </ion-item>
         </ion-card-content>
         <ion-item>
@@ -46,7 +46,6 @@ import {
   IonToolbar,
   IonContent,
 } from "@ionic/vue";
-import popup from "../services/popup";
 
 export default defineComponent({
   name: "FormCategorie",
@@ -67,21 +66,15 @@ export default defineComponent({
 
   data() {
     return {
-      name: "",
+      libelle: "",
     };
   },
   mounted() {
-    this.$store.dispatch("getCategories");
+    // this.$store.dispatch("getCategories");
   },
   methods: {
     addCategorie() {
-      try {
-        this.$store.commit("setCategories", this.name);
-        popup.showPopUp("Catégorie ajouté");
-        this.$store.dispatch("postCategorie");
-      } catch (error) {
-        popup.showPopUp(error);
-      }
+      this.$store.dispatch("postCategorie", this.libelle);
     },
   },
 });

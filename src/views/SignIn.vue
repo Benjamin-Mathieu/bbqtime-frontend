@@ -1,5 +1,7 @@
 <template>
   <ion-page>
+    <h1>OKOKOK</h1>
+    <h1>OKOKOK</h1>
     <ion-content>
       <form @submit.prevent="authUser()" method="post">
         <ion-item>

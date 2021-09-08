@@ -1,19 +1,21 @@
  <template>
   <ion-page>
     <h1>Création évènement</h1>
+    <h1>Création évènement</h1>
+
     <ion-content>
       <!-- ETAPES (1: Evènement, 2: Categorie + Menu, 3: Paiement, 4: Confirmation création évènement) -->
       <ion-segment :value="step">
-        <ion-segment-button value="1">
+        <ion-segment-button @click="step = 1" value="1">
           <ion-label>Step 1</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="2">
+        <ion-segment-button @click="step = 2" value="2">
           <ion-label>Step 2</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="3" disabled>
+        <ion-segment-button @click="step = 3" value="3" :disabled="disabled">
           <ion-label>Step 3</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="4" disabled>
+        <ion-segment-button @click="step = 4" value="4" :disabled="disabled">
           <ion-label>Step 4</ion-label>
         </ion-segment-button>
       </ion-segment>
@@ -21,10 +23,17 @@
       <!-- ETAPE 2 -->
       <ion-content v-if="step === 2">
         <ion-segment :value="toggleForm">
-          <ion-segment-button value="categorie">
+          <ion-segment-button
+            @click="toggleForm = 'categorie'"
+            value="categorie"
+          >
             <ion-label>Catégorie</ion-label>
           </ion-segment-button>
-          <ion-segment-button value="menu">
+          <ion-segment-button
+            @click="toggleForm = 'menu'"
+            value="menu"
+            :disabled="disabledMenu"
+          >
             <ion-label>Menu</ion-label>
           </ion-segment-button>
         </ion-segment>
@@ -35,29 +44,45 @@
           >Ajouter une catégorie</ion-button
         >
         <ion-button @click="openModalMenu" v-else>Ajouter un menu</ion-button>
-        <ion-button size="small" @click="goMenu()">go menu</ion-button>
-        <ion-button size="small" @click="goCategorie()"
-          >go categorie</ion-button
-        >
-        <div v-if="toggleForm === 'categorie'">
-          <ion-card
-            v-for="categorie in this.$store.state.categories"
-            :key="categorie.id"
-          >
-            <ion-item>
-              <ion-label
-                ><b>{{ categorie }}</b></ion-label
-              >
-            </ion-item>
-          </ion-card>
-        </div>
+
+        <ion-grid v-if="toggleForm === 'categorie'">
+          <ion-row>
+            <ion-col
+              v-for="categorie in this.$store.state.categories"
+              :key="categorie.id"
+              size="6"
+              @click="postPlatCategorie(categorie.id)"
+            >
+              <ion-card>
+                <img :src="categorie.photo_url" alt="img-categorie" />
+                <ion-card-header>
+                  <ion-card-title> {{ categorie.libelle }} </ion-card-title>
+                </ion-card-header>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <ion-grid v-if="toggleForm === 'menu'">
+          <ion-row>
+            <ion-col
+              v-for="plat in this.$store.state.plats"
+              :key="plat.id"
+              size="6"
+            >
+              <ion-card>
+                <img :src="plat.photo_url" alt="img-plat" />
+                <ion-card-header>
+                  <ion-card-title> {{ plat.libelle }} </ion-card-title>
+                </ion-card-header>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
       </ion-content>
 
       <FormEvent v-if="step === 1"></FormEvent>
-      <ion-button @click="nextStep()">NEXT STEP</ion-button>
-
-      <FormCategorie v-if="step === 0"></FormCategorie>
-      <FormMenu v-if="step === 0"></FormMenu>
+      <ion-button @click="nextStep()">Valider</ion-button>
     </ion-content>
   </ion-page>
 </template>
@@ -71,8 +96,11 @@ import {
   IonSegmentButton,
   IonLabel,
   IonButton,
-  IonItem,
   IonCard,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonCardHeader,
   modalController,
   alertController,
 } from "@ionic/vue";
@@ -89,29 +117,35 @@ export default defineComponent({
     IonSegmentButton,
     IonLabel,
     IonButton,
-    IonItem,
     IonCard,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonCardHeader,
     FormEvent,
-    FormCategorie,
-    FormMenu,
   },
   data() {
     return {
       step: 1,
       toggleForm: "categorie",
+      disabled: true,
+      disabledMenu: true,
     };
   },
   methods: {
-    goMenu() {
+    postPlatCategorie(categorieId) {
       this.toggleForm = "menu";
+      this.$store.commit("setCategoryIdTmp", categorieId);
+      this.$store.dispatch("getPlats");
     },
-    goCategorie() {
-      this.toggleForm = "categorie";
-    },
-
     nextStep() {
       this.step++;
-      if (this.step >= 3) {
+
+      if (this.step === 2) {
+        console.log("step", this.step);
+        this.$store.dispatch("getCategories");
+      }
+      if (this.step === 3) {
         this.validEvent();
       }
     },

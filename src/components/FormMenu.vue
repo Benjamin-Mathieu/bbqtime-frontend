@@ -36,16 +36,6 @@
           <ion-label position="floating">Quantité</ion-label>
           <ion-input type="number" v-model="quantity" required></ion-input>
         </ion-item>
-        <ion-item>
-          <ion-select v-model="categorie" placeholder="Catégories">
-            <ion-select-option
-              v-for="categorie in this.$store.state.categories"
-              :key="categorie.id"
-              :value="categorie"
-              >{{ categorie }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
       </ion-card-content>
       <ion-item>
         <ion-button type="submit" size="small">Ajouter</ion-button>
@@ -65,11 +55,9 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonCardContent,
-  IonSelect,
-  IonSelectOption,
   IonTextarea,
 } from "@ionic/vue";
-import popup from "../services/popup";
+// import popup from "../services/popup";
 
 export default defineComponent({
   name: "FormMenu",
@@ -82,40 +70,27 @@ export default defineComponent({
     IonCardHeader,
     IonCardTitle,
     IonCardContent,
-    IonSelect,
-    IonSelectOption,
     IonTextarea,
   },
   data() {
     return {
-      name: "",
-      price: "",
-      description: "",
-      quantity: "",
+      name: "test",
+      price: 25,
+      description: "zezaezae",
+      quantity: 10,
       photo_url: "public/uploads/test.jpg",
-      categorie: "",
     };
   },
   methods: {
     addMenu() {
-      const menu = {
+      const plat = {
         libelle: this.name,
         price: this.price,
         photo_url: this.photo_url,
         description: this.description,
         quantity: this.quantity,
-        categorie: {
-          libelle: this.categorie,
-        },
       };
-
-      try {
-        this.$store.commit("setMenus", menu);
-        popup.showPopUp("Menu ajouté");
-        this.$store.dispatch("postMenu");
-      } catch (error) {
-        popup.showPopUp(error);
-      }
+      this.$store.dispatch("postPlat", plat);
     },
   },
 });

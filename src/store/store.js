@@ -1,6 +1,7 @@
 import { createStore } from 'vuex';
 // import APIProvider from '../services/api';
 import axios from "axios";
+import popup from '../services/popup';
 
 // Create a new store instance.
 const store = createStore({
@@ -15,7 +16,8 @@ const store = createStore({
             orders: [],
             orderDetails: [],
             categories: [],
-            menus: [],
+            categoryIdTmp: {},
+            plats: [],
             shop: []
         };
     },
@@ -51,8 +53,11 @@ const store = createStore({
         setCategories(state, categorie) {
             state.categories.push(categorie)
         },
-        setMenus(state, menu) {
-            state.menus.push(menu)
+        setCategoryIdTmp(state, categorieId) {
+            state.categoryIdTmp = categorieId
+        },
+        setPlats(state, plat) {
+            state.plats = plat;
         },
         setShop(state, shop) {
             if (state.shop.includes(shop)) {
@@ -69,15 +74,6 @@ const store = createStore({
             } else {
                 return "Disconnected"
             }
-        },
-        categories: state => {
-            return state.categories;
-        },
-        events: state => {
-            return state.events;
-        },
-        menus: state => {
-            return state.menus;
         }
     },
     actions: {
@@ -101,15 +97,31 @@ const store = createStore({
             });
             commit("setOrders", req.data.orders)
         },
-        async getCategories({ commit }) {
-            let req = await axios({
+        async getPlats({ commit, state }) {
+            await axios({
                 method: "get",
-                url: 'http://localhost:3000/categories',
+                url: 'http://localhost:3000/plats/' + state.categoryIdTmp,
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
-            });
-            commit("setCategories", req.data.categories)
+            }).then(resp => {
+                commit("setPlats", resp.data.plats);
+            })
+        },
+
+        async getCategories({ commit, state }) {
+            await axios({
+                method: "get",
+                url: 'http://localhost:3000/categories/' + state.eventTmp.id,
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            }).then(resp => {
+                resp.data.categories.forEach(categorie => {
+                    commit("setCategories", categorie);
+                });
+            })
+
         },
 
         async getEventDetails({ commit }, id) {
@@ -136,7 +148,7 @@ const store = createStore({
             commit("setOrderDetails", req.data);
         },
 
-        async postEvent({ state }) {
+        async postEvent({ commit, state }) {
             await axios({
                 method: "post",
                 url: 'http://localhost:3000/events',
@@ -153,43 +165,64 @@ const store = createStore({
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
+            }).then(resp => {
+                commit("setEventTmp", resp.data.event);
             })
         },
 
-        async postCategorie({ state }) {
-            await state.categories.forEach(categorie => {
-                axios({
-                    method: "post",
-                    url: 'http://localhost:3000/categories',
-                    data: {
-                        libelle: categorie
-                    },
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem("token")
-                    }
-                });
-            });
-        },
-
-        async postMenu({ state }) {
-            await state.menus.forEach(menu => {
-                axios({
-                    method: "post",
-                    url: 'http://localhost:3000/plats',
-                    data: {
-                        libelle: menu.libelle,
-                        price: menu.price,
-                        description: menu.description,
-                        quantity: menu.quantity,
-                        category_id: 40,
-                        event_id: state.eventTmp.id,
-                        photo_url: "public/uploads/menu.jpg"
-                    },
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+        async postCategorie({ commit, state }, libelle) {
+            await axios({
+                method: "post",
+                url: 'http://localhost:3000/categories',
+                data: {
+                    libelle: libelle,
+                    event_id: state.eventTmp.id
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            })
+                .then(resp => {
+                    if (resp.status === 201) {
+                        console.log(resp.data);
+                        popup.success("Catégorie ajouté");
+                        commit("setCategories", resp.data.categorie[0])
                     }
                 })
+                .catch(err => {
+                    if (err.toString().includes("400")) {
+                        popup.warning("Catégorie déjà existante");
+                    } else {
+                        popup.error("Une erreur est survenue");
+                    }
+                })
+        },
+
+        async postPlat({ state }, plat) {
+            axios({
+                method: "post",
+                url: 'http://localhost:3000/plats',
+                data: {
+                    libelle: plat.libelle,
+                    price: plat.price,
+                    description: plat.description,
+                    quantity: plat.quantity,
+                    photo_url: plat.photo_url,
+                    event_id: state.eventTmp.id,
+                    category_id: state.categoryIdTmp
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
             })
+                .then(resp => {
+                    if (resp.status === 201) {
+                        popup.success("plat ajouté");
+                    }
+                    if (resp.status === 500) {
+                        popup.error("Une erreur est survenue");
+                    }
+                })
         },
 
         postOrder({ state }, payload) {

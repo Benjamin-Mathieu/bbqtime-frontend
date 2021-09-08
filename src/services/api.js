@@ -21,7 +21,7 @@ class APIProvider {
                 password: password,
             },
         };
-        console.log(store);
+
         const resp = Http.post(options)
             .then((resp) => {
                 // Use library community/storage if necessary...
@@ -30,15 +30,14 @@ class APIProvider {
                 //     value: resp.data.token,
                 // });
 
-                console.log(resp);
                 if (resp.status === 200) {
                     store.commit("setUserIsLoggedIn", true);
                     store.commit("setToken", resp.data.token);
                     store.commit("setUserInformation", JSON.stringify(resp.data.informations));
-                    popup.showPopUp("Vous êtes connectés");
+                    popup.success("Vous êtes connectés");
                 }
                 if (resp.status === 400) {
-                    popup.error("Cette adresse n'a pas été enregistré !");
+                    popup.warning("Cette adresse n'a pas été enregistré !");
                 }
                 if (resp.status === 401) {
                     popup.error("Mauvais mot de passe !");
