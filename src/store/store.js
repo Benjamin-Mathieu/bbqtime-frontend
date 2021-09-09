@@ -11,6 +11,7 @@ const store = createStore({
             userInformation: null,
             userIsLoggedIn: null,
             events: [],
+            myEvents: [],
             eventTmp: {},
             eventDetails: [],
             orders: [],
@@ -37,6 +38,9 @@ const store = createStore({
             if (Object.keys(event).length > 0) {
                 state.events.push(event);
             }
+        },
+        setMyEvents(state, myEvents) {
+            state.myEvents = myEvents;
         },
         setEventTmp(state, eventTmp) {
             state.eventTmp = eventTmp;
@@ -86,6 +90,16 @@ const store = createStore({
                 }
             });
             commit("setEvents", req.data.events)
+        },
+        async getMyEvents({ commit }) {
+            let req = await axios({
+                method: "get",
+                url: 'http://localhost:3000/events/myEvents',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            });
+            commit("setMyEvents", req.data.events)
         },
         async getOrders({ commit }) {
             let req = await axios({
@@ -210,7 +224,7 @@ const store = createStore({
                     libelle: plat.libelle,
                     price: plat.price,
                     description: plat.description,
-                    quantity: plat.quantity,
+                    stock: plat.stock,
                     photo_url: plat.photo_url,
                     event_id: state.eventTmp.id,
                     category_id: state.categoryIdTmp

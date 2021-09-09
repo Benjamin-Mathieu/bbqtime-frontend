@@ -10,6 +10,7 @@ import AddEvent from "../views/AddEvent";
 import Account from "../views/Account";
 import Plats from "../views/Plats";
 import Shop from "../views/Shop";
+import MyEvents from "../views/MyEvents";
 
 const routes = [
   {
@@ -70,7 +71,12 @@ const routes = [
     path: '/shop',
     name: 'Shop',
     component: Shop
-  }
+  },
+  {
+    path: '/my-events',
+    name: 'MyEvents',
+    component: MyEvents
+  },
 ];
 
 const router = createRouter({

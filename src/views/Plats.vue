@@ -28,14 +28,14 @@
                     <ion-label position="floating">Quantité</ion-label>
                     <ion-input
                       type="number"
-                      value="1"
-                      min="0"
-                      :max="plat.quantity"
+                      v-model.number="plat.qty"
+                      min="1"
+                      :max="plat.stock"
                     ></ion-input>
                   </ion-item>
-                  <h3>stock</h3>
+                  <h3>stock: {{ plat.stock }}</h3>
                   <ion-progress-bar
-                    :value="(plat.quantity - 1) / 10"
+                    :value="(plat.stock - plat.qty) / 10"
                     :color="color"
                   ></ion-progress-bar>
                   <ion-button
@@ -114,7 +114,6 @@ export default defineComponent({
   computed: {},
   methods: {
     addToShop(addedPlat) {
-      addedPlat.qty = parseInt(this.quantity, 10);
       this.$store.commit("setShop", addedPlat);
     },
   },

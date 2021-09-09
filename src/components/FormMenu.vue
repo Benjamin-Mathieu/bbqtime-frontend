@@ -33,8 +33,8 @@
           ></ion-textarea>
         </ion-item>
         <ion-item>
-          <ion-label position="floating">Quantité</ion-label>
-          <ion-input type="number" v-model="quantity" required></ion-input>
+          <ion-label position="floating">Stock</ion-label>
+          <ion-input type="number" v-model="stock" required></ion-input>
         </ion-item>
       </ion-card-content>
       <ion-item>
@@ -77,7 +77,7 @@ export default defineComponent({
       name: "test",
       price: 25,
       description: "zezaezae",
-      quantity: 10,
+      stock: 10,
       photo_url: "public/uploads/test.jpg",
     };
   },
@@ -88,7 +88,7 @@ export default defineComponent({
         price: this.price,
         photo_url: this.photo_url,
         description: this.description,
-        quantity: this.quantity,
+        stock: this.stock,
       };
       this.$store.dispatch("postPlat", plat);
     },
