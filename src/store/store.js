@@ -99,7 +99,7 @@ const store = createStore({
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
             });
-            commit("setMyEvents", req.data.events)
+            commit("setMyEvents", req.data.event)
         },
         async getOrders({ commit }) {
             let req = await axios({

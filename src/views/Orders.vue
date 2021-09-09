@@ -59,7 +59,7 @@
                       >
                     </ion-item>
                     <ion-item>
-                      <b>Quantité:</b> {{ orderplat.plat.quantity }}
+                      <b>Quantité:</b> {{ orderplat.quantity }}
                     </ion-item>
                     <ion-item>
                       <b>Prix unitaire: </b> {{ orderplat.plat.price }} €
@@ -128,7 +128,6 @@ export default defineComponent({
   },
   mounted() {
     this.$store.dispatch("getOrders");
-    console.log(this.detail);
   },
   methods: {
     getDetails(orderId) {
