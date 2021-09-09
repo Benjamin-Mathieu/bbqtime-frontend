@@ -7,8 +7,8 @@
       <ion-list v-else>
         <ion-item v-for="plat in this.$store.state.shop" :key="plat.id">
           <ion-label>{{ plat.libelle }} </ion-label>
-          <ion-label>{{ plat.price + "€" }} </ion-label>
-          <ion-label>{{ plat.qty }} </ion-label>
+          <ion-label>prix: {{ plat.price + "€" }} </ion-label>
+          <ion-label>quantité: {{ plat.qty }} </ion-label>
         </ion-item>
         <ion-item>Montant total: {{ getTotal }}</ion-item>
         <router-link to="/shop">
@@ -42,7 +42,6 @@ export default defineComponent({
       this.$store.state.shop.forEach((plat) => {
         console.log("prix =>", plat.price, "qty =>", plat.qty);
         this.totalOrder = this.totalOrder + parseInt(plat.price, 10) * plat.qty;
-        console.log("totalorder", this.totalOrder);
       });
       return this.totalOrder;
     },

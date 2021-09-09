@@ -26,8 +26,18 @@
                   {{ plat.description }}
                   <ion-item>
                     <ion-label position="floating">Quantité</ion-label>
-                    <ion-input type="number" v-model="quantity"></ion-input>
+                    <ion-input
+                      type="number"
+                      value="1"
+                      min="0"
+                      :max="plat.quantity"
+                    ></ion-input>
                   </ion-item>
+                  <h3>stock</h3>
+                  <ion-progress-bar
+                    :value="(plat.quantity - 1) / 10"
+                    :color="color"
+                  ></ion-progress-bar>
                   <ion-button
                     @click="addToShop(plat)"
                     size="small"
@@ -63,6 +73,7 @@ import {
   IonCardTitle,
   IonIcon,
   IonButton,
+  IonProgressBar,
 } from "@ionic/vue";
 import { addCircleOutline } from "ionicons/icons";
 
@@ -83,6 +94,7 @@ export default defineComponent({
     IonCardTitle,
     IonIcon,
     IonButton,
+    IonProgressBar,
   },
   setup() {
     return {
@@ -92,12 +104,14 @@ export default defineComponent({
   data() {
     return {
       quantity: 1,
+      color: "primary",
       total: 0,
     };
   },
   mounted() {
     this.$store.dispatch("getEventDetails", this.$route.params.id);
   },
+  computed: {},
   methods: {
     addToShop(addedPlat) {
       addedPlat.qty = parseInt(this.quantity, 10);

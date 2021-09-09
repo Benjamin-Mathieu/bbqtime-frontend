@@ -18,7 +18,7 @@
         <ion-item>
           <ion-label position="floating">Prix</ion-label>
           <ion-input
-            type="text"
+            type="number"
             v-model="price"
             placeholder=" €"
             required

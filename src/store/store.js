@@ -59,11 +59,11 @@ const store = createStore({
         setPlats(state, plat) {
             state.plats = plat;
         },
-        setShop(state, shop) {
-            if (state.shop.includes(shop)) {
-                state.shop.qty = shop.qty;
+        setShop(state, plat) {
+            if (state.shop.includes(plat)) {
+                state.shop.qty = plat.qty++;
             } else {
-                state.shop.push(shop);
+                state.shop.push(plat);
             }
         }
     },
@@ -166,7 +166,12 @@ const store = createStore({
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
             }).then(resp => {
-                commit("setEventTmp", resp.data.event);
+                if (resp.status === 201) {
+                    commit("setEventTmp", resp.data.event);
+                    popup.success("Evènement crée");
+                }
+            }).catch(() => {
+                popup.error("Une erreur est survenue");
             })
         },
 
@@ -184,7 +189,6 @@ const store = createStore({
             })
                 .then(resp => {
                     if (resp.status === 201) {
-                        console.log(resp.data);
                         popup.success("Catégorie ajouté");
                         commit("setCategories", resp.data.categorie[0])
                     }
@@ -225,13 +229,12 @@ const store = createStore({
                 })
         },
 
-        postOrder({ state }, payload) {
+        postOrder({ state }) {
             axios({
                 method: "post",
                 url: 'http://localhost:3000/orders',
                 data: {
                     event_id: state.eventDetails.id,
-                    cost: payload,
                     heure: "2021-09-01 20:30:00",
                     plats: state.shop,
                 },
@@ -240,9 +243,13 @@ const store = createStore({
                 }
             })
                 .then(resp => {
-                    console.log(resp);
+                    if (resp.status === 201) {
+                        popup.success("Commande effectué");
+                    }
                 }
-                ).catch(err => console.log(err));
+                ).catch(err => {
+                    console.log(err)
+                });
         },
 
     }

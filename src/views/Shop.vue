@@ -75,18 +75,17 @@ export default defineComponent({
   },
   methods: {
     removePlat(plat) {
-      console.log(plat);
       this.$store.state.shop = this.$store.state.shop.filter(
         (item) => item.id !== plat.id
       );
-
-      const index = this.$store.state.shop.indexOf(Object.values(plat.id));
-      if (index > -1) {
-        this.$store.state.shop.splice(index, 1);
-      }
+      // const index = this.$store.state.shop.indexOf(Object.values(plat.id));
+      // if (index > -1) {
+      //   this.$store.state.shop.splice(index, 1);
+      // }
     },
     postOrder() {
-      this.$store.dispatch("postOrder", this.totalOrder);
+      this.$store.dispatch("postOrder");
+      this.$router.push("/orders");
     },
   },
 });
