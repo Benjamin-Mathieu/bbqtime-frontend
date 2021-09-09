@@ -7,31 +7,24 @@
       <ion-grid>
         <ion-row>
           <ion-col
-            v-for="plat in this.$store.state.eventDetails.plats"
-            :key="plat.id"
+            v-for="categorie in this.$store.state.eventDetails.categories"
+            :key="categorie.id"
             size="6"
           >
-            <ion-card>
-              <img :src="plat.photo_url" alt="img-categorie" />
-              <ion-card-header>
-                <ion-card-title></ion-card-title>
-              </ion-card-header>
-
-              <ion-card-content>
-                {{ plat.categorie.libelle }}
-                <router-link
-                  :to="
-                    '/event/' +
-                    plat.event_id +
-                    '/categories/' +
-                    plat.categorie.id
-                  "
-                  ><ion-button fill="outline" slot="end" size="small"
-                    >Voir plats</ion-button
-                  ></router-link
-                >
-              </ion-card-content>
-            </ion-card>
+            <router-link
+              :to="
+                '/event/' + categorie.event_id + '/categories/' + categorie.id
+              "
+            >
+              <ion-card>
+                <img :src="categorie.photo_url" alt="img-categorie" />
+                <ion-card-header>
+                  <ion-card-title>
+                    {{ categorie.libelle }}
+                  </ion-card-title>
+                </ion-card-header>
+              </ion-card>
+            </router-link>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -46,7 +39,7 @@ import {
   IonContent,
   IonCard,
   IonCardHeader,
-  IonCardContent,
+  // IonCardContent,
   IonGrid,
   IonRow,
   IonCol,
@@ -59,13 +52,12 @@ export default defineComponent({
     IonContent,
     IonCard,
     IonCardHeader,
-    IonCardContent,
+    // IonCardContent,
     IonGrid,
     IonRow,
     IonCol,
   },
   mounted() {
-    // APIProvider.getCategories();
     console.log(this.$route.params.id);
     this.$store.dispatch("getEventDetails", this.$route.params.id);
   },

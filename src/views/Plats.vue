@@ -4,42 +4,44 @@
       <h1>Categories</h1>
       <h1>Categories</h1>
 
-      <ion-grid>
-        <ion-row>
-          <ion-col
-            v-for="plat in this.$store.state.eventDetails.plats"
-            :key="plat.id"
-            size="6"
-          >
-            <ion-card
-              v-if="plat.categorie.id == this.$route.params.idCategorie"
-            >
-              <img :src="plat.photo_url" alt="img-plat" />
-              <ion-card-header>
-                <ion-card-title
-                  >{{ plat.libelle }} {{ plat.price + "€" }}
-                </ion-card-title>
-              </ion-card-header>
+      <div
+        v-for="categorie in this.$store.state.eventDetails.categories"
+        :key="categorie.id"
+      >
+        <ion-grid>
+          <ion-row>
+            <ion-col v-for="plat in categorie.plats" :key="plat.id" size="6">
+              <ion-card
+                v-if="plat.category_id == this.$route.params.idCategorie"
+              >
+                <img :src="plat.photo_url" alt="img-plat" />
+                <ion-card-header>
+                  <ion-card-title
+                    >{{ plat.libelle }}
+                    {{ plat.price + "€" }}
+                  </ion-card-title>
+                </ion-card-header>
 
-              <ion-card-content>
-                {{ plat.description }}
-                <ion-item>
-                  <ion-label position="floating">Quantité</ion-label>
-                  <ion-input type="number" v-model="quantity"></ion-input>
-                </ion-item>
-                <ion-button
-                  @click="addToShop(plat)"
-                  size="small"
-                  fill="outline"
-                >
-                  Ajouter au panier
-                  <ion-icon :icon="addCircleOutline"></ion-icon>
-                </ion-button>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+                <ion-card-content>
+                  {{ plat.description }}
+                  <ion-item>
+                    <ion-label position="floating">Quantité</ion-label>
+                    <ion-input type="number" v-model="quantity"></ion-input>
+                  </ion-item>
+                  <ion-button
+                    @click="addToShop(plat)"
+                    size="small"
+                    fill="outline"
+                  >
+                    Ajouter au panier
+                    <ion-icon :icon="addCircleOutline"></ion-icon>
+                  </ion-button>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
     </ion-content>
   </ion-page>
 </template>
