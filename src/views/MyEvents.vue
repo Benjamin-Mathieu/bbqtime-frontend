@@ -17,12 +17,11 @@
                   ><b>{{ event.name }}</b> ID {{ event.id }}
                 </ion-label>
 
-                <ion-button fill="outline" slot="end"
-                  ><router-link
-                    :to="{ name: 'MyEventDetails', params: { id: event.id } }"
-                    >Details
-                  </router-link>
-                </ion-button>
+                <router-link
+                  :to="{ name: 'MyEventDetails', params: { id: event.id } }"
+                >
+                  <ion-button fill="outline" slot="end"> Details </ion-button>
+                </router-link>
               </ion-item>
               <ion-card-content>
                 <p>

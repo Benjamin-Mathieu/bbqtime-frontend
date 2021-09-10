@@ -5,20 +5,36 @@
     </ion-header>
     <ion-content>
       <ion-list v-if="!this.$store.state.userIsLoggedIn">
-        <router-link to="/events"><ion-item>Evènements</ion-item></router-link>
-        <router-link to="/orders"><ion-item>Commandes</ion-item></router-link>
-        <router-link to="/shop"><ion-item>Panier</ion-item></router-link>
-        <router-link to="/sign-up"
-          ><ion-item>Inscription</ion-item></router-link
-        >
-        <router-link to="/sign-in"><ion-item>Connexion</ion-item></router-link>
+        <router-link :to="{ name: 'Events' }">
+          <ion-item>Evènements</ion-item>
+        </router-link>
+        <router-link :to="{ name: 'Orders' }">
+          <ion-item>Commandes</ion-item>
+        </router-link>
+        <router-link :to="{ name: 'Shop' }">
+          <ion-item>Panier</ion-item>
+        </router-link>
+        <router-link :to="{ name: 'SignIn' }">
+          <ion-item>Connexion</ion-item>
+        </router-link>
       </ion-list>
       <ion-list v-else>
-        <router-link to="/events"><ion-item>Evènements</ion-item></router-link>
-        <router-link to="/orders"><ion-item>Commandes</ion-item></router-link>
-        <router-link to="/shop"><ion-item>Panier</ion-item></router-link>
-        <router-link to="/scan"><ion-item>Scan</ion-item></router-link>
-        <router-link to="/account"><ion-item>Mon compte</ion-item></router-link>
+        <router-link :to="{ name: 'Events' }">
+          <ion-item>Evènements</ion-item>
+        </router-link>
+        <router-link :to="{ name: 'Orders' }">
+          <ion-item>Commandes</ion-item>
+        </router-link>
+        <router-link :to="{ name: 'Shop' }">
+          <ion-item>Panier</ion-item>
+        </router-link>
+        <router-link :to="{ name: 'Scan' }">
+          <ion-item>Scan</ion-item>
+        </router-link>
+        <router-link :to="{ name: 'Account' }">
+          <ion-item>Mon compte</ion-item>
+        </router-link>
+
         <ion-item>Paramètres</ion-item>
         <Logout></Logout>
       </ion-list>

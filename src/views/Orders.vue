@@ -101,7 +101,7 @@ import {
 import { chevronDownOutline } from "ionicons/icons";
 
 export default defineComponent({
-  name: "Order",
+  name: "Orders",
   component: {
     IonPage,
     IonContent,

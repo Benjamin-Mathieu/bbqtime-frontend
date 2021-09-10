@@ -41,7 +41,7 @@
         </ion-grid>
       </ion-card>
 
-      <router-link to="/add-event">
+      <router-link :to="{ name: 'AddEvent' }">
         <ion-button href="/add-event" fill="solid"
           >Créer un évènement</ion-button
         >

@@ -11,7 +11,7 @@
           <ion-label>quantité: {{ plat.qty }} </ion-label>
         </ion-item>
         <ion-item>Montant total: {{ getTotal }}</ion-item>
-        <router-link to="/shop">
+        <router-link :to="{ name: 'Shop' }">
           <ion-button size="medium">Commander</ion-button>
         </router-link>
       </ion-list>
