@@ -3,6 +3,9 @@ http://ionicframework.com/docs/theming/ */
 
 /** Ionic CSS Variables **/
 :root {
+  /* Set the background of the entire app */
+  --ion-background-color: #D7B59D;
+
   /** primary **/
   --ion-color-primary: #3880ff;
   --ion-color-primary-rgb: 56, 128, 255;
@@ -233,4 +236,20 @@ http://ionicframework.com/docs/theming/ */
 
     --ion-card-background: #1e1e1e;
   }
+}
+
+ion-card {
+  --background: #FFFFFF;
+}
+
+ion-item {
+  --background: #FFFFFF;
+}
+
+ion-button {
+  --background: #740F13CC;
+}
+
+ion-menu {
+  --background: #E5E5E5;
 }

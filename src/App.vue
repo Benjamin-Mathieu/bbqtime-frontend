@@ -3,6 +3,7 @@
     <Navigation></Navigation>
     <Header></Header>
     <ShopMenu></ShopMenu>
+    <Footer></Footer>
     <ion-router-outlet id="main" />
   </ion-app>
 </template>
@@ -13,6 +14,7 @@ import { defineComponent } from "vue";
 import Navigation from "./components/Navigation.vue";
 import Header from "./components/Header.vue";
 import ShopMenu from "./components/ShopMenu.vue";
+import Footer from "./components/Footer.vue";
 
 export default defineComponent({
   name: "App",
@@ -22,6 +24,7 @@ export default defineComponent({
     Navigation,
     Header,
     ShopMenu,
+    Footer,
   },
   mounted() {
     console.log(localStorage.getItem("token"));
