@@ -11,6 +11,7 @@ import Account from "../views/Account";
 import Plats from "../views/Plats";
 import Shop from "../views/Shop";
 import MyEvents from "../views/MyEvents";
+import MyEventDetails from "../views/MyEventDetails";
 
 const routes = [
   {
@@ -76,6 +77,11 @@ const routes = [
     path: '/my-events',
     name: 'MyEvents',
     component: MyEvents
+  },
+  {
+    path: '/my-events/:id',
+    name: 'MyEventDetails',
+    component: MyEventDetails
   },
 ];
 
