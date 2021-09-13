@@ -1,6 +1,6 @@
 <template>
   <ion-menu side="end" menu-id="shop" content-id="main">
-    <ion-content>
+    <ion-content class="shop">
       <p v-if="this.$store.state.shop.length === 0">Votre panier est vide</p>
 
       <!-- List of Plat in Shop -->
@@ -54,6 +54,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped>
-</style>

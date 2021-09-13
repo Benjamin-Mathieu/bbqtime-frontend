@@ -3,7 +3,7 @@
     <ion-header>
       <router-link to="/home"><ion-item>Home</ion-item></router-link>
     </ion-header>
-    <ion-content>
+    <ion-content class="menu">
       <ion-list v-if="!this.$store.state.userIsLoggedIn">
         <router-link :to="{ name: 'Events' }">
           <ion-item>Evènements</ion-item>
@@ -36,8 +36,8 @@
         </router-link>
 
         <ion-item>Paramètres</ion-item>
-        <Logout></Logout>
       </ion-list>
+      <ion-button size="medium" @click="logoutUser">Se déconnecter</ion-button>
     </ion-content>
   </ion-menu>
 </template>
@@ -49,10 +49,10 @@ import {
   IonItem,
   IonList,
   IonContent,
+  IonButton,
   menuController,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
-import Logout from "./Logout.vue";
 
 export default defineComponent({
   name: "Navigation",
@@ -61,13 +61,21 @@ export default defineComponent({
     IonHeader,
     IonItem,
     IonList,
+    IonButton,
     IonContent,
-    Logout,
   },
   methods: {
     openMenu() {
       menuController.enable(true, "nav");
       menuController.open("nav");
+    },
+
+    logoutUser() {
+      localStorage.clear();
+      this.$store.commit("setUserIsLoggedIn", false);
+      this.$store.commit("setToken", null);
+      this.$store.commit("setUserInformation", null);
+      this.$router.push("/home");
     },
   },
 });

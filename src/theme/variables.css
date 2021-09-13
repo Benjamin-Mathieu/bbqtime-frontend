@@ -250,6 +250,15 @@ ion-button {
   --background: #740F13CC;
 }
 
-ion-menu {
+ion-menu .shop,
+ion-menu .menu {
   --background: #E5E5E5;
+}
+
+ion-header {
+  --background: #FFFFFF;
+}
+
+ion-footer {
+  --background: #740F13CC;
 }
