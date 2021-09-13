@@ -34,7 +34,7 @@ const routes = [
     component: Categories
   },
   {
-    path: '/event/:id/categories/:idCategorie',
+    path: '/event/:id/categorie/:idCategorie',
     name: 'Plats',
     component: Plats
   },

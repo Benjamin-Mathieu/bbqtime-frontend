@@ -12,10 +12,9 @@
             size="6"
           >
             <router-link
-              :to="{
-                name: 'Categories',
-                params: { id: categorie.event_id, idCategorie: categorie.id },
-              }"
+              :to="
+                '/event/' + categorie.event_id + '/categorie/' + categorie.id
+              "
             >
               <ion-card>
                 <img :src="categorie.photo_url" alt="img-categorie" />
