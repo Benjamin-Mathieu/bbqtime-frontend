@@ -5,18 +5,11 @@
       <ion-input type="text" v-model="name" required></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label position="floating">Adresse</ion-label>
-      <ion-input type="text" v-model="address" required></ion-input>
+      <ion-button @click="openMapModal()">Lieu</ion-button>
     </ion-item>
-    <ion-item>
-      <ion-label position="floating">Ville</ion-label>
-      <ion-input type="text" v-model="city" required></ion-input>
+    <ion-item v-if="this.$store.getters.getAddress"
+      >Adresse: {{ this.$store.getters.getAddress.label }}
     </ion-item>
-    <ion-item>
-      <ion-label position="floating">Code postale</ion-label>
-      <ion-input type="text" v-model="zipcode" required></ion-input>
-    </ion-item>
-
     <ion-item>
       <ion-label>Date</ion-label>
       <ion-datetime
@@ -24,11 +17,18 @@
         :day-short-names="customDayShortNames"
         display-format="DDD. MMM DD"
         month-short-names="janvier, fevrier, mars, avril, mai, juin, juillet, août, septembre, octobre, novembre, décembre"
+        done-text="Valider"
+        cancel-text="Fermer"
       ></ion-datetime>
     </ion-item>
     <ion-item>
       <ion-label>Heure</ion-label>
-      <ion-datetime v-model="hours" display-format="hh:mm:ss"></ion-datetime>
+      <ion-datetime
+        v-model="hours"
+        display-format="hh:mm"
+        done-text="Valider"
+        cancel-text="Fermer"
+      ></ion-datetime>
     </ion-item>
 
     <ion-item>
@@ -49,7 +49,7 @@
       ></ion-checkbox>
     </ion-item>
 
-    <ion-button type="submit" size="small">Valider</ion-button>
+    <ion-button type="submit" size="small">Créer l'évènement</ion-button>
   </form>
 </template>
 
@@ -63,7 +63,10 @@ import {
   IonInput,
   IonDatetime,
   IonTextarea,
+  modalController,
+  alertController,
 } from "@ionic/vue";
+import MapModal from "./MapModal.vue";
 
 export default defineComponent({
   name: "FormEvent",
@@ -79,9 +82,6 @@ export default defineComponent({
   data() {
     return {
       name: "Test API",
-      address: "99 rue des pins",
-      city: "Epinal",
-      zipcode: "88000",
       date: "",
       hours: "",
       description:
@@ -92,6 +92,10 @@ export default defineComponent({
   mounted() {},
   methods: {
     addInfoEvent() {
+      this.address = this.$store.getters.getAddress.name;
+      this.city = this.$store.getters.getAddress.city;
+      this.zipcode = this.$store.getters.getAddress.postcode;
+
       const event = {
         name: this.name,
         address: this.address,
@@ -108,6 +112,40 @@ export default defineComponent({
         this.$store.dispatch("postEvent");
       } catch (error) {
         console.error(error);
+      }
+    },
+
+    async openMapModal() {
+      const modal = await modalController.create({
+        component: MapModal,
+      });
+
+      // handle "onDidDismiss"
+      // modal.onWillDismiss().then(() => this.validEvent());
+
+      return modal.present();
+    },
+
+    async validEvent() {
+      const alert = await alertController.create({
+        subHeader: "Validez l'adresse saisi ?",
+        buttons: [
+          {
+            text: "Non",
+            role: "cancel",
+          },
+          {
+            text: "Oui",
+            role: "valid",
+          },
+        ],
+      });
+      await alert.present();
+
+      const { role } = await alert.onDidDismiss();
+      console.log("onDidDismiss resolved with role", role);
+      if (role === "valid") {
+        console.log(role);
       }
     },
   },

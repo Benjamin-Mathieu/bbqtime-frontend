@@ -10,6 +10,8 @@ const store = createStore({
             token: null,
             userInformation: null,
             userIsLoggedIn: null,
+            address: "",
+            respApiAddress: {},
             events: [],
             myEvents: [],
             myEventDetails: [],
@@ -34,6 +36,12 @@ const store = createStore({
         },
         setUserIsLoggedIn(state, userIsLoggedIn) {
             state.userIsLoggedIn = userIsLoggedIn
+        },
+        setAddress(state, address) {
+            state.address = address;
+        },
+        setApiAddress(state, respApi) {
+            state.respApiAddress = respApi;
         },
         setEvents(state, event) {
             if (Object.keys(event).length > 0) {
@@ -101,6 +109,13 @@ const store = createStore({
                 return totalOrder;
             }
 
+        },
+        getAddress(state) {
+            if (Object.keys(state.respApiAddress).length > 0) {
+                return state.respApiAddress.features[0].properties;
+            } else {
+                return state.respApiAddress;
+            }
         }
     },
     actions: {
@@ -298,6 +313,19 @@ const store = createStore({
                     console.log(err)
                 });
         },
+
+        getAddress({ commit, state }) {
+            axios({
+                method: "get",
+                url: 'https://api-adresse.data.gouv.fr/search/?q=' + state.address,
+            })
+                .then(resp => {
+                    commit("setApiAddress", resp.data);
+                }
+                ).catch(err => {
+                    console.log(err)
+                });
+        }
 
     }
 });
