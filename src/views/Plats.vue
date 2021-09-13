@@ -35,7 +35,7 @@
                   </ion-item>
                   <h3>stock: {{ plat.stock }}</h3>
                   <ion-progress-bar
-                    :value="(plat.stock - plat.qty) / 10"
+                    :value="1 - plat.qty / plat.stock"
                     :color="color"
                   ></ion-progress-bar>
                   <ion-button
