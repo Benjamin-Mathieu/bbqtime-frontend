@@ -67,6 +67,7 @@ import {
   IonCol,
 } from "@ionic/vue";
 import { lockClosed } from "ionicons/icons";
+import store from "../store/store";
 
 export default defineComponent({
   name: "Events",
@@ -89,8 +90,10 @@ export default defineComponent({
       lockClosed,
     };
   },
-  mounted() {
-    this.$store.dispatch("getEvents");
+  beforeRouteEnter(to, from, next) {
+    console.log(to, from);
+    store.dispatch("getEvents");
+    next();
   },
 });
 </script>
