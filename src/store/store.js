@@ -73,6 +73,13 @@ const store = createStore({
             } else {
                 state.shop.push(plat);
             }
+        },
+        removePlatInShop(state, plat) {
+            console.log(state, plat);
+            for (var i = 0; i < state.shop.length; i++)
+                if (state.shop[i].id === plat.id) {
+                    state.shop.splice(i, 1);
+                }
         }
     },
     getters: {
@@ -82,6 +89,18 @@ const store = createStore({
             } else {
                 return "Disconnected"
             }
+        },
+        getTotalShop(state) {
+            let totalOrder = 0;
+            if (state.shop.length > 0) {
+                state.shop.forEach((plat) => {
+                    totalOrder += plat.price * plat.qty;
+                });
+                return totalOrder;
+            } else {
+                return totalOrder;
+            }
+
         }
     },
     actions: {

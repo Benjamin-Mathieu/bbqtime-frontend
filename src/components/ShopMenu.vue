@@ -10,7 +10,9 @@
           <ion-label>prix: {{ plat.price + "€" }} </ion-label>
           <ion-label>quantité: {{ plat.qty }} </ion-label>
         </ion-item>
-        <ion-item>Montant total: {{ getTotal }}</ion-item>
+        <ion-item
+          >Montant total: {{ this.$store.getters.getTotalShop }}</ion-item
+        >
         <router-link :to="{ name: 'Shop' }">
           <ion-button size="medium">Commander</ion-button>
         </router-link>
@@ -36,15 +38,6 @@ export default defineComponent({
     return {
       totalOrder: 0,
     };
-  },
-  computed: {
-    getTotal() {
-      this.$store.state.shop.forEach((plat) => {
-        console.log("prix =>", plat.price, "qty =>", plat.qty);
-        this.totalOrder = this.totalOrder + parseInt(plat.price, 10) * plat.qty;
-      });
-      return this.totalOrder;
-    },
   },
   methods: {
     openShop() {

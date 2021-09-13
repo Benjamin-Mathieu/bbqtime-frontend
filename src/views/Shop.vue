@@ -27,7 +27,9 @@
           </ion-row>
         </ion-grid>
       </ion-card>
-      <ion-item> Montant total: {{ getTotalOrder }} € </ion-item>
+      <ion-item>
+        Montant total: {{ this.$store.getters.getTotalShop }} €
+      </ion-item>
       <ion-button fill="solid" @click="postOrder()">Commander</ion-button>
     </ion-content>
   </ion-page>
@@ -65,23 +67,9 @@ export default defineComponent({
       totalOrder: 0,
     };
   },
-  computed: {
-    getTotalOrder() {
-      this.$store.state.shop.forEach((plat) => {
-        this.totalOrder = this.totalOrder + parseInt(plat.price, 10) * plat.qty;
-      });
-      return this.totalOrder;
-    },
-  },
   methods: {
     removePlat(plat) {
-      this.$store.state.shop = this.$store.state.shop.filter(
-        (item) => item.id !== plat.id
-      );
-      // const index = this.$store.state.shop.indexOf(Object.values(plat.id));
-      // if (index > -1) {
-      //   this.$store.state.shop.splice(index, 1);
-      // }
+      this.$store.commit("removePlatInShop", plat);
     },
     postOrder() {
       this.$store.dispatch("postOrder");
