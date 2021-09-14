@@ -110,12 +110,25 @@ const store = createStore({
             }
 
         },
+        getNumberItemInShop(state) {
+            let numberOfItem = 0;
+            if (state.shop.length > 0) {
+                state.shop.forEach(() => {
+                    numberOfItem++;
+                });
+                return numberOfItem;
+            }
+            return numberOfItem;
+        },
         getAddress(state) {
             if (Object.keys(state.respApiAddress).length > 0) {
                 return state.respApiAddress.features[0].properties;
             } else {
                 return state.respApiAddress;
             }
+        },
+        getCurrentEvent(state) {
+            return state.eventDetails;
         }
     },
     actions: {
