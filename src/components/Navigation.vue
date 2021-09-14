@@ -1,5 +1,5 @@
 <template>
-  <ion-menu side="start" menu-id="nav" content-id="main">
+  <ion-menu color="primary" side="start" menu-id="nav" content-id="main">
     <ion-header>
       <router-link to="/home"><ion-item>Home</ion-item></router-link>
     </ion-header>
@@ -34,8 +34,9 @@
         <router-link :to="{ name: 'Account' }">
           <ion-item>Mon compte</ion-item>
         </router-link>
-
-        <ion-item>Paramètres</ion-item>
+        <router-link :to="{ name: 'Settings' }">
+          <ion-item>Paramètres</ion-item>
+        </router-link>
       </ion-list>
       <ion-button size="medium" @click="logoutUser">Se déconnecter</ion-button>
     </ion-content>
