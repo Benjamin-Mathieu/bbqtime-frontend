@@ -1,7 +1,7 @@
 <template>
   <ion-page>
-    <h1>OKOKOK</h1>
-    <h1>OKOKOK</h1>
+    <Header></Header>
+    <Sub title="Connexion"></Sub>
     <ion-content>
       <form @submit.prevent="authUser()" method="post">
         <ion-item>
@@ -22,9 +22,11 @@
 import { defineComponent } from "vue";
 import { IonLabel, IonInput, IonItem, IonPage, IonContent } from "@ionic/vue";
 import APIProvider from "../services/api";
+import Sub from "../components/Sub";
+import Header from "../components/Header.vue";
 
 export default defineComponent({
-  components: { IonLabel, IonInput, IonItem, IonPage, IonContent },
+  components: { IonLabel, IonInput, IonItem, IonPage, IonContent, Sub, Header },
   name: "SignIn",
   data() {
     return {

@@ -1,10 +1,8 @@
 <template>
   <ion-page>
+    <Header></Header>
+    <Sub title="Détails"></Sub>
     <ion-content>
-      <h1>Mes évènements</h1>
-      <h1>Mes évènements</h1>
-      <h1>Organisation</h1>
-
       <ion-card class="commandes">
         <ion-card-header>
           <ion-card-title>Commandes</ion-card-title>
@@ -58,15 +56,41 @@
         </ion-item-divider>
       </ion-card>
     </ion-content>
+    <Footer></Footer>
   </ion-page>
 </template>
 
 <script>
 import { defineComponent } from "vue";
-// import { IonCard, IonCardContent, IonItem, IonButton } from "@ionic/vue";
+import {
+  IonCard,
+  IonCardHeader,
+  IonItem,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonLabel,
+  IonItemDivider,
+} from "@ionic/vue";
+import Sub from "../components/Sub.vue";
+import Header from "../components/Header.vue";
+import Footer from "../components/Footer.vue";
 
 export default defineComponent({
   name: "MyEventDetails",
+  components: {
+    IonCard,
+    IonCardHeader,
+    IonItem,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonLabel,
+    IonItemDivider,
+    Sub,
+    Header,
+    Footer,
+  },
   mounted() {
     this.$store.dispatch("getMyEventDetails", this.$route.params.id);
   },

@@ -1,9 +1,8 @@
 <template>
   <ion-page>
+    <Header></Header>
+    <Sub title="Évènements"></Sub>
     <ion-content :fullscreen="true">
-      <h1>okoke</h1>
-      <h1>okoke</h1>
-
       <ion-card v-for="event in this.$store.state.events[0]" :key="event.id">
         <ion-grid>
           <ion-row>
@@ -47,6 +46,7 @@
         >
       </router-link>
     </ion-content>
+    <Footer></Footer>
   </ion-page>
 </template>
 
@@ -68,6 +68,9 @@ import {
 } from "@ionic/vue";
 import { lockClosed } from "ionicons/icons";
 import store from "../store/store";
+import Header from "../components/Header.vue";
+import Sub from "../components/Sub.vue";
+import Footer from "../components/Footer.vue";
 
 export default defineComponent({
   name: "Events",
@@ -84,6 +87,9 @@ export default defineComponent({
     IonGrid,
     IonRow,
     IonCol,
+    Header,
+    Sub,
+    Footer,
   },
   setup() {
     return {

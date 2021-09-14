@@ -1,7 +1,8 @@
 <template>
   <ion-page>
+    <Header></Header>
+    <Sub title="Créer un compte"></Sub>
     <ion-content>
-      <h1>SignUp</h1>
       <form @submit.prevent="registerUser()" method="post">
         <input v-model="email" type="email" placeholder="E-mail" required />
         <input
@@ -24,10 +25,12 @@
 import { defineComponent } from "vue";
 import { Http } from "@capacitor-community/http";
 import { IonPage, IonContent } from "@ionic/vue";
+import Sub from "../components/Sub.vue";
+import Header from "../components/Header.vue";
 
 export default defineComponent({
   name: "SignUp",
-  components: { IonPage, IonContent },
+  components: { IonPage, IonContent, Sub, Header },
   data() {
     return {
       email: "postfe@gmail.com",

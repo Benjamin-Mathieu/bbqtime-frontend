@@ -1,7 +1,8 @@
 <template>
   <ion-page>
+    <Header></Header>
+    <Sub title="Mon compte"></Sub>
     <ion-content>
-      <h1>Mon compte</h1>
       <form @submit.prevent="updateProfile()" method="post">
         <ion-card>
           <ion-card-content
@@ -53,6 +54,7 @@
           ></ion-icon> </ion-button
       ></router-link>
     </ion-content>
+    <Footer></Footer>
   </ion-page>
 </template>
 
@@ -69,6 +71,9 @@ import {
   IonInput,
 } from "@ionic/vue";
 import { settingsOutline, bagOutline, calendarOutline } from "ionicons/icons";
+import Sub from "../components/Sub.vue";
+import Header from "../components/Header.vue";
+import Footer from "../components/Footer.vue";
 
 export default defineComponent({
   name: "Account",
@@ -84,6 +89,9 @@ export default defineComponent({
     IonButton,
     IonIcon,
     IonInput,
+    Header,
+    Sub,
+    Footer,
   },
   methods: {
     updateProfile() {

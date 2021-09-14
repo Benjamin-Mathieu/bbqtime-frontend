@@ -1,8 +1,7 @@
  <template>
   <ion-page>
-    <h1>Création évènement</h1>
-    <h1>Création évènement</h1>
-
+    <Header></Header>
+    <Sub title="Création de votre évènement"></Sub>
     <ion-content>
       <!-- ETAPES (1: Evènement, 2: Categorie + Menu, 3: Paiement, 4: Confirmation création évènement) -->
       <ion-segment :value="step">
@@ -34,7 +33,7 @@
             value="menu"
             :disabled="disabledMenu"
           >
-            <ion-label>Menu</ion-label>
+            <ion-label>Plats</ion-label>
           </ion-segment-button>
         </ion-segment>
 
@@ -43,7 +42,7 @@
           v-if="toggleForm === 'categorie'"
           >Ajouter une catégorie</ion-button
         >
-        <ion-button @click="openModalMenu" v-else>Ajouter un menu</ion-button>
+        <ion-button @click="openModalMenu" v-else>Ajouter un plat</ion-button>
 
         <ion-grid v-if="toggleForm === 'categorie'">
           <ion-row>
@@ -51,7 +50,7 @@
               v-for="categorie in this.$store.state.categories"
               :key="categorie.id"
               size="6"
-              @click="postPlatCategorie(categorie.id)"
+              @click="addPlatToCategorie(categorie.id)"
             >
               <ion-card>
                 <img :src="categorie.photo_url" alt="img-categorie" />
@@ -82,8 +81,9 @@
       </ion-content>
 
       <FormEvent v-if="step === 1"></FormEvent>
-      <ion-button @click="nextStep()">Valider</ion-button>
+      <ion-button @click="nextStep()">Suivant</ion-button>
     </ion-content>
+    <Footer></Footer>
   </ion-page>
 </template>
 
@@ -107,6 +107,9 @@ import {
 import FormEvent from "../components/FormEvent.vue";
 import FormCategorie from "../components/FormCategorie.vue";
 import FormMenu from "../components/FormMenu.vue";
+import Sub from "../components/Sub.vue";
+import Header from "../components/Header.vue";
+import Footer from "../components/Footer.vue";
 
 export default defineComponent({
   name: "AddEvent",
@@ -123,6 +126,9 @@ export default defineComponent({
     IonCol,
     IonCardHeader,
     FormEvent,
+    Sub,
+    Header,
+    Footer,
   },
   data() {
     return {
@@ -133,7 +139,7 @@ export default defineComponent({
     };
   },
   methods: {
-    postPlatCategorie(categorieId) {
+    addPlatToCategorie(categorieId) {
       this.toggleForm = "menu";
       this.$store.commit("setCategoryIdTmp", categorieId);
       this.$store.dispatch("getPlats");

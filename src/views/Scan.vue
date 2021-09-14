@@ -1,6 +1,10 @@
 <template>
   <ion-page>
-    <ion-content> <h3>Veuillez scanner votre QR-code</h3> </ion-content>
+    <Header></Header>
+    <ion-content class="test">
+      <h3>Veuillez scanner votre QR-code</h3>
+    </ion-content>
+    <Footer></Footer>
   </ion-page>
 </template>
 
@@ -8,9 +12,11 @@
 import { defineComponent } from "vue";
 import QrCode from "../services/qrcode";
 import { IonPage, IonContent } from "@ionic/vue";
+import Header from "../components/Header.vue";
+import Footer from "../components/Footer.vue";
 
 export default defineComponent({
-  compnents: { IonPage, IonContent },
+  components: { IonPage, IonContent, Header, Footer },
   name: "Scan",
   mounted() {
     QrCode.scan();

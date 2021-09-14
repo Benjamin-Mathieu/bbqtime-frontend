@@ -1,5 +1,6 @@
 <template>
   <ion-page>
+    <Header></Header>
     <ion-content :fullscreen="true">
       <div id="container">
         <ion-card>
@@ -28,6 +29,7 @@
         >
       </div>
     </ion-content>
+    <Footer></Footer>
   </ion-page>
 </template>
 
@@ -41,6 +43,8 @@ import {
   IonCardContent,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
+import Header from "../components/Header.vue";
+import Footer from "../components/Footer.vue";
 
 export default defineComponent({
   name: "Home",
@@ -51,6 +55,8 @@ export default defineComponent({
     IonCard,
     IonCardHeader,
     IonCardContent,
+    Header,
+    Footer,
   },
 });
 </script>

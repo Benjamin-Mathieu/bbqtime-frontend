@@ -7,7 +7,7 @@ http://ionicframework.com/docs/theming/ */
   --ion-background-color: #D7B59D;
 
   /** primary **/
-  --ion-color-primary: #3880ff;
+  --ion-color-primary: #75141799;
   --ion-color-primary-rgb: 56, 128, 255;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
@@ -23,7 +23,7 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-secondary-tint: #50c8ff;
 
   /** tertiary **/
-  --ion-color-tertiary: #5260ff;
+  --ion-color-tertiary: #ffffff;
   --ion-color-tertiary-rgb: 82, 96, 255;
   --ion-color-tertiary-contrast: #ffffff;
   --ion-color-tertiary-contrast-rgb: 255, 255, 255;
@@ -253,10 +253,6 @@ ion-button {
 ion-menu .shop,
 ion-menu .menu {
   --background: #E5E5E5;
-}
-
-ion-header {
-  --background: #FFFFFF;
 }
 
 ion-footer {

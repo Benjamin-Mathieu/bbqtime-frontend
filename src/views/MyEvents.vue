@@ -1,10 +1,9 @@
 <template>
   <ion-page>
-    <ion-content>
-      <h1>Mes évènements</h1>
-      <h1>Mes évènements</h1>
-      <h1>Mes évènements</h1>
+    <Header></Header>
+    <Sub title="Mes évènements"></Sub>
 
+    <ion-content v-if="this.$store.state.myEvents.length > 0">
       <ion-card v-for="event in this.$store.state.myEvents" :key="event.id">
         <ion-grid>
           <ion-row>
@@ -37,16 +36,46 @@
         </ion-grid>
       </ion-card>
     </ion-content>
+    <ion-content v-else>
+      <ion-card>
+        <ion-card-content>
+          Pas d'évènement crée pour le moment
+        </ion-card-content>
+      </ion-card>
+    </ion-content>
+    <Footer></Footer>
   </ion-page>
 </template>
 
 <script>
 import { defineComponent } from "vue";
-// import { IonCard, IonCardContent, IonItem, IonButton } from "@ionic/vue";
+import {
+  IonCard,
+  IonCardContent,
+  IonItem,
+  IonButton,
+  IonGrid,
+  IonRow,
+  IonCol,
+} from "@ionic/vue";
+import Sub from "../components/Sub.vue";
+import Header from "../components/Header.vue";
+import Footer from "../components/Footer.vue";
 
 export default defineComponent({
   name: "MyEvents",
-  components: {},
+  components: {
+    IonCard,
+    IonCardContent,
+    IonItem,
+    IonButton,
+    IonGrid,
+    IonRow,
+    IonCol,
+    Sub,
+    Header,
+    Footer,
+  },
   mounted() {
     this.$store.dispatch("getMyEvents");
   },

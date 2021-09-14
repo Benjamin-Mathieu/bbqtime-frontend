@@ -1,6 +1,6 @@
 <template>
   <ion-footer>
-    <ion-toolbar>
+    <ion-toolbar color="primary">
       <ion-title>Footer</ion-title>
     </ion-toolbar>
   </ion-footer>

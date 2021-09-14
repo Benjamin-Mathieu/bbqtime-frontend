@@ -1,9 +1,9 @@
 <template>
   <ion-page>
-    <ion-content :fullscreen="true">
-      <h1>Categories</h1>
-      <h1>Categories</h1>
+    <Header></Header>
+    <Sub :title="this.$store.getters.getCurrentEvent.name"></Sub>
 
+    <ion-content class="has-header" :fullscreen="true">
       <ion-grid>
         <ion-row>
           <ion-col
@@ -29,6 +29,7 @@
         </ion-row>
       </ion-grid>
     </ion-content>
+    <Footer></Footer>
   </ion-page>
 </template>
 
@@ -39,11 +40,13 @@ import {
   IonContent,
   IonCard,
   IonCardHeader,
-  // IonCardContent,
   IonGrid,
   IonRow,
   IonCol,
 } from "@ionic/vue";
+import Sub from "../components/Sub.vue";
+import Header from "../components/Header.vue";
+import Footer from "../components/Footer.vue";
 
 export default defineComponent({
   name: "Categories",
@@ -52,19 +55,23 @@ export default defineComponent({
     IonContent,
     IonCard,
     IonCardHeader,
-    // IonCardContent,
     IonGrid,
     IonRow,
     IonCol,
+    Sub,
+    Header,
+    Footer,
   },
   mounted() {
-    console.log(this.$route.params.id);
     this.$store.dispatch("getEventDetails", this.$route.params.id);
   },
 });
 </script>
 
 <style scoped>
+.has-header {
+  margin-top: 105px;
+}
 #container {
   text-align: center;
 }

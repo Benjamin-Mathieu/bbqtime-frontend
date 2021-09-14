@@ -1,9 +1,8 @@
 <template>
   <ion-page>
+    <Header></Header>
+    <Sub :title="this.$store.getters.getCurrentEvent.name + ' / '"></Sub>
     <ion-content :fullscreen="true">
-      <h1>Categories</h1>
-      <h1>Categories</h1>
-
       <div
         v-for="categorie in this.$store.state.eventDetails.categories"
         :key="categorie.id"
@@ -53,6 +52,7 @@
         </ion-grid>
       </div>
     </ion-content>
+    <Footer></Footer>
   </ion-page>
 </template>
 
@@ -76,6 +76,9 @@ import {
   IonProgressBar,
 } from "@ionic/vue";
 import { addCircleOutline } from "ionicons/icons";
+import Sub from "../components/Sub.vue";
+import Header from "../components/Header.vue";
+import Footer from "../components/Footer.vue";
 
 export default defineComponent({
   name: "Categories",
@@ -95,6 +98,9 @@ export default defineComponent({
     IonIcon,
     IonButton,
     IonProgressBar,
+    Sub,
+    Header,
+    Footer,
   },
   setup() {
     return {

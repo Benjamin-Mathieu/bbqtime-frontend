@@ -1,8 +1,8 @@
 <template>
   <ion-page>
+    <Header></Header>
+    <Sub title="Votre commande"></Sub>
     <ion-content :fullscreen="true">
-      <h1>Shop</h1>
-      <h1>Shop</h1>
       <ion-card v-for="plat in this.$store.state.shop" :key="plat.id">
         <ion-grid>
           <ion-row>
@@ -46,6 +46,8 @@ import {
   IonInput,
 } from "@ionic/vue";
 import { trashBinOutline } from "ionicons/icons";
+import Sub from "../components/Sub";
+import Header from "../components/Header.vue";
 
 export default defineComponent({
   name: "Shop",
@@ -56,6 +58,8 @@ export default defineComponent({
     IonRow,
     IonCol,
     IonInput,
+    Sub,
+    Header,
   },
   setup() {
     return {
