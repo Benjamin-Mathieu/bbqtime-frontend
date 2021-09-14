@@ -2,28 +2,27 @@
   <ion-page>
     <Header></Header>
     <Sub title="Évènements"></Sub>
-    <ion-content :fullscreen="true">
+    <ion-content>
       <ion-card v-for="event in this.$store.state.events[0]" :key="event.id">
         <ion-grid>
           <ion-row>
             <ion-col size="2">
-              <ion-img
+              <img
                 alt="event-img"
                 src="../../public/uploads/bbq.jpeg"
-              ></ion-img>
+                style="width: 100%; height: 100%; object-fit: cover"
+              />
             </ion-col>
             <ion-col size="10">
               <ion-item>
                 <ion-label
-                  ><b>{{ event.name }}</b> ID {{ event.id }}</ion-label
+                  ><b>{{ event.name }}</b></ion-label
                 >
                 <ion-icon v-if="event.private" :icon="lockClosed"></ion-icon>
 
-                <router-link :to="'/event/' + event.id + '/categories'"
-                  ><ion-button fill="outline" slot="end"
-                    >Détails</ion-button
-                  ></router-link
-                >
+                <router-link :to="'/event/' + event.id + '/categories'">
+                  <ion-button fill="outline" slot="end">Détails</ion-button>
+                </router-link>
               </ion-item>
 
               <ion-card-content>
@@ -61,7 +60,6 @@ import {
   IonItem,
   IonLabel,
   IonButton,
-  IonImg,
   IonGrid,
   IonRow,
   IonCol,
@@ -83,7 +81,6 @@ export default defineComponent({
     IonItem,
     IonLabel,
     IonButton,
-    IonImg,
     IonGrid,
     IonRow,
     IonCol,
@@ -103,6 +100,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped>
-</style>

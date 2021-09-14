@@ -36,3 +36,10 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss">
+ion-card {
+  width: 80%;
+  margin: auto;
+}
+</style>

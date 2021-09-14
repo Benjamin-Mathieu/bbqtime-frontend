@@ -12,14 +12,14 @@
 
       <ion-card-content>
         <ion-item>
-          <ion-label position="floating">Nom du menu</ion-label>
+          <ion-label position="floating">Nom du plat</ion-label>
           <ion-input type="text" v-model="name" required></ion-input>
         </ion-item>
         <ion-item>
           <ion-label position="floating">Prix</ion-label>
           <ion-input
             type="number"
-            v-model="price"
+            v-model.number="price"
             placeholder=" €"
             required
           ></ion-input>

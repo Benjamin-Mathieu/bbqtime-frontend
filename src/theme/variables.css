@@ -4,7 +4,7 @@ http://ionicframework.com/docs/theming/ */
 /** Ionic CSS Variables **/
 :root {
   /* Set the background of the entire app */
-  --ion-background-color: #D7B59D;
+  /* --ion-background-color: #D7B59D; */
 
   /** primary **/
   --ion-color-primary: #75141799;
@@ -242,6 +242,14 @@ ion-card {
   --background: #FFFFFF;
 }
 
+ion-content {
+  /* --padding-bottom: 16px;
+  --padding-start: 16px;
+  --padding-end: 16px; */
+  --padding-top: 16px;
+  --background: #D7B59D;
+}
+
 ion-item {
   --background: #FFFFFF;
 }
@@ -253,8 +261,4 @@ ion-button {
 ion-menu .shop,
 ion-menu .menu {
   --background: #E5E5E5;
-}
-
-ion-footer {
-  --background: #740F13CC;
 }
