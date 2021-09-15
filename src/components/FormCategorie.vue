@@ -2,6 +2,9 @@
   <ion-header>
     <ion-toolbar>
       <ion-title><h2>Ajout catégorie</h2></ion-title>
+      <ion-button slot="end" @click="closeModal()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
@@ -45,6 +48,7 @@ import {
   IonHeader,
   IonToolbar,
   IonContent,
+  modalController,
 } from "@ionic/vue";
 
 export default defineComponent({
@@ -75,6 +79,10 @@ export default defineComponent({
   methods: {
     addCategorie() {
       this.$store.dispatch("postCategorie", this.libelle);
+      this.libelle = "";
+    },
+    closeModal() {
+      modalController.dismiss();
     },
   },
 });

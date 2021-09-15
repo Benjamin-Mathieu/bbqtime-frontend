@@ -1,47 +1,54 @@
 <template>
-  <form @submit.prevent="addMenu()" method="post">
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>
+  <ion-header>
+    <ion-toolbar>
+      <ion-title><h2>Ajout plat</h2></ion-title>
+      <ion-button slot="end" @click="closeModal()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <form @submit.prevent="addMenu()" method="post">
+      <ion-card>
+        <ion-card-content>
           <ion-item>
-            <ion-label>Ajouter une image</ion-label>
+            <ion-label>image</ion-label>
+            <ion-button>
+              <input type="file" />
+            </ion-button>
           </ion-item>
-          <input type="file" />
-        </ion-card-title>
-      </ion-card-header>
-
-      <ion-card-content>
-        <ion-item>
-          <ion-label position="floating">Nom du plat</ion-label>
-          <ion-input type="text" v-model="name" required></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Prix</ion-label>
-          <ion-input
-            type="number"
-            v-model.number="price"
-            placeholder=" €"
-            required
-          ></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-textarea
-            type="text"
-            v-model="description"
-            placeholder="Description, allergènes..."
-            required
-          ></ion-textarea>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Stock</ion-label>
-          <ion-input type="number" v-model="stock" required></ion-input>
-        </ion-item>
-      </ion-card-content>
-      <ion-item>
-        <ion-button type="submit" size="small">Ajouter</ion-button>
-      </ion-item>
-    </ion-card>
-  </form>
+          <ion-item>
+            <ion-label position="floating">Nom du plat</ion-label>
+            <ion-input type="text" v-model="name" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Prix</ion-label>
+            <ion-input
+              type="number"
+              v-model.number="price"
+              placeholder=" €"
+              required
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-textarea
+              type="text"
+              v-model="description"
+              placeholder="Description, allergènes..."
+              required
+            ></ion-textarea>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Stock</ion-label>
+            <ion-input type="number" v-model="stock" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-button type="submit" size="small">Ajouter</ion-button>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+    </form>
+  </ion-content>
 </template>
 
 <script>
@@ -52,10 +59,9 @@ import {
   IonButton,
   IonInput,
   IonCard,
-  IonCardHeader,
-  IonCardTitle,
   IonCardContent,
   IonTextarea,
+  modalController,
 } from "@ionic/vue";
 // import popup from "../services/popup";
 
@@ -67,8 +73,6 @@ export default defineComponent({
     IonButton,
     IonInput,
     IonCard,
-    IonCardHeader,
-    IonCardTitle,
     IonCardContent,
     IonTextarea,
   },
@@ -91,6 +95,16 @@ export default defineComponent({
         stock: this.stock,
       };
       this.$store.dispatch("postPlat", plat);
+
+      this.name = "";
+      this.price = "";
+      this.description = "";
+      this.stock = "";
+      this.photo_url = "";
+    },
+
+    closeModal() {
+      modalController.dismiss();
     },
   },
 });
