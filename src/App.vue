@@ -23,7 +23,7 @@ export default defineComponent({
   mounted() {
     console.log(localStorage.getItem("token"));
     // Check if user already logged in
-    if (localStorage.getItem("token") === "null") {
+    if (localStorage.getItem("token") == "null") {
       this.$store.commit("setUserIsLoggedIn", false);
     } else {
       this.$store.commit("setToken", localStorage.getItem("token"));

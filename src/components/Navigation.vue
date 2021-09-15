@@ -4,7 +4,7 @@
       <router-link to="/home"><ion-item>Home</ion-item></router-link>
     </ion-header>
     <ion-content class="menu">
-      <ion-list v-if="!this.$store.state.userIsLoggedIn">
+      <ion-list v-if="this.$store.state.userIsLoggedIn === false">
         <router-link :to="{ name: 'Events' }">
           <ion-item>Evènements</ion-item>
         </router-link>
@@ -37,8 +37,10 @@
         <router-link :to="{ name: 'Settings' }">
           <ion-item>Paramètres</ion-item>
         </router-link>
+        <ion-button size="medium" @click="logoutUser"
+          >Se déconnecter</ion-button
+        >
       </ion-list>
-      <ion-button size="medium" @click="logoutUser">Se déconnecter</ion-button>
     </ion-content>
   </ion-menu>
 </template>

@@ -3,13 +3,15 @@ import { createStore } from 'vuex';
 import axios from "axios";
 import popup from '../services/popup';
 
+const URL_API = "http://192.168.1.47:3000/";
+
 // Create a new store instance.
 const store = createStore({
     state() {
         return {
             token: null,
             userInformation: null,
-            userIsLoggedIn: null,
+            userIsLoggedIn: false,
             address: "",
             respApiAddress: {},
             events: [],
@@ -135,7 +137,7 @@ const store = createStore({
         async getEvents({ commit }) {
             let req = await axios({
                 method: "get",
-                url: 'http://localhost:3000/events',
+                url: URL_API + 'events',
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
@@ -145,7 +147,7 @@ const store = createStore({
         async getMyEvents({ commit }) {
             let req = await axios({
                 method: "get",
-                url: 'http://localhost:3000/events/myEvents',
+                url: URL_API + 'events/myEvents',
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
@@ -155,7 +157,7 @@ const store = createStore({
         async getMyEventDetails({ commit }, id) {
             let req = await axios({
                 method: "get",
-                url: 'http://localhost:3000/events/myEvents/' + id,
+                url: URL_API + 'events/myEvents/' + id,
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
@@ -165,7 +167,7 @@ const store = createStore({
         async getOrders({ commit }) {
             let req = await axios({
                 method: "get",
-                url: 'http://localhost:3000/orders',
+                url: URL_API + 'orders',
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
@@ -175,7 +177,7 @@ const store = createStore({
         async getPlats({ commit, state }) {
             await axios({
                 method: "get",
-                url: 'http://localhost:3000/plats/' + state.categoryIdTmp,
+                url: URL_API + 'plats/' + state.categoryIdTmp,
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
@@ -187,7 +189,7 @@ const store = createStore({
         async getCategories({ commit, state }) {
             await axios({
                 method: "get",
-                url: 'http://localhost:3000/categories/' + state.eventTmp.id,
+                url: URL_API + 'categories/' + state.eventTmp.id,
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
@@ -202,7 +204,7 @@ const store = createStore({
         async getEventDetails({ commit }, id) {
             let req = await axios({
                 method: "get",
-                url: 'http://localhost:3000/events/' + id,
+                url: URL_API + 'events/' + id,
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
@@ -214,7 +216,7 @@ const store = createStore({
             const orderId = Object.values(id.id).toString();
             let req = await axios({
                 method: "get",
-                url: 'http://localhost:3000/orders/' + orderId,
+                url: URL_API + 'orders/' + orderId,
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
@@ -226,7 +228,7 @@ const store = createStore({
         async postEvent({ commit, state }) {
             await axios({
                 method: "post",
-                url: 'http://localhost:3000/events',
+                url: URL_API + 'events',
                 data: {
                     name: state.eventTmp.name,
                     address: state.eventTmp.address,
@@ -253,7 +255,7 @@ const store = createStore({
         async postCategorie({ commit, state }, libelle) {
             await axios({
                 method: "post",
-                url: 'http://localhost:3000/categories',
+                url: URL_API + 'categories',
                 data: {
                     libelle: libelle,
                     event_id: state.eventTmp.id
@@ -280,7 +282,7 @@ const store = createStore({
         async postPlat({ state }, plat) {
             axios({
                 method: "post",
-                url: 'http://localhost:3000/plats',
+                url: URL_API + 'plats',
                 data: {
                     libelle: plat.libelle,
                     price: plat.price,
@@ -307,7 +309,7 @@ const store = createStore({
         postOrder({ state }) {
             axios({
                 method: "post",
-                url: 'http://localhost:3000/orders',
+                url: URL_API + 'orders',
                 data: {
                     event_id: state.eventDetails.id,
                     heure: "2021-09-01 20:30:00",
