@@ -105,14 +105,8 @@ export default defineComponent({
         private: this.isPrivate,
       };
 
-      console.log(this.isPrivate);
-
-      try {
-        this.$store.commit("setEventTmp", event);
-        this.$store.dispatch("postEvent");
-      } catch (error) {
-        console.error(error);
-      }
+      this.$store.commit("setEventTmp", event);
+      this.$store.dispatch("postEvent");
     },
 
     async openMapModal() {

@@ -8,14 +8,24 @@
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
-    <form @submit.prevent="addCategorie()" method="post">
+    <form
+      @submit.prevent="addCategorie()"
+      enctype="multipart/form-data"
+      method="post"
+    >
       <ion-card>
         <ion-card-header>
           <ion-card-title>
             <ion-item>
               <ion-label>Ajouter une image</ion-label>
             </ion-item>
-            <input type="file" />
+            <input
+              type="file"
+              id="file"
+              name="file"
+              ref="file"
+              v-on:change="handleFileUpload()"
+            />
           </ion-card-title>
         </ion-card-header>
 
@@ -71,15 +81,21 @@ export default defineComponent({
   data() {
     return {
       libelle: "",
+      file: "",
     };
-  },
-  mounted() {
-    // this.$store.dispatch("getCategories");
   },
   methods: {
     addCategorie() {
-      this.$store.dispatch("postCategorie", this.libelle);
+      console.log(typeof this.file);
+      let data = {
+        libelle: this.libelle,
+        file: this.file,
+      };
+      this.$store.dispatch("postCategorie", data);
       this.libelle = "";
+    },
+    handleFileUpload() {
+      this.file = this.$refs.file.files[0];
     },
     closeModal() {
       modalController.dismiss();
