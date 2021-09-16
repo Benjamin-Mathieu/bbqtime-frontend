@@ -226,19 +226,20 @@ const store = createStore({
         },
 
         async postEvent({ commit, state }) {
+            let formData = new FormData();
+            formData.append("name", state.eventTmp.name);
+            formData.append("address", state.eventTmp.address);
+            formData.append("city", state.eventTmp.city);
+            formData.append("zipcode", state.eventTmp.zipcode);
+            formData.append("date", "2021-08-30 20:30:00");
+            formData.append("description", state.eventTmp.description);
+            formData.append("private", state.eventTmp.private);
+            formData.append("image", state.eventTmp.file, state.eventTmp.file.name);
+
             await axios({
                 method: "post",
                 url: URL_API + 'events',
-                data: {
-                    name: state.eventTmp.name,
-                    address: state.eventTmp.address,
-                    city: state.eventTmp.city,
-                    zipcode: state.eventTmp.zipcode,
-                    date: "2021-08-30 20:30:00",
-                    description: state.eventTmp.description,
-                    photo_url: "public/uploads/event.png",
-                    private: state.eventTmp.private,
-                },
+                data: formData,
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }

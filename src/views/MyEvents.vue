@@ -8,7 +8,7 @@
         <ion-grid>
           <ion-row>
             <ion-col size="2">
-              <ion-img alt="event-img" :src="event.public_img"></ion-img>
+              <ion-img alt="event-img" :src="event.photo_url"></ion-img>
             </ion-col>
             <ion-col size="10">
               <ion-item>

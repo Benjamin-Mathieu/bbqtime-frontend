@@ -37,7 +37,16 @@
     </ion-item>
 
     <ion-item>
-      <input type="file" name="photoUrl" />
+      <input
+        style="display: none"
+        type="file"
+        name="image"
+        @change="pickImage"
+        ref="fileInput"
+      />
+      <ion-button size="small" fill="clear" @click="$refs.fileInput.click()">
+        Ajouter une image
+      </ion-button>
     </ion-item>
 
     <ion-item>
@@ -86,11 +95,14 @@ export default defineComponent({
       hours: "",
       description:
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      file: null,
       isPrivate: true,
     };
   },
-  mounted() {},
   methods: {
+    pickImage(selected) {
+      this.file = selected.target.files[0];
+    },
     addInfoEvent() {
       this.address = this.$store.getters.getAddress.name;
       this.city = this.$store.getters.getAddress.city;
@@ -103,6 +115,7 @@ export default defineComponent({
         zipcode: this.zipcode,
         description: this.description,
         private: this.isPrivate,
+        file: this.file,
       };
 
       this.$store.commit("setEventTmp", event);
