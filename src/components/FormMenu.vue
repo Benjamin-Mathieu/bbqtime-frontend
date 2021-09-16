@@ -8,17 +8,15 @@
     </ion-toolbar>
   </ion-header>
   <ion-content>
-    <form @submit.prevent="addMenu()" method="post">
+    <form
+      @submit.prevent="addMenu()"
+      method="post"
+      enctype="multipart/form-data"
+    >
       <ion-card>
         <ion-card-content>
           <ion-item>
-            <ion-label>image</ion-label>
-            <ion-button>
-              <input type="file" />
-            </ion-button>
-          </ion-item>
-          <ion-item>
-            <ion-label position="floating">Nom du plat</ion-label>
+            <ion-label position="floating">Nom</ion-label>
             <ion-input type="text" v-model="name" required></ion-input>
           </ion-item>
           <ion-item>
@@ -40,8 +38,27 @@
           </ion-item>
           <ion-item>
             <ion-label position="floating">Stock</ion-label>
-            <ion-input type="number" v-model="stock" required></ion-input>
+            <ion-input
+              type="number"
+              v-model.number="stock"
+              required
+            ></ion-input>
           </ion-item>
+          <input
+            style="display: none"
+            type="file"
+            name="image"
+            @change="pickImage"
+            ref="fileInput"
+          />
+
+          <ion-button
+            size="small"
+            fill="clear"
+            @click="$refs.fileInput.click()"
+          >
+            Poster une image
+          </ion-button>
           <ion-item>
             <ion-button type="submit" size="small">Ajouter</ion-button>
           </ion-item>
@@ -82,10 +99,13 @@ export default defineComponent({
       price: 25,
       description: "zezaezae",
       stock: 10,
-      photo_url: "public/uploads/test.jpg",
+      file: null,
     };
   },
   methods: {
+    pickImage(selected) {
+      this.file = selected.target.files[0];
+    },
     addMenu() {
       const plat = {
         libelle: this.name,
@@ -93,6 +113,7 @@ export default defineComponent({
         photo_url: this.photo_url,
         description: this.description,
         stock: this.stock,
+        file: this.file,
       };
       this.$store.dispatch("postPlat", plat);
 
@@ -100,7 +121,6 @@ export default defineComponent({
       this.price = "";
       this.description = "";
       this.stock = "";
-      this.photo_url = "";
     },
 
     closeModal() {

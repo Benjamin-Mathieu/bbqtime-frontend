@@ -253,13 +253,11 @@ const store = createStore({
         },
 
         async postCategorie({ commit, state }, data) {
+            console.log("data.file =>", data.file.name);
             let formData = new FormData();
-            // formData.append("libelle", libelle);
-            // formData.append("event_id", state.eventTmp.id);
-            // formData.append("file", uploadedFile);   
-            console.log(state);
-            console.log(data);
-
+            formData.append("libelle", data.libelle);
+            formData.append("event_id", state.eventTmp.id);
+            formData.append("image", data.file, data.file.name);
 
             await axios({
                 method: "post",
@@ -285,19 +283,21 @@ const store = createStore({
                 })
         },
 
-        async postPlat({ state }, plat) {
+        async postPlat({ state }, data) {
+            let formData = new FormData();
+            formData.append("libelle", data.libelle);
+            formData.append("price", data.price);
+            formData.append("description", data.description);
+            formData.append("stock", data.stock);
+            formData.append("event_id", state.eventTmp.id);
+            formData.append("category_id", state.categoryIdTmp);
+            formData.append("image", data.file, data.file.name);
+
+
             axios({
                 method: "post",
                 url: URL_API + 'plats',
-                data: {
-                    libelle: plat.libelle,
-                    price: plat.price,
-                    description: plat.description,
-                    stock: plat.stock,
-                    photo_url: plat.photo_url,
-                    event_id: state.eventTmp.id,
-                    category_id: state.categoryIdTmp
-                },
+                data: formData,
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }

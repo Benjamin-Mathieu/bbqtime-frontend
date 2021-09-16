@@ -6,9 +6,6 @@
         <ion-card>
           <ion-card-header>
             <ion-button size="large" href="/scan">Scan QR Code</ion-button>
-            <ion-button size="large" @click="pick()"
-              >Test pick image</ion-button
-            >
           </ion-card-header>
 
           <ion-card-content>
@@ -48,7 +45,6 @@ import {
 import { defineComponent } from "vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
-import GetPicture from "../services/camera";
 
 export default defineComponent({
   name: "Home",
@@ -61,11 +57,6 @@ export default defineComponent({
     IonCardContent,
     Header,
     Footer,
-  },
-  methods: {
-    pick() {
-      GetPicture.browser();
-    },
   },
 });
 </script>
