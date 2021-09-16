@@ -2,7 +2,7 @@
   <ion-page>
     <Header></Header>
     <Sub title="Vos commandes"></Sub>
-    <ion-content v-if="this.$store.state.orders.length > 0">
+    <ion-content>
       <ion-card v-for="order in this.$store.state.orders" :key="order.id">
         <ion-grid>
           <ion-row>
@@ -71,11 +71,11 @@
         </ion-grid>
       </ion-card>
     </ion-content>
-    <ion-content v-else>
+    <!-- <ion-content>
       <ion-card>
         <ion-card-content>Pas de commande pour le moment</ion-card-content>
       </ion-card>
-    </ion-content>
+    </ion-content> -->
     <Footer></Footer>
   </ion-page>
 </template>
@@ -97,13 +97,14 @@ import {
   IonCol,
 } from "@ionic/vue";
 import { chevronDownOutline } from "ionicons/icons";
+import store from "../store/store";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
 
 export default defineComponent({
   name: "Orders",
-  component: {
+  components: {
     IonPage,
     IonContent,
     IonCard,
@@ -127,11 +128,12 @@ export default defineComponent({
   },
   data() {
     return {
-      showDetails: true,
+      showDetails: false,
     };
   },
-  mounted() {
-    this.$store.dispatch("getOrders");
+  beforeRouteEnter(to, from, next) {
+    store.dispatch("getOrders");
+    next();
   },
   methods: {
     getDetails(orderId) {

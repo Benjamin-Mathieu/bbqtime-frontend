@@ -2,6 +2,9 @@
   <ion-header>
     <ion-toolbar>
       <ion-title>Lieu de l'évènement</ion-title>
+      <ion-button fill="outline" slot="end" @click="closeModal()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
     </ion-toolbar>
   </ion-header>
   <ion-content>
@@ -25,6 +28,7 @@ import {
   IonInput,
   IonItem,
   IonLabel,
+  modalController,
 } from "@ionic/vue";
 import Map from "../services/map";
 
@@ -48,6 +52,9 @@ export default defineComponent({
       this.$store.commit("setAddress", this.address.replaceAll(" ", "+"));
       this.$store.dispatch("getAddress");
       Map.getMap();
+    },
+    closeModal() {
+      modalController.dismiss();
     },
   },
 });

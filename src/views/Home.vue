@@ -5,7 +5,11 @@
       <div id="container">
         <ion-card>
           <ion-card-header>
-            <ion-button size="large" href="/scan">Scan QR Code</ion-button>
+            <router-link :to="{ name: 'Scan' }">
+              <ion-button fill="outline" size="large">
+                Scan QR Code
+              </ion-button>
+            </router-link>
           </ion-card-header>
 
           <ion-card-content>

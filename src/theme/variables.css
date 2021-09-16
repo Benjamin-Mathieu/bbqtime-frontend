@@ -255,7 +255,7 @@ ion-item {
 }
 
 ion-button {
-  --background: #740F13CC;
+  --background: rgba(116, 15, 19, 0.8);;
 }
 
 ion-menu .shop,

@@ -5,14 +5,14 @@ import Categories from '../views/Categories.vue';
 import Events from '../views/Events.vue';
 import SignIn from '../views/SignIn.vue';
 import SignUp from '../views/SignUp.vue';
-import Orders from "../views/Orders";
-import AddEvent from "../views/AddEvent";
-import Account from "../views/Account";
-import Plats from "../views/Plats";
-import Shop from "../views/Shop";
-import MyEvents from "../views/MyEvents";
-import MyEventDetails from "../views/MyEventDetails";
-import Settings from "../views/Settings";
+import Orders from "../views/Orders.vue";
+import AddEvent from "../views/AddEvent.vue";
+import Account from "../views/Account.vue";
+import Plats from "../views/Plats.vue";
+import Shop from "../views/Shop.vue";
+import MyEvents from "../views/MyEvents.vue";
+import MyEventDetails from "../views/MyEventDetails.vue";
+import Settings from "../views/Settings.vue";
 
 const routes = [
   {

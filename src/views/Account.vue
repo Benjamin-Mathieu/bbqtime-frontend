@@ -46,7 +46,7 @@
           <ion-icon size="large" :icon="bagOutline"></ion-icon> </ion-button
       ></router-link>
 
-      <router-link :to="{ name: 'Orders' }"
+      <router-link :to="{ name: 'Settings' }"
         ><ion-button>
           <ion-icon
             size="large"

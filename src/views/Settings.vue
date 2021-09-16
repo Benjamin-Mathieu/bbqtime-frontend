@@ -19,7 +19,15 @@
 
 <script>
 import { defineComponent } from "vue";
-import { IonPage, IonContent } from "@ionic/vue";
+import {
+  IonPage,
+  IonContent,
+  IonCard,
+  IonCardHeader,
+  IonCardContent,
+  IonRange,
+  IonIcon,
+} from "@ionic/vue";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
@@ -30,6 +38,11 @@ export default defineComponent({
   components: {
     IonPage,
     IonContent,
+    IonCard,
+    IonCardHeader,
+    IonCardContent,
+    IonRange,
+    IonIcon,
     Header,
     Sub,
     Footer,

@@ -8,7 +8,7 @@
         <ion-segment-button @click="step = 1" value="1">
           <ion-label>Step 1</ion-label>
         </ion-segment-button>
-        <ion-segment-button @click="step = 2" value="2">
+        <ion-segment-button @click="step = 2" value="2" :disabled="disabled">
           <ion-label>Step 2</ion-label>
         </ion-segment-button>
         <ion-segment-button @click="step = 3" value="3" :disabled="disabled">

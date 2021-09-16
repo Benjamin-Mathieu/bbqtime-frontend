@@ -50,6 +50,10 @@
 <script>
 import { defineComponent } from "vue";
 import {
+  IonPage,
+  IonContent,
+  IonImg,
+  IonLabel,
   IonCard,
   IonCardContent,
   IonItem,
@@ -65,6 +69,10 @@ import Footer from "../components/Footer.vue";
 export default defineComponent({
   name: "MyEvents",
   components: {
+    IonPage,
+    IonContent,
+    IonImg,
+    IonLabel,
     IonCard,
     IonCardContent,
     IonItem,

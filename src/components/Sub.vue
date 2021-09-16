@@ -21,9 +21,11 @@
 import {
   IonToolbar,
   IonButtons,
+  IonButton,
   IonMenuButton,
   IonTitle,
   IonIcon,
+  IonBadge,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { chevronBackOutline, bagHandle } from "ionicons/icons";
@@ -38,9 +40,11 @@ export default defineComponent({
   components: {
     IonToolbar,
     IonButtons,
+    IonButton,
     IonMenuButton,
     IonTitle,
     IonIcon,
+    IonBadge,
   },
   setup() {
     return {

@@ -30,10 +30,11 @@ import {
   IonList,
   IonItem,
   IonLabel,
+  IonButton,
 } from "@ionic/vue";
 export default defineComponent({
   name: "ShopMenu",
-  components: { IonMenu, IonContent, IonList, IonItem, IonLabel },
+  components: { IonMenu, IonContent, IonList, IonItem, IonLabel, IonButton },
   data() {
     return {
       totalOrder: 0,

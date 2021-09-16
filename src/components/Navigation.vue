@@ -1,7 +1,9 @@
 <template>
   <ion-menu color="primary" side="start" menu-id="nav" content-id="main">
     <ion-header>
-      <router-link to="/home"><ion-item>Home</ion-item></router-link>
+      <router-link :to="{ name: 'Home' }"
+        ><ion-item>Home</ion-item></router-link
+      >
     </ion-header>
     <ion-content class="menu">
       <ion-list v-if="this.$store.state.userIsLoggedIn === false">

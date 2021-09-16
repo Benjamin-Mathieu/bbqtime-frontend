@@ -1,8 +1,8 @@
 <template>
   <ion-page>
     <Header></Header>
-    <Sub title="Votre commande"></Sub>
-    <ion-content :fullscreen="true">
+    <Sub title="Panier"></Sub>
+    <ion-content v-if="this.$store.state.shop.length > 0">
       <ion-card v-for="plat in this.$store.state.shop" :key="plat.id">
         <ion-grid>
           <ion-row>
@@ -32,6 +32,11 @@
       </ion-item>
       <ion-button fill="solid" @click="postOrder()">Commander</ion-button>
     </ion-content>
+    <ion-content v-else>
+      <ion-card>
+        <ion-card-header> Votre panier est vide </ion-card-header>
+      </ion-card>
+    </ion-content>
   </ion-page>
 </template>
 
@@ -40,13 +45,20 @@ import { defineComponent } from "vue";
 import {
   IonPage,
   IonContent,
+  IonCard,
+  IonCardHeader,
+  IonIcon,
+  IonImg,
+  IonLabel,
+  IonItem,
+  IonButton,
   IonGrid,
   IonRow,
   IonCol,
   IonInput,
 } from "@ionic/vue";
 import { trashBinOutline } from "ionicons/icons";
-import Sub from "../components/Sub";
+import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
 
 export default defineComponent({
@@ -54,6 +66,13 @@ export default defineComponent({
   components: {
     IonPage,
     IonContent,
+    IonCard,
+    IonCardHeader,
+    IonIcon,
+    IonImg,
+    IonLabel,
+    IonItem,
+    IonButton,
     IonGrid,
     IonRow,
     IonCol,
