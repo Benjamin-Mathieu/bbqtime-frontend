@@ -28,31 +28,31 @@
               ></ion-input> </ion-item
           ></ion-card-content>
           <ion-item>
-            <ion-button type="submit" slot="end" size="small"
-              >Modifier</ion-button
-            >
+            <ion-button type="submit" slot="end">Modifier</ion-button>
           </ion-item>
         </ion-card>
       </form>
 
-      <router-link :to="{ name: 'MyEvents' }">
-        <ion-button>
-          <ion-icon size="large" :icon="calendarOutline"> </ion-icon>
-        </ion-button>
-      </router-link>
+      <div class="buttons">
+        <router-link :to="{ name: 'MyEvents' }">
+          <ion-button>
+            <ion-icon size="large" :icon="calendarOutline"> </ion-icon>
+          </ion-button>
+        </router-link>
 
-      <router-link :to="{ name: 'Orders' }"
-        ><ion-button>
-          <ion-icon size="large" :icon="bagOutline"></ion-icon> </ion-button
-      ></router-link>
+        <router-link :to="{ name: 'Orders' }"
+          ><ion-button>
+            <ion-icon size="large" :icon="bagOutline"></ion-icon> </ion-button
+        ></router-link>
 
-      <router-link :to="{ name: 'Settings' }"
-        ><ion-button>
-          <ion-icon
-            size="large"
-            :icon="settingsOutline"
-          ></ion-icon> </ion-button
-      ></router-link>
+        <router-link :to="{ name: 'Settings' }"
+          ><ion-button>
+            <ion-icon
+              size="large"
+              :icon="settingsOutline"
+            ></ion-icon> </ion-button
+        ></router-link>
+      </div>
     </ion-content>
     <Footer></Footer>
   </ion-page>
@@ -100,5 +100,14 @@ export default defineComponent({
   },
 });
 </script>
-<style>
+
+<style lang="scss" scoped>
+ion-card {
+  margin: auto;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-around;
+}
 </style>

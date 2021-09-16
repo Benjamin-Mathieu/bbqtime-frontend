@@ -6,9 +6,7 @@
         <ion-card>
           <ion-card-header>
             <router-link :to="{ name: 'Scan' }">
-              <ion-button fill="outline" size="large">
-                Scan QR Code
-              </ion-button>
+              <ion-button size="large"> Scan QR Code </ion-button>
             </router-link>
           </ion-card-header>
 
@@ -18,19 +16,17 @@
           </ion-card-content>
         </ion-card>
 
-        <ion-button
-          v-if="!this.$store.state.userIsLoggedIn"
-          size="medium"
-          href="/sign-in"
-          fill="outline"
-          >Connexion</ion-button
-        >
-        <ion-button
-          v-if="!this.$store.state.userIsLoggedIn"
-          size="medium"
-          href="/sign-up"
-          >Créer un compte</ion-button
-        >
+        <router-link :to="{ name: 'SignIn' }">
+          <ion-button v-if="!this.$store.state.userIsLoggedIn">
+            Connexion
+          </ion-button>
+        </router-link>
+
+        <router-link :to="{ name: 'SignUp' }">
+          <ion-button v-if="!this.$store.state.userIsLoggedIn">
+            Créer un compte
+          </ion-button>
+        </router-link>
       </div>
     </ion-content>
     <Footer></Footer>

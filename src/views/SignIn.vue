@@ -4,17 +4,26 @@
     <Sub title="Connexion"></Sub>
     <ion-content>
       <form @submit.prevent="authUser()" method="post">
-        <ion-item>
-          <ion-label position="floating">E-mail</ion-label>
-          <ion-input type="email" v-model="email" required></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Mot de passe</ion-label>
-          <ion-input type="password" v-model="password" required></ion-input>
-        </ion-item>
-        <ion-button type="submit">Connexion</ion-button>
+        <ion-card>
+          <ion-card-content>
+            <ion-item lines="none">
+              <ion-label position="floating">E-mail</ion-label>
+              <ion-input type="email" v-model="email" required></ion-input>
+            </ion-item>
+            <ion-item lines="none">
+              <ion-label position="floating">Mot de passe</ion-label>
+              <ion-input
+                type="password"
+                v-model="password"
+                required
+              ></ion-input>
+            </ion-item>
+            <ion-button slot="end" type="submit">Connexion</ion-button>
+          </ion-card-content>
+        </ion-card>
       </form>
     </ion-content>
+    <Footer></Footer>
   </ion-page>
 </template>
 
@@ -22,11 +31,21 @@
 import { defineComponent } from "vue";
 import { IonLabel, IonInput, IonItem, IonPage, IonContent } from "@ionic/vue";
 import APIProvider from "../services/api";
-import Sub from "../components/Sub";
+import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
+import Footer from "../components/Footer.vue";
 
 export default defineComponent({
-  components: { IonLabel, IonInput, IonItem, IonPage, IonContent, Sub, Header },
+  components: {
+    IonLabel,
+    IonInput,
+    IonItem,
+    IonPage,
+    IonContent,
+    Sub,
+    Header,
+    Footer,
+  },
   name: "SignIn",
   data() {
     return {

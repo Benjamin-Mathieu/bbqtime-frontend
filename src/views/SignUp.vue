@@ -4,18 +4,70 @@
     <Sub title="Créer un compte"></Sub>
     <ion-content>
       <form @submit.prevent="registerUser()" method="post">
-        <input v-model="email" type="email" placeholder="E-mail" required />
-        <input
-          v-model="password"
-          type="password"
-          placeholder="Mot de passe"
-          required
-        />
-        <input v-model="name" type="text" placeholder="Nom" required />
-        <input v-model="firstname" type="text" placeholder="Prénom" required />
-        <input v-model="phone" type="text" placeholder="Mobile" required />
-
-        <button type="submit">Créer un compte</button>
+        <ion-card>
+          <ion-grid>
+            <ion-row>
+              <ion-col size="6">
+                <ion-item lines="none">
+                  <ion-label position="floating">Prénom</ion-label>
+                  <ion-input
+                    v-model="firstname"
+                    type="text"
+                    required
+                  ></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col size="6">
+                <ion-item lines="none">
+                  <ion-label position="floating">Nom</ion-label>
+                  <ion-input v-model="nom" type="text" required></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="6">
+                <ion-item lines="none">
+                  <ion-label position="floating">Téléphone</ion-label>
+                  <ion-input v-model="phone" type="text" required></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col size="6">
+                <ion-item lines="none">
+                  <ion-label position="floating">Code postal</ion-label>
+                  <ion-input v-model="zipcode" type="text" required></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-item lines="none">
+                <ion-label position="floating">E-mail</ion-label>
+                <ion-input v-model="email" type="email" required></ion-input>
+              </ion-item>
+            </ion-row>
+            <ion-row :class="classObject">
+              <ion-item>
+                <ion-label position="floating">Mot de passe</ion-label>
+                <ion-input
+                  v-model="password"
+                  type="password"
+                  required
+                ></ion-input> </ion-item
+            ></ion-row>
+            <ion-row :class="classObject">
+              <ion-item>
+                <ion-label position="floating"
+                  >Vérifier le mot de passe</ion-label
+                >
+                <ion-input
+                  v-model="checkPassword"
+                  type="password"
+                  required
+                ></ion-input>
+              </ion-item>
+            </ion-row>
+          </ion-grid>
+          <ion-button type="submit">Créer le compte</ion-button>
+        </ion-card>
       </form>
     </ion-content>
   </ion-page>
@@ -24,49 +76,102 @@
 <script>
 import { defineComponent } from "vue";
 import { Http } from "@capacitor-community/http";
-import { IonPage, IonContent } from "@ionic/vue";
+import {
+  IonPage,
+  IonContent,
+  IonCard,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonItem,
+  IonLabel,
+  IonInput,
+  IonButton,
+} from "@ionic/vue";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
 
 export default defineComponent({
   name: "SignUp",
-  components: { IonPage, IonContent, Sub, Header },
+  components: {
+    IonPage,
+    IonContent,
+    IonCard,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonItem,
+    IonLabel,
+    IonInput,
+    IonButton,
+    Sub,
+    Header,
+  },
   data() {
     return {
       email: "postfe@gmail.com",
-      password: "test",
+      password: "",
+      checkPassword: "",
       name: "Christopher",
       firstname: "Wallace",
       phone: "0325142365",
+      isChecked: true,
+      noMatch: true,
     };
+  },
+  computed: {
+    classObject() {
+      if (this.password == this.checkPassword) {
+        return { checkPassword: this.isChecked };
+      } else {
+        return { noMatch: this.noMatch };
+      }
+    },
   },
   methods: {
     registerUser() {
-      const options = {
-        url: "http://localhost:3000/users",
-        headers: {
-          Accept: "application/json",
-          "Content-type": "application/json",
-        },
-        data: {
-          email: this.email,
-          password: this.password,
-          name: this.name,
-          firstname: this.firstname,
-          phone: this.phone,
-        },
-      };
+      if (this.password !== this.checkPassword) {
+        this.isChecked = false;
+        alert("Mot de passe ne correspond pas");
+      } else {
+        const options = {
+          url: "http://localhost:3000/users",
+          headers: {
+            Accept: "application/json",
+            "Content-type": "application/json",
+          },
+          data: {
+            email: this.email,
+            password: this.password,
+            name: this.name,
+            firstname: this.firstname,
+            phone: this.phone,
+          },
+        };
 
-      const resp = Http.post(options)
-        .then((resp) => {
-          console.log(resp);
-        })
-        .catch((err) => console.log(err));
-      return resp;
+        const resp = Http.post(options)
+          .then((resp) => {
+            console.log(resp);
+          })
+          .catch((err) => console.log(err));
+        return resp;
+      }
     },
   },
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.checkPassword {
+  ion-item {
+    --border-color: green;
+    --color: green;
+  }
+}
+.noMatch {
+  ion-item {
+    --border-color: red;
+    --color: red;
+  }
+}
 </style>
