@@ -11,8 +11,13 @@
           </ion-card-header>
 
           <ion-card-content>
-            <input type="text" name="code" placeholder="Entrer un code" />
-            <ion-button>GO</ion-button>
+            <input
+              type="text"
+              name="code"
+              v-model="code"
+              placeholder="Entrer un code"
+            />
+            <ion-button @click="goToEvent()">GO</ion-button>
           </ion-card-content>
         </ion-card>
 
@@ -57,6 +62,16 @@ export default defineComponent({
     IonCardContent,
     Header,
     Footer,
+  },
+  data() {
+    return {
+      code: "",
+    };
+  },
+  methods: {
+    goToEvent() {
+      this.$store.dispatch("joinEvent", this.code);
+    },
   },
 });
 </script>

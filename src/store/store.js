@@ -2,6 +2,7 @@ import { createStore } from 'vuex';
 // import APIProvider from '../services/api';
 import axios from "axios";
 import popup from '../services/popup';
+import router from "../router/index";
 
 const URL_API = "http://192.168.1.47:3000/";
 
@@ -144,6 +145,7 @@ const store = createStore({
             });
             commit("setEvents", req.data.events)
         },
+
         async getMyEvents({ commit }) {
             let req = await axios({
                 method: "get",
@@ -154,6 +156,40 @@ const store = createStore({
             });
             commit("setMyEvents", req.data.events)
         },
+
+        async getEventDetails({ commit }, id) {
+            await axios({
+                method: "get",
+                url: URL_API + 'events/' + id,
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            })
+                .then(resp => {
+                    commit("setEventDetails", resp.data.event);
+                })
+                .catch(err => console.log(err))
+        },
+
+        async joinEvent({ commit, state }, password) {
+            await axios({
+                method: "get",
+                url: URL_API + 'events/join/' + password,
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            })
+                .then(resp => {
+                    console.log(resp);
+                    commit("setEventDetails", resp.data.event);
+                    router.push({
+                        name: "Categories",
+                        params: { id: state.eventDetails.id },
+                    });
+                })
+                .catch(err => console.log(err));
+        },
+
         async getMyEventDetails({ commit }, id) {
             let req = await axios({
                 method: "get",
@@ -164,6 +200,7 @@ const store = createStore({
             });
             commit("setMyEventDetails", req.data)
         },
+
         async getOrders({ commit }) {
             let req = await axios({
                 method: "get",
@@ -174,6 +211,7 @@ const store = createStore({
             });
             commit("setOrders", req.data.orders)
         },
+
         async getPlats({ commit, state }) {
             await axios({
                 method: "get",
@@ -201,17 +239,6 @@ const store = createStore({
 
         },
 
-        async getEventDetails({ commit }, id) {
-            let req = await axios({
-                method: "get",
-                url: URL_API + 'events/' + id,
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token")
-                }
-            });
-            commit("setEventDetails", req.data.event);
-        },
-
         async getOrderDetails({ commit }, id) {
             const orderId = Object.values(id.id).toString();
             let req = await axios({
@@ -234,6 +261,7 @@ const store = createStore({
             formData.append("date", "2021-08-30 20:30:00");
             formData.append("description", state.eventTmp.description);
             formData.append("private", state.eventTmp.private);
+            formData.append("password", state.eventTmp.password);
             formData.append("image", state.eventTmp.file, state.eventTmp.file.name);
 
             await axios({
