@@ -29,7 +29,16 @@
 
 <script>
 import { defineComponent } from "vue";
-import { IonLabel, IonInput, IonItem, IonPage, IonContent } from "@ionic/vue";
+import {
+  IonLabel,
+  IonInput,
+  IonItem,
+  IonPage,
+  IonContent,
+  IonCard,
+  IonCardContent,
+  IonButton,
+} from "@ionic/vue";
 import APIProvider from "../services/api";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
@@ -45,6 +54,9 @@ export default defineComponent({
     Sub,
     Header,
     Footer,
+    IonCard,
+    IonCardContent,
+    IonButton,
   },
   name: "SignIn",
   data() {

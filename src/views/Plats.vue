@@ -11,14 +11,20 @@
           <ion-row>
             <ion-col v-for="plat in categorie.plats" :key="plat.id" size="6">
               <ion-card
+                style="width: 150px"
                 v-if="plat.category_id == this.$route.params.idCategorie"
               >
-                <img :src="plat.photo_url" alt="img-plat" />
                 <ion-card-header>
-                  <ion-card-title
+                  <img
+                    style="border-radius: 2px; height: 122px"
+                    :src="plat.photo_url"
+                    alt="img-plat"
+                  />
+
+                  <ion-card-subtitle
                     >{{ plat.libelle }}
                     {{ plat.price + "€" }}
-                  </ion-card-title>
+                  </ion-card-subtitle>
                 </ion-card-header>
 
                 <ion-card-content>
@@ -31,17 +37,28 @@
                       min="1"
                       :max="plat.stock"
                     ></ion-input>
+
+                    <ion-item>
+                      <ion-label>Quantité</ion-label>
+                      <ion-select
+                        value="1"
+                        ok-text="Valider"
+                        cancel-text="Fermer"
+                      >
+                        <ion-select-option
+                          v-for="qty in plat.stock"
+                          :key="qty.id"
+                          >{{ qty }}</ion-select-option
+                        >
+                      </ion-select>
+                    </ion-item>
+                    <h3>stock: {{ plat.stock }}</h3>
                   </ion-item>
-                  <h3>stock: {{ plat.stock }}</h3>
                   <ion-progress-bar
                     :value="1 - plat.qty / plat.stock"
                     :color="color"
                   ></ion-progress-bar>
-                  <ion-button
-                    @click="addToShop(plat)"
-                    size="small"
-                    fill="outline"
-                  >
+                  <ion-button @click="addToShop(plat)" size="small">
                     Ajouter au panier
                     <ion-icon :icon="addCircleOutline"></ion-icon>
                   </ion-button>
@@ -70,7 +87,7 @@ import {
   IonItem,
   IonInput,
   IonLabel,
-  IonCardTitle,
+  IonCardSubtitle,
   IonIcon,
   IonButton,
   IonProgressBar,
@@ -94,7 +111,7 @@ export default defineComponent({
     IonItem,
     IonInput,
     IonLabel,
-    IonCardTitle,
+    IonCardSubtitle,
     IonIcon,
     IonButton,
     IonProgressBar,

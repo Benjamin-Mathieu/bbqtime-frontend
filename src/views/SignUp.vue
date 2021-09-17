@@ -20,7 +20,7 @@
               <ion-col size="6">
                 <ion-item lines="none">
                   <ion-label position="floating">Nom</ion-label>
-                  <ion-input v-model="nom" type="text" required></ion-input>
+                  <ion-input v-model="name" type="text" required></ion-input>
                 </ion-item>
               </ion-col>
             </ion-row>
@@ -115,13 +115,18 @@ export default defineComponent({
       name: "Christopher",
       firstname: "Wallace",
       phone: "0325142365",
+      zipcode: "88200",
       isChecked: true,
       noMatch: true,
     };
   },
   computed: {
     classObject() {
-      if (this.password == this.checkPassword) {
+      if (
+        this.password == this.checkPassword &&
+        this.password !== "" &&
+        this.checkPassword !== ""
+      ) {
         return { checkPassword: this.isChecked };
       } else {
         return { noMatch: this.noMatch };

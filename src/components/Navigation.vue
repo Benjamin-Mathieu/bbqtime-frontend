@@ -1,12 +1,12 @@
 <template>
   <ion-menu color="primary" side="start" menu-id="nav" content-id="main">
-    <ion-header>
-      <router-link :to="{ name: 'Home' }"
-        ><ion-item>Home</ion-item></router-link
-      >
-    </ion-header>
     <ion-content class="menu">
-      <ion-list v-if="this.$store.state.userIsLoggedIn === false">
+      <ion-list-header>
+        <router-link :to="{ name: 'Home' }">
+          <img src="../../public/assets/logo1.png" alt="logo-bbqtime" />
+        </router-link>
+      </ion-list-header>
+      <ion-list v-if="this.$store.state.userIsLoggedIn === false" lines="none">
         <router-link :to="{ name: 'Events' }">
           <ion-item>Evènements</ion-item>
         </router-link>
@@ -20,7 +20,7 @@
           <ion-item>Connexion</ion-item>
         </router-link>
       </ion-list>
-      <ion-list v-else>
+      <ion-list v-else lines="none">
         <router-link :to="{ name: 'Events' }">
           <ion-item>Evènements</ion-item>
         </router-link>
@@ -29,6 +29,9 @@
         </router-link>
         <router-link :to="{ name: 'Shop' }">
           <ion-item>Panier</ion-item>
+        </router-link>
+        <router-link :to="{ name: 'AddEvent' }">
+          <ion-item>Créer un évènement</ion-item>
         </router-link>
         <router-link :to="{ name: 'Scan' }">
           <ion-item>Scan</ion-item>
@@ -39,9 +42,11 @@
         <router-link :to="{ name: 'Settings' }">
           <ion-item>Paramètres</ion-item>
         </router-link>
-        <ion-button size="medium" @click="logoutUser"
-          >Se déconnecter</ion-button
-        >
+        <ion-item slot="end">
+          <ion-button size="medium" @click="logoutUser">
+            Déconnexion
+          </ion-button>
+        </ion-item>
       </ion-list>
     </ion-content>
   </ion-menu>
@@ -50,11 +55,11 @@
 <script>
 import {
   IonMenu,
-  IonHeader,
   IonItem,
   IonList,
   IonContent,
   IonButton,
+  IonListHeader,
   menuController,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
@@ -63,10 +68,10 @@ export default defineComponent({
   name: "Navigation",
   components: {
     IonMenu,
-    IonHeader,
     IonItem,
     IonList,
     IonButton,
+    IonListHeader,
     IonContent,
   },
   methods: {
@@ -85,3 +90,9 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+ion-item {
+  --background: #e5e5e5;
+}
+</style>
