@@ -4,22 +4,25 @@
     <Sub title="Création de votre évènement"></Sub>
     <ion-content>
       <!-- ETAPES (1: Evènement, 2: Categorie + Menu, 3: Paiement, 4: Confirmation création évènement) -->
-      <ion-segment :value="step">
+      <ion-segment class="steps" :value="step">
         <ion-segment-button @click="step = 1" value="1">
-          <ion-label>Step 1</ion-label>
+          <ion-label>1</ion-label>
         </ion-segment-button>
         <ion-segment-button @click="step = 2" value="2" :disabled="disabled">
-          <ion-label>Step 2</ion-label>
+          <ion-label>2</ion-label>
         </ion-segment-button>
         <ion-segment-button @click="step = 3" value="3" :disabled="disabled">
-          <ion-label>Step 3</ion-label>
+          <ion-label>3</ion-label>
         </ion-segment-button>
         <ion-segment-button @click="step = 4" value="4" :disabled="disabled">
-          <ion-label>Step 4</ion-label>
+          <ion-label>4</ion-label>
         </ion-segment-button>
       </ion-segment>
 
-      <!-- ETAPE 2 -->
+      <!-- STEP 1 -->
+      <FormEvent v-if="step === 1"></FormEvent>
+
+      <!-- STEP 2 -->
       <ion-content v-if="step === 2">
         <ion-segment :value="toggleForm">
           <ion-segment-button
@@ -80,7 +83,6 @@
         </ion-grid>
       </ion-content>
 
-      <FormEvent v-if="step === 1"></FormEvent>
       <ion-button @click="nextStep()">Suivant</ion-button>
     </ion-content>
     <Footer></Footer>
@@ -97,6 +99,7 @@ import {
   IonLabel,
   IonButton,
   IonCard,
+  IonCardTitle,
   IonGrid,
   IonRow,
   IonCol,
@@ -121,6 +124,7 @@ export default defineComponent({
     IonLabel,
     IonButton,
     IonCard,
+    IonCardTitle,
     IonGrid,
     IonRow,
     IonCol,
@@ -148,7 +152,6 @@ export default defineComponent({
       this.step++;
 
       if (this.step === 2) {
-        console.log("step", this.step);
         this.$store.dispatch("getCategories");
       }
       if (this.step === 3) {
@@ -189,7 +192,7 @@ export default defineComponent({
       const { role } = await alert.onDidDismiss();
       console.log("onDidDismiss resolved with role", role);
       if (role === "valid") {
-        this.step++;
+        this.step = 3;
       }
     },
   },
@@ -199,5 +202,12 @@ export default defineComponent({
 <style lang="scss" scoped>
 .isInactive {
   display: none;
+}
+
+.steps {
+  ion-segment-button {
+    --background-checked: #9c544d;
+    --color-checked: #d7b59d;
+  }
 }
 </style>

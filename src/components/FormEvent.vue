@@ -44,7 +44,7 @@
         @change="pickImage"
         ref="fileInput"
       />
-      <ion-button size="small" fill="clear" @click="$refs.fileInput.click()">
+      <ion-button size="small" @click="$refs.fileInput.click()">
         Ajouter une image
       </ion-button>
     </ion-item>
@@ -58,7 +58,14 @@
       ></ion-checkbox>
     </ion-item>
 
-    <ion-button type="submit" size="small">Créer l'évènement</ion-button>
+    <ion-item>
+      <ion-label position="floating">Mot de passe</ion-label>
+      <ion-input type="password" v-model="password" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-button type="submit" size="small" slot="end">Valider</ion-button>
+    </ion-item>
   </form>
 </template>
 
@@ -90,13 +97,13 @@ export default defineComponent({
   },
   data() {
     return {
-      name: "Test API",
+      name: "",
       date: "",
       hours: "",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      description: "",
       file: null,
-      isPrivate: true,
+      isPrivate: false,
+      password: null,
     };
   },
   methods: {
@@ -116,6 +123,7 @@ export default defineComponent({
         description: this.description,
         private: this.isPrivate,
         file: this.file,
+        password: this.password,
       };
 
       this.$store.commit("setEventTmp", event);
@@ -158,3 +166,10 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+form {
+  width: 80%;
+  margin: auto;
+}
+</style>
