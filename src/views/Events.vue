@@ -20,7 +20,10 @@
                 >
                 <ion-icon v-if="event.private" :icon="lockClosed"></ion-icon>
 
-                <router-link :to="'/event/' + event.id + '/categories'">
+                <router-link
+                  v-if="!event.private"
+                  :to="{ name: 'Categories', params: { id: event.id } }"
+                >
                   <ion-button fill="outline" slot="end">Détails</ion-button>
                 </router-link>
               </ion-item>
