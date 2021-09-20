@@ -12,10 +12,30 @@
 
     <form class="form" @submit.prevent="getAddress()">
       <ion-item>
-        <ion-label position="floating">Adresse</ion-label>
-        <ion-input type="text" v-model="address"></ion-input>
-        <ion-button type="submit">Rechercher</ion-button>
+        <ion-label position="floating">Tapez l'adresse:</ion-label>
+        <ion-input
+          type="text"
+          v-model="address"
+          @focus="this.showList = true"
+        ></ion-input>
       </ion-item>
+      <ion-list
+        inset="true"
+        v-if="this.$store.state.respApiAddress && showList"
+      >
+        <ion-item
+          v-for="selectAddress in this.$store.state.respApiAddress.features"
+          :key="selectAddress.id"
+        >
+          <ion-label
+            @click="
+              this.address = selectAddress.properties.label;
+              this.showList = false;
+            "
+            >{{ selectAddress.properties.label }}</ion-label
+          >
+        </ion-item>
+      </ion-list>
     </form>
   </ion-content>
 </template>
@@ -44,14 +64,17 @@ export default defineComponent({
   },
   data() {
     return {
-      address: "3 rue saint antoine 88200 Remiremont",
+      address: "",
+      showList: true,
     };
   },
-  methods: {
-    getAddress() {
+  watch: {
+    address() {
       this.$store.commit("setAddress", this.address.replaceAll(" ", "+"));
       this.$store.dispatch("getAddress");
     },
+  },
+  methods: {
     closeModal() {
       modalController.dismiss();
     },

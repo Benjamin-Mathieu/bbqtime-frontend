@@ -370,7 +370,7 @@ const store = createStore({
         getAddress({ commit, state }) {
             axios({
                 method: "get",
-                url: 'https://api-adresse.data.gouv.fr/search/?q=' + state.address,
+                url: 'https://api-adresse.data.gouv.fr/search/?q=' + state.address + "&autocomplete=1",
             })
                 .then(resp => {
                     commit("setApiAddress", resp.data);
