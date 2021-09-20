@@ -334,6 +334,7 @@ const store = createStore({
                 .then(resp => {
                     if (resp.status === 201) {
                         popup.success("plat ajouté");
+                        state.plats.push(resp.data.plat);
                     }
                     if (resp.status === 500) {
                         popup.error("Une erreur est survenue");

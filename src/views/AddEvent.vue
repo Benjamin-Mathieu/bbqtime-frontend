@@ -150,10 +150,6 @@ export default defineComponent({
     },
     nextStep() {
       this.step++;
-
-      if (this.step === 2) {
-        this.$store.dispatch("getCategories");
-      }
       if (this.step === 3) {
         this.validEvent();
       }
