@@ -4,26 +4,26 @@
     <Sub title="Création de votre évènement"></Sub>
     <ion-content>
       <!-- ETAPES (1: Evènement, 2: Categorie + Menu, 3: Paiement, 4: Confirmation création évènement) -->
-      <ion-segment class="steps" :value="step">
-        <ion-segment-button @click="step = 1" value="1">
+      <ion-segment>
+        <ion-segment-button @click="currentStep = 1" value="1">
           <ion-label>1</ion-label>
         </ion-segment-button>
-        <ion-segment-button @click="step = 2" value="2" :disabled="disabled">
+        <ion-segment-button @click="currentStep = 2" value="2">
           <ion-label>2</ion-label>
         </ion-segment-button>
-        <ion-segment-button @click="step = 3" value="3" :disabled="disabled">
+        <ion-segment-button @click="currentStep = 3" value="3">
           <ion-label>3</ion-label>
         </ion-segment-button>
-        <ion-segment-button @click="step = 4" value="4" :disabled="disabled">
+        <ion-segment-button @click="currentStep = 4" value="4">
           <ion-label>4</ion-label>
         </ion-segment-button>
       </ion-segment>
 
       <!-- STEP 1 -->
-      <FormEvent v-if="step === 1"></FormEvent>
+      <FormEvent v-if="currentStep === 1"></FormEvent>
 
       <!-- STEP 2 -->
-      <ion-content v-if="step === 2">
+      <ion-content v-if="currentStep === 2">
         <ion-segment :value="toggleForm">
           <ion-segment-button
             @click="toggleForm = 'categorie'"
@@ -53,7 +53,7 @@
               v-for="categorie in this.$store.state.categories"
               :key="categorie.id"
               size="6"
-              @click="addPlatToCategorie(categorie.id)"
+              @click="addPlatToCategorie(categorie)"
             >
               <ion-card>
                 <img :src="categorie.photo_url" alt="img-categorie" />
@@ -75,8 +75,13 @@
               <ion-card>
                 <img :src="plat.photo_url" alt="img-plat" />
                 <ion-card-header>
-                  <ion-card-title> {{ plat.libelle }} </ion-card-title>
+                  <ion-card-subtitle>
+                    {{ plat.libelle }} {{ plat.price + " €" }}
+                  </ion-card-subtitle>
                 </ion-card-header>
+                <ion-card-content>
+                  Description: {{ plat.description }} Stock: {{ plat.stock }}
+                </ion-card-content>
               </ion-card>
             </ion-col>
           </ion-row>
@@ -100,6 +105,8 @@ import {
   IonButton,
   IonCard,
   IonCardTitle,
+  IonCardContent,
+  IonCardSubtitle,
   IonGrid,
   IonRow,
   IonCol,
@@ -124,6 +131,8 @@ export default defineComponent({
     IonLabel,
     IonButton,
     IonCard,
+    IonCardContent,
+    IonCardSubtitle,
     IonCardTitle,
     IonGrid,
     IonRow,
@@ -136,21 +145,39 @@ export default defineComponent({
   },
   data() {
     return {
-      step: 1,
+      currentStep: 1,
       toggleForm: "categorie",
-      disabled: true,
       disabledMenu: true,
     };
   },
+  watch: {
+    currentStep() {
+      switch (this.currentStep) {
+        case 1:
+          console.log(this.currentStep);
+          break;
+        case 2:
+          console.log(this.currentStep);
+          break;
+        case 3:
+          console.log(this.currentStep);
+          break;
+        case 4:
+          console.log(this.currentStep);
+          break;
+      }
+    },
+  },
   methods: {
-    addPlatToCategorie(categorieId) {
+    addPlatToCategorie(categorie) {
       this.toggleForm = "menu";
-      this.$store.commit("setCategoryIdTmp", categorieId);
+      this.$store.commit("setCategoryIdTmp", categorie);
       this.$store.dispatch("getPlats");
     },
     nextStep() {
-      this.step++;
-      if (this.step === 3) {
+      this.currentStep++;
+
+      if (this.currentStep === 3) {
         this.validEvent();
       }
     },
@@ -188,7 +215,7 @@ export default defineComponent({
       const { role } = await alert.onDidDismiss();
       console.log("onDidDismiss resolved with role", role);
       if (role === "valid") {
-        this.step = 3;
+        this.currentStep = 3;
       }
     },
   },
