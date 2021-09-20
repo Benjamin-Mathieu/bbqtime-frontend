@@ -258,7 +258,7 @@ const store = createStore({
             formData.append("address", state.eventTmp.address);
             formData.append("city", state.eventTmp.city);
             formData.append("zipcode", state.eventTmp.zipcode);
-            formData.append("date", "2021-08-30 20:30:00");
+            formData.append("date", state.eventTmp.date);
             formData.append("description", state.eventTmp.description);
             formData.append("private", state.eventTmp.private);
             formData.append("password", state.eventTmp.password);

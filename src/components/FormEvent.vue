@@ -15,7 +15,7 @@
       <ion-datetime
         v-model="date"
         :day-short-names="customDayShortNames"
-        display-format="DDD. MMM DD"
+        display-format="DD MMM "
         month-short-names="janvier, fevrier, mars, avril, mai, juin, juillet, août, septembre, octobre, novembre, décembre"
         done-text="Valider"
         cancel-text="Fermer"
@@ -104,7 +104,15 @@ export default defineComponent({
       file: null,
       isPrivate: false,
       password: null,
+      test: "",
     };
+  },
+  mounted() {
+    this.test = new Date(Date.UTC(2012, 11, 20, 3, 0, 0));
+
+    // British English uses day-month-year order and 24-hour time without AM/PM
+    console.log(this.test.toLocaleString("fr-FR", { timeZone: "UTC" }));
+    // expected output: 20/12/2012, 03:00:00
   },
   methods: {
     pickImage(selected) {
@@ -115,11 +123,17 @@ export default defineComponent({
       this.city = this.$store.getters.getAddress.city;
       this.zipcode = this.$store.getters.getAddress.postcode;
 
+      //Convert date+hours in DATETIME
+      this.date = this.date.slice(0, 10);
+      this.hours = this.hours.slice(11, 19);
+      const datetime = this.date.concat(" ", this.hours);
+
       const event = {
         name: this.name,
         address: this.address,
         city: this.city,
         zipcode: this.zipcode,
+        date: datetime,
         description: this.description,
         private: this.isPrivate,
         file: this.file,
