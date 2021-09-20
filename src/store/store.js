@@ -3,6 +3,8 @@ import { createStore } from 'vuex';
 import axios from "axios";
 import popup from '../services/popup';
 import router from "../router/index";
+import Map from "../services/map";
+
 
 const URL_API = "http://192.168.1.47:3000/";
 
@@ -372,6 +374,11 @@ const store = createStore({
             })
                 .then(resp => {
                     commit("setApiAddress", resp.data);
+                    const latitude =
+                        resp.data.features[0].geometry.coordinates[1];
+                    const longitude =
+                        resp.data.features[0].geometry.coordinates[0];
+                    Map.getMap(latitude, longitude);
                 }
                 ).catch(err => {
                     console.log(err)
