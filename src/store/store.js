@@ -81,10 +81,9 @@ const store = createStore({
             state.plats = plat;
         },
         setShop(state, plat) {
-            if (state.shop.includes(plat)) {
-                state.shop.qty = plat.qty++;
-            } else {
+            if (!state.shop.includes(plat)) {
                 state.shop.push(plat);
+                popup.success("Plat ajouté au panier");
             }
         },
         removePlatInShop(state, plat) {
