@@ -26,12 +26,17 @@
 import { defineComponent } from "vue";
 import { IonPage, IonContent } from "@ionic/vue";
 import Header from "../components/Header.vue";
+import store from "../store/store";
+import { BarcodeScanner } from "@capacitor-community/barcode-scanner";
 
 export default defineComponent({
   components: { IonPage, IonContent, Header },
   name: "Scan",
-  mounted() {
-    this.$store.dispatch("scan");
+  ionViewDidEnter() {
+    store.dispatch("scan");
+  },
+  ionViewDidLeave() {
+    BarcodeScanner.stopScan();
   },
 });
 </script>

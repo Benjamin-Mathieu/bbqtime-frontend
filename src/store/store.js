@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-// import APIProvider from '../services/api';
+import httpErrorHandler from './httpErrorHandler';
 import axios from "axios";
 import popup from '../services/popup';
 import router from "../router/index";
@@ -8,6 +8,7 @@ import { BarcodeScanner } from "@capacitor-community/barcode-scanner";
 import qrcode from "qrcode";
 
 const URL_API = "http://192.168.1.47:3000/";
+
 
 // Create a new store instance.
 const store = createStore({
@@ -171,7 +172,7 @@ const store = createStore({
                 .catch(err => console.log(err))
         },
 
-        async joinEvent({ commit, state }, password) {
+        async joinEvent({ commit, dispatch, state }, password) {
             await axios({
                 method: "get",
                 url: URL_API + 'events/join/' + password,
@@ -180,14 +181,14 @@ const store = createStore({
                 }
             })
                 .then(resp => {
-                    console.log(resp);
+                    console.log(typeof resp)
                     commit("setEventDetails", resp.data.event);
                     router.push({
                         name: "Categories",
                         params: { id: state.eventDetails.id },
                     });
                 })
-                .catch(err => console.log(err));
+                .catch(httpErrorHandler).then(() => dispatch("scan"));
         },
 
         async getMyEventDetails({ commit }, id) {

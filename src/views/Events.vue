@@ -3,7 +3,7 @@
     <Header></Header>
     <Sub title="Évènements"></Sub>
     <ion-content>
-      <ion-card v-for="event in this.$store.state.events[0]" :key="event.id">
+      <ion-card v-for="event in this.$store.state.events" :key="event.id">
         <ion-grid>
           <ion-row>
             <ion-col size="2">
@@ -24,7 +24,7 @@
                   v-if="!event.private"
                   :to="{ name: 'Categories', params: { id: event.id } }"
                 >
-                  <ion-button fill="outline" slot="end">Détails</ion-button>
+                  <ion-button slot="end">Détails</ion-button>
                 </router-link>
               </ion-item>
 
@@ -94,10 +94,8 @@ export default defineComponent({
       lockClosed,
     };
   },
-  beforeRouteEnter(to, from, next) {
-    console.log(to, from);
+  ionViewWillEnter() {
     store.dispatch("getEvents");
-    next();
   },
 });
 </script>
