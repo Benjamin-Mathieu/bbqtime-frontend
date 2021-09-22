@@ -5,7 +5,6 @@ import popup from '../services/popup';
 import router from "../router/index";
 import Map from "../services/map";
 import { BarcodeScanner } from "@capacitor-community/barcode-scanner";
-import qrcode from "qrcode";
 
 const URL_API = "http://192.168.1.47:3000/";
 
@@ -187,6 +186,7 @@ const store = createStore({
                         name: "Categories",
                         params: { id: state.eventDetails.id },
                     });
+                    popup.success("Evènement rejoint");
                 })
                 .catch(httpErrorHandler).then(() => dispatch("scan"));
         },
@@ -399,16 +399,7 @@ const store = createStore({
                     }
                 })
                 .catch((err) => console.log(err)); // start scanning and wait for a result
-        },
-
-        generateQrcode(id) {
-            const urlEvent = "http://localhost:3000/event/"
-
-            qrcode.toDataURL(urlEvent + id, function (err, url) {
-                console.log(url)
-            })
         }
-
     }
 });
 
