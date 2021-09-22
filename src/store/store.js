@@ -4,7 +4,8 @@ import axios from "axios";
 import popup from '../services/popup';
 import router from "../router/index";
 import Map from "../services/map";
-
+import { BarcodeScanner } from "@capacitor-community/barcode-scanner";
+import qrcode from "qrcode";
 
 const URL_API = "http://192.168.1.47:3000/";
 
@@ -380,6 +381,31 @@ const store = createStore({
                 ).catch(err => {
                     console.log(err)
                 });
+        },
+
+        scan({ dispatch }) {
+            // check or request permission
+            BarcodeScanner.checkPermission({ force: true })
+                .then((res) => console.log(res, "Permissions ok"))
+                .catch((err) => console.log(err));
+
+            BarcodeScanner.hideBackground(); // make background of WebView transparent
+
+            BarcodeScanner.startScan()
+                .then((res) => {
+                    if (res.hasContent) {
+                        dispatch("joinEvent", res.content);
+                    }
+                })
+                .catch((err) => console.log(err)); // start scanning and wait for a result
+        },
+
+        generateQrcode(id) {
+            const urlEvent = "http://localhost:3000/event/"
+
+            qrcode.toDataURL(urlEvent + id, function (err, url) {
+                console.log(url)
+            })
         }
 
     }

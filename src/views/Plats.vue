@@ -146,15 +146,15 @@ export default defineComponent({
     },
     addToShop(addedPlat) {
       if (addedPlat.qty !== undefined) {
-        addedPlat.qty = addedPlat.qty + this.selectedQty; // add selected quantity if plat is already in shop
-        if (addedPlat.qty > addedPlat.stock) {
-          this.disabledButton = true;
-          return popup.error("Impossible d'ajouter dans le panier !");
+        if (addedPlat.qty >= addedPlat.stock) {
+          return popup.error("Plus de stock !");
+        } else {
+          addedPlat.qty = addedPlat.qty + this.selectedQty; // add selected quantity if plat is already in shop
+          popup.success(
+            this.selectedQty + " quantité, ajouté à " + addedPlat.libelle
+          );
+          this.$store.commit("setShop", addedPlat);
         }
-        popup.success(
-          this.selectedQty + " quantité, ajouté à " + addedPlat.libelle
-        );
-        this.$store.commit("setShop", addedPlat);
       } else {
         addedPlat.qty = this.selectedQty;
         this.$store.commit("setShop", addedPlat);
