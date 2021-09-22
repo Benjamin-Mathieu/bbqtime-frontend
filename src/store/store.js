@@ -48,10 +48,8 @@ const store = createStore({
         setApiAddress(state, respApi) {
             state.respApiAddress = respApi;
         },
-        setEvents(state, event) {
-            if (Object.keys(event).length > 0) {
-                state.events.push(event);
-            }
+        setEvents(state, events) {
+            state.events = events;
         },
         setMyEvents(state, myEvents) {
             state.myEvents = myEvents;
