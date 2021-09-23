@@ -29,7 +29,7 @@
         </ion-row>
       </ion-grid>
     </ion-content>
-    <Footer></Footer>
+    <Footer :showDetails="true"></Footer>
   </ion-page>
 </template>
 
@@ -39,6 +39,7 @@ import {
   IonPage,
   IonContent,
   IonCard,
+  IonCardTitle,
   IonCardHeader,
   IonGrid,
   IonRow,
@@ -54,6 +55,7 @@ export default defineComponent({
     IonPage,
     IonContent,
     IonCard,
+    IonCardTitle,
     IonCardHeader,
     IonGrid,
     IonRow,
@@ -62,8 +64,8 @@ export default defineComponent({
     Header,
     Footer,
   },
-  mounted() {
-    this.$store.dispatch("getEventDetails", this.$route.params.id);
+  ionViewWillEnter() {
+    this.$store.dispatch("getEventDetails");
   },
 });
 </script>

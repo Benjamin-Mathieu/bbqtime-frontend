@@ -1,14 +1,20 @@
 <template>
   <ion-footer>
     <ion-toolbar color="primary">
-      <ion-grid v-if="Object.keys(this.$store.state.eventDetails).length > 0">
+      <ion-grid v-if="showDetails" :showDetails="showDetails">
         <ion-row>
           <ion-col size="6"
-            >Adresse: {{ this.$store.state.eventDetails.address }}</ion-col
-          >
+            ><b>Adresse</b>
+            {{
+              `${this.$store.state.eventDetails.address} ${this.$store.state.eventDetails.zipcode} ${this.$store.state.eventDetails.city}`
+            }}
+          </ion-col>
           <ion-col size="6"
-            >Date: {{ this.$store.state.eventDetails.date }}</ion-col
-          >
+            ><b>Date :</b>
+            {{ this.$store.getters.getDateEvent.date }}
+            <b>Heure :</b>
+            {{ this.$store.getters.getDateEvent.hours }}
+          </ion-col>
         </ion-row>
       </ion-grid>
     </ion-toolbar>
@@ -27,6 +33,12 @@ export default defineComponent({
     IonGrid,
     IonRow,
     IonCol,
+  },
+  props: {
+    showDetails: {
+      type: Boolean,
+      default: false,
+    },
   },
 });
 </script>

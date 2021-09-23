@@ -9,17 +9,11 @@
       >
         <ion-grid>
           <ion-row>
-            <ion-col
-              v-for="(plat, index) in categorie.plats"
-              :key="plat.id"
-              size="6"
-            >
+            <ion-col v-for="plat in categorie.plats" :key="plat.id" size="6">
               <ion-card
                 style="height: 100%"
                 v-if="plat.category_id == this.$route.params.idCategorie"
               >
-                {{ "index" + index }}
-                {{ "plat.id" + plat.id }}
                 <ion-card-header>
                   <img
                     style="border-radius: 4px; height: 122px"
@@ -75,7 +69,7 @@
         </ion-grid>
       </div>
     </ion-content>
-    <Footer></Footer>
+    <Footer :showDetails="true"></Footer>
   </ion-page>
 </template>
 
@@ -136,9 +130,6 @@ export default defineComponent({
       qty: 1,
       selectedQty: 1,
     };
-  },
-  mounted() {
-    this.$store.dispatch("getEventDetails", this.$route.params.id);
   },
   methods: {
     selectedValue(ev) {
