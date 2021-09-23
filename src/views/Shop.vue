@@ -22,7 +22,10 @@
                 <ion-label>Quantité</ion-label>
                 <ion-input type="number" :value="plat.qty"></ion-input>
               </ion-item>
-              <ion-item>Total: {{ plat.qty * plat.price }} €</ion-item>
+              <ion-item>Prix unitaire: {{ plat.price }} €</ion-item>
+              <ion-item
+                ><b>Total: {{ plat.qty * plat.price }} €</b></ion-item
+              >
             </ion-col>
           </ion-row>
         </ion-grid>

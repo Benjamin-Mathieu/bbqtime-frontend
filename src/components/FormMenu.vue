@@ -52,11 +52,7 @@
             ref="fileInput"
           />
 
-          <ion-button
-            size="small"
-            fill="clear"
-            @click="$refs.fileInput.click()"
-          >
+          <ion-button size="small" @click="$refs.fileInput.click()">
             Poster une image
           </ion-button>
           <ion-item>

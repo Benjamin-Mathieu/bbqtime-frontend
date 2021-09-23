@@ -19,7 +19,7 @@
                 <router-link
                   :to="{ name: 'MyEventDetails', params: { id: event.id } }"
                 >
-                  <ion-button fill="outline" slot="end"> Details </ion-button>
+                  <ion-button slot="end"> Details </ion-button>
                 </router-link>
               </ion-item>
               <ion-card-content>
@@ -84,7 +84,7 @@ export default defineComponent({
     Header,
     Footer,
   },
-  mounted() {
+  ionViewWillEnter() {
     this.$store.dispatch("getMyEvents");
   },
 });

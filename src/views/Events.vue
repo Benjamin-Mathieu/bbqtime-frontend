@@ -3,6 +3,9 @@
     <Header></Header>
     <Sub title="Évènements"></Sub>
     <ion-content>
+      <router-link :to="{ name: 'AddEvent' }">
+        <ion-button>Créer un évènement</ion-button>
+      </router-link>
       <ion-card v-for="event in this.$store.state.events" :key="event.id">
         <ion-grid>
           <ion-row>
@@ -41,10 +44,6 @@
           </ion-row>
         </ion-grid>
       </ion-card>
-
-      <router-link :to="{ name: 'AddEvent' }">
-        <ion-button fill="solid">Créer un évènement</ion-button>
-      </router-link>
     </ion-content>
     <Footer></Footer>
   </ion-page>
@@ -66,7 +65,6 @@ import {
   IonCol,
 } from "@ionic/vue";
 import { lockClosed } from "ionicons/icons";
-import store from "../store/store";
 import Header from "../components/Header.vue";
 import Sub from "../components/Sub.vue";
 import Footer from "../components/Footer.vue";
@@ -95,7 +93,13 @@ export default defineComponent({
     };
   },
   ionViewWillEnter() {
-    store.dispatch("getEvents");
+    this.$store.dispatch("getEvents");
   },
 });
 </script>
+
+<style lang="scss" scoped>
+ion-card {
+  margin: 1em auto;
+}
+</style>

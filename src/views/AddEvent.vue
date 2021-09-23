@@ -23,7 +23,7 @@
       <FormEvent v-if="currentStep === 1"></FormEvent>
 
       <!-- STEP 2 -->
-      <ion-content v-if="currentStep === 2">
+      <div class="step2" v-if="currentStep === 2">
         <ion-segment :value="toggleForm">
           <ion-segment-button
             @click="toggleForm = 'categorie'"
@@ -86,7 +86,67 @@
             </ion-col>
           </ion-row>
         </ion-grid>
-      </ion-content>
+      </div>
+
+      <!-- STEP 3 -->
+      <div v-if="currentStep === 3" class="step3">
+        <ion-card>
+          <ion-item>
+            <ion-label position="floating">
+              Numéro de compte de l'évènement
+            </ion-label>
+            <ion-input placeholder="Numéro de compte" required></ion-input>
+          </ion-item>
+          <ion-list>
+            <ion-list-header>Moyen de paiement:</ion-list-header>
+            <ion-item lines="none">
+              <ion-label>Carte bancaire:</ion-label>
+              <ion-checkbox color="primary" checked slot="end"></ion-checkbox>
+            </ion-item>
+            <ion-item lines="none">
+              <ion-label>Espèce:</ion-label>
+              <ion-checkbox color="primary" checked slot="end"></ion-checkbox>
+            </ion-item>
+            <ion-item lines="none">
+              <ion-label>Visa:</ion-label>
+              <ion-checkbox color="primary" slot="end"></ion-checkbox>
+            </ion-item>
+          </ion-list>
+          <ion-item>
+            <p>Recevoir les notifications d'inscriptions:</p>
+            <ion-toggle color="primary"></ion-toggle>
+          </ion-item>
+        </ion-card>
+      </div>
+
+      <!-- STEP 4 -->
+      <div v-if="currentStep === 4" class="step4">
+        <ion-card>
+          <ion-card-title>L'évènement a été crée !</ion-card-title>
+          <ion-card-content>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non
+            risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing
+            nec, ultricies sed, dolor. Lorem ipsum dolor sit amet, consectetur
+            adipiscing elit.
+          </ion-card-content>
+        </ion-card>
+        <ion-card>
+          <ion-card-subtitle
+            >Inviter des personnes à votre évènement</ion-card-subtitle
+          >
+          <ion-card-content>
+            <ion-item>
+              <ion-input
+                :placeholder="this.$store.state.eventTmp.password"
+                readonly="true"
+                color="danger"
+              ></ion-input>
+            </ion-item>
+
+            <ion-button size="small">Partager l'évènement</ion-button>
+          </ion-card-content>
+        </ion-card>
+      </div>
 
       <ion-button @click="nextStep()">Suivant</ion-button>
     </ion-content>
@@ -101,7 +161,13 @@ import {
   IonPage,
   IonSegment,
   IonSegmentButton,
+  IonList,
+  IonListHeader,
+  IonItem,
+  IonCheckbox,
+  IonToggle,
   IonLabel,
+  IonInput,
   IonButton,
   IonCard,
   IonCardTitle,
@@ -128,7 +194,13 @@ export default defineComponent({
     IonPage,
     IonSegment,
     IonSegmentButton,
+    IonList,
+    IonListHeader,
+    IonItem,
+    IonCheckbox,
+    IonToggle,
     IonLabel,
+    IonInput,
     IonButton,
     IonCard,
     IonCardContent,
@@ -175,8 +247,6 @@ export default defineComponent({
       this.$store.dispatch("getPlats");
     },
     nextStep() {
-      this.currentStep++;
-
       if (this.currentStep === 3) {
         this.validEvent();
       }

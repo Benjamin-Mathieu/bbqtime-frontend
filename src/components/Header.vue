@@ -7,9 +7,13 @@
       <ion-title>
         <img src="../../public/assets/logo1.png" alt="logo-bbqtime" />
       </ion-title>
+
       <ion-buttons slot="end">
         <ion-button size="large" color="dark">
-          <ion-icon :icon="personCircleOutline"></ion-icon>
+          <ion-icon
+            style="height: 32px; width: 32px"
+            :icon="personCircleOutline"
+          ></ion-icon>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
@@ -47,3 +51,9 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+ion-toolbar {
+  --min-height: 75px;
+}
+</style>
