@@ -1,22 +1,20 @@
 <template>
   <form @submit.prevent="addInfoEvent()" method="post">
     <ion-item>
-      <ion-label position="floating">Nom de l'évènement</ion-label>
+      <ion-label position="floating">Nom</ion-label>
       <ion-input type="text" v-model="name" required></ion-input>
     </ion-item>
     <ion-item>
-      <ion-button @click="openMapModal()">Lieu</ion-button>
+      <ion-button @click="openMapModal()">Choisir le lieu</ion-button>
     </ion-item>
-    <ion-item v-if="this.$store.getters.getAddress"
-      >Adresse: {{ this.$store.getters.getAddress.label }}
-    </ion-item>
+    <ion-item> Adresse: {{ this.$store.getters.getAddress.label }} </ion-item>
     <ion-item>
       <ion-label>Date</ion-label>
       <ion-datetime
         v-model="date"
-        :day-short-names="customDayShortNames"
-        display-format="DD MMM "
-        month-short-names="janvier, fevrier, mars, avril, mai, juin, juillet, août, septembre, octobre, novembre, décembre"
+        day-short-names="customDayShortNames"
+        display-format="DD MMM"
+        month-short-names="janvier, février, mars, avril, mai, juin, juillet, août, septembre, octobre, novembre, décembre"
         done-text="Valider"
         cancel-text="Fermer"
       ></ion-datetime>
@@ -25,7 +23,7 @@
       <ion-label>Heure</ion-label>
       <ion-datetime
         v-model="hours"
-        display-format="hh:mm"
+        display-format="HH:mm"
         done-text="Valider"
         cancel-text="Fermer"
       ></ion-datetime>
@@ -43,6 +41,7 @@
         name="image"
         @change="pickImage"
         ref="fileInput"
+        accept=".jpeg, jpg, .png"
       />
       <ion-button size="small" @click="$refs.fileInput.click()">
         Ajouter une image
@@ -106,13 +105,6 @@ export default defineComponent({
       password: null,
       test: "",
     };
-  },
-  mounted() {
-    this.test = new Date(Date.UTC(2012, 11, 20, 3, 0, 0));
-
-    // British English uses day-month-year order and 24-hour time without AM/PM
-    console.log(this.test.toLocaleString("fr-FR", { timeZone: "UTC" }));
-    // expected output: 20/12/2012, 03:00:00
   },
   methods: {
     pickImage(selected) {
@@ -183,7 +175,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 form {
-  width: 80%;
+  width: 90%;
   margin: auto;
 }
 </style>
