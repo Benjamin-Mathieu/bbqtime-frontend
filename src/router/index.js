@@ -1,18 +1,4 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
-import Home from '../views/Home.vue';
-import Scan from '../views/Scan.vue';
-import Categories from '../views/Categories.vue';
-import Events from '../views/Events.vue';
-import SignIn from '../views/SignIn.vue';
-import SignUp from '../views/SignUp.vue';
-import Orders from "../views/Orders.vue";
-import AddEvent from "../views/AddEvent.vue";
-import Account from "../views/Account.vue";
-import Plats from "../views/Plats.vue";
-import Shop from "../views/Shop.vue";
-import MyEvents from "../views/MyEvents.vue";
-import MyEventDetails from "../views/MyEventDetails.vue";
-import Settings from "../views/Settings.vue";
 
 const routes = [
   {
@@ -22,72 +8,72 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
-    component: Home
+    component: () => import('@/views/Home.vue')
   },
   {
     path: '/scan',
     name: 'Scan',
-    component: Scan
+    component: () => import('@/views/Scan.vue')
   },
   {
     path: '/event/:id/categories',
     name: 'Categories',
-    component: Categories
+    component: () => import('@/views/Categories.vue')
   },
   {
     path: '/event/:id/categorie/:idCategorie',
     name: 'Plats',
-    component: Plats
+    component: () => import('@/views/Plats.vue')
   },
   {
     path: '/events',
     name: 'Events',
-    component: Events
+    component: () => import('@/views/Events.vue')
   },
   {
     path: '/sign-in',
     name: 'SignIn',
-    component: SignIn
+    component: () => import('@/views/SignIn.vue')
   },
   {
     path: '/sign-up',
     name: 'SignUp',
-    component: SignUp
+    component: () => import('@/views/SignUp.vue')
   },
   {
     path: '/orders',
     name: 'Orders',
-    component: Orders
+    component: () => import('@/views/Orders.vue')
   },
   {
     path: '/add-event',
     name: 'AddEvent',
-    component: AddEvent
+    component: () => import('@/views/AddEvent.vue')
   },
   {
     path: '/account',
     name: 'Account',
-    component: Account
+    component: () => import('@/views/Account.vue')
   },
   {
     path: '/shop',
     name: 'Shop',
-    component: Shop
+    component: () => import('@/views/Shop.vue')
   },
   {
     path: '/my-events',
     name: 'MyEvents',
-    component: MyEvents
+    component: () => import('@/views/MyEvents.vue')
   },
   {
     path: '/my-events/:id',
     name: 'MyEventDetails',
-    component: MyEventDetails
+    component: () => import('@/views/MyEventDetails.vue')
   },
   {
     path: '/settings',
     name: 'Settings',
-    component: Settings
+    component: () => import('@/views/Settings.vue')
   },
 ];
 
