@@ -95,6 +95,9 @@ const store = createStore({
         }
     },
     getters: {
+        getUserInformation(state) {
+            return JSON.parse(state.userInformation);
+        },
         getLoginStatus(state) {
             if (state.userIsLoggedIn) {
                 return "Connected"
@@ -133,6 +136,15 @@ const store = createStore({
         },
         getCurrentEvent(state) {
             return state.eventDetails;
+        },
+        getDateEvent(state) {
+            if (Object.keys(state.eventDetails).length > 0) {
+                //Convert date+hours in DATETIME
+                const date = state.eventDetails.date.slice(0, 10);
+                const hours = state.eventDetails.date.slice(11, 16);
+                return { date, hours }
+            }
+            return {}
         }
     },
     actions: {
@@ -158,10 +170,12 @@ const store = createStore({
             commit("setMyEvents", req.data.events)
         },
 
-        async getEventDetails({ commit }, id) {
+        async getEventDetails({ commit }) {
+            const params = router.currentRoute.value.params.id;
+
             await axios({
                 method: "get",
-                url: URL_API + 'events/' + id,
+                url: URL_API + 'events/' + params,
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }

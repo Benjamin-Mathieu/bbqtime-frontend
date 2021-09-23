@@ -7,19 +7,42 @@
         <ion-card>
           <ion-card-content
             ><ion-item>
-              <ion-input type="text" placeholder="Prénom"></ion-input>
+              <ion-label position="floating">Prénom</ion-label>
+              <ion-input
+                type="text"
+                :value="this.$store.getters.getUserInformation.name"
+              ></ion-input>
             </ion-item>
             <ion-item>
-              <ion-input type="text" placeholder="Nom"></ion-input>
+              <ion-label position="floating">Nom</ion-label>
+              <ion-input
+                type="text"
+                :value="this.$store.getters.getUserInformation.firstname"
+              ></ion-input>
             </ion-item>
             <ion-item>
-              <ion-input type="text" placeholder="Téléphone"></ion-input>
+              <ion-label position="floating">Téléphone</ion-label>
+              <ion-input
+                type="text"
+                :value="this.$store.getters.getUserInformation.phone"
+                inputmode="tel"
+              ></ion-input>
             </ion-item>
             <ion-item>
-              <ion-input type="text" placeholder="Code postal"></ion-input>
+              <ion-label position="floating">Code postale</ion-label>
+              <ion-input
+                type="text"
+                :value="this.$store.getters.getUserInformation.zipcode"
+                inputmode="decimal"
+              ></ion-input>
             </ion-item>
             <ion-item>
-              <ion-input type="email" placeholder="Email"></ion-input>
+              <ion-label position="floating">Email</ion-label>
+              <ion-input
+                type="email"
+                :value="this.$store.getters.getUserInformation.firstname"
+                inputmode="email"
+              ></ion-input>
             </ion-item>
             <ion-item>
               <ion-input
