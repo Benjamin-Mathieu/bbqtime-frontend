@@ -5,6 +5,7 @@ import popup from '../services/popup';
 import router from "../router/index";
 import Map from "../services/map";
 import { BarcodeScanner } from "@capacitor-community/barcode-scanner";
+import { Filesystem, Directory } from "@capacitor/filesystem";
 
 const URL_API = "http://192.168.1.47:3000/";
 
@@ -399,6 +400,19 @@ const store = createStore({
                     }
                 })
                 .catch((err) => console.log(err)); // start scanning and wait for a result
+        },
+
+        saveQrcode({ state }) {
+            const params = router.currentRoute.value.params.id;
+            state.myEvents.forEach((event) => {
+                if (event.id == params) {
+                    Filesystem.appendFile({
+                        path: `${event.name}-${event.id}.png`,
+                        data: event.qrcode,
+                        directory: Directory.Documents,
+                    });
+                }
+            });
         }
     }
 });

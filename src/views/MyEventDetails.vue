@@ -3,6 +3,11 @@
     <Header></Header>
     <Sub title="Détails"></Sub>
     <ion-content>
+      <ion-button @click="saveQrcode()">
+        Télécharger Qrcode
+        <ion-icon slot="end" :icon="download"></ion-icon
+      ></ion-button>
+
       <ion-card class="commandes">
         <ion-card-header>
           <ion-card-title>Commandes</ion-card-title>
@@ -68,7 +73,9 @@ import {
   IonCard,
   IonCardHeader,
   IonCardTitle,
+  IonButton,
   IonBadge,
+  IonIcon,
   IonImg,
   IonItem,
   IonGrid,
@@ -80,6 +87,7 @@ import {
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
+import { download } from "ionicons/icons";
 
 export default defineComponent({
   name: "MyEventDetails",
@@ -89,7 +97,9 @@ export default defineComponent({
     IonCard,
     IonCardHeader,
     IonCardTitle,
+    IonButton,
     IonBadge,
+    IonIcon,
     IonImg,
     IonItem,
     IonGrid,
@@ -101,8 +111,18 @@ export default defineComponent({
     Header,
     Footer,
   },
-  mounted() {
+  setup() {
+    return {
+      download,
+    };
+  },
+  ionViewWillEnter() {
     this.$store.dispatch("getMyEventDetails", this.$route.params.id);
+  },
+  methods: {
+    saveQrcode() {
+      this.$store.dispatch("saveQrcode");
+    },
   },
 });
 </script>
