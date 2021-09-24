@@ -40,7 +40,7 @@
               <ion-label position="floating">Email</ion-label>
               <ion-input
                 type="email"
-                :value="this.$store.getters.getUserInformation.firstname"
+                :value="this.$store.getters.getUserInformation.email"
                 inputmode="email"
               ></ion-input>
             </ion-item>

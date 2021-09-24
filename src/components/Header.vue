@@ -9,12 +9,14 @@
       </ion-title>
 
       <ion-buttons slot="end">
-        <ion-button size="large" color="dark">
-          <ion-icon
-            style="height: 32px; width: 32px"
-            :icon="personCircleOutline"
-          ></ion-icon>
-        </ion-button>
+        <router-link :to="{ name: 'Account' }">
+          <ion-button size="large" color="dark">
+            <ion-icon
+              style="height: 32px; width: 32px"
+              :icon="personCircleOutline"
+            ></ion-icon>
+          </ion-button>
+        </router-link>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>

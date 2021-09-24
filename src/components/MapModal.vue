@@ -49,6 +49,10 @@ import {
   IonInput,
   IonItem,
   IonLabel,
+  IonIcon,
+  IonTitle,
+  IonButton,
+  IonList,
   modalController,
 } from "@ionic/vue";
 
@@ -61,6 +65,10 @@ export default defineComponent({
     IonInput,
     IonItem,
     IonLabel,
+    IonIcon,
+    IonTitle,
+    IonButton,
+    IonList,
   },
   data() {
     return {
