@@ -17,6 +17,7 @@
         month-short-names="janvier, février, mars, avril, mai, juin, juillet, août, septembre, octobre, novembre, décembre"
         done-text="Valider"
         cancel-text="Fermer"
+        :min="actualDate"
       ></ion-datetime>
     </ion-item>
     <ion-item>
@@ -26,6 +27,7 @@
         display-format="HH:mm"
         done-text="Valider"
         cancel-text="Fermer"
+        minuteValues="0,15,30,45"
       ></ion-datetime>
     </ion-item>
 
@@ -103,8 +105,12 @@ export default defineComponent({
       file: null,
       isPrivate: false,
       password: null,
-      test: "",
     };
+  },
+  computed: {
+    actualDate() {
+      return new Date().toISOString().slice(0, 10);
+    },
   },
   methods: {
     pickImage(selected) {
@@ -118,7 +124,7 @@ export default defineComponent({
       //Convert date+hours in DATETIME
       this.date = this.date.slice(0, 10);
       this.hours = this.hours.slice(11, 19);
-      const datetime = this.date.concat(" ", this.hours);
+      const datetime = this.date.concat("T", this.hours, "Z");
 
       const event = {
         name: this.name,
