@@ -6,7 +6,11 @@
       </ion-button>
     </ion-buttons>
     <ion-title :title="title">{{ title }}</ion-title>
-    <ion-buttons slot="end">
+    <ion-buttons
+      v-if="showShopButton"
+      :showShopButton="showShopButton"
+      slot="end"
+    >
       <ion-menu-button menu="end" color="dark">
         <ion-icon :icon="bagHandle" style="width: 50px"></ion-icon>
       </ion-menu-button>
@@ -35,6 +39,10 @@ export default defineComponent({
   props: {
     title: {
       type: String,
+    },
+    showShopButton: {
+      type: Boolean,
+      default: false,
     },
   },
   components: {

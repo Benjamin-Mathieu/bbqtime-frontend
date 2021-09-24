@@ -1,7 +1,10 @@
 <template>
   <ion-page>
     <Header></Header>
-    <Sub :title="this.$store.getters.getCurrentEvent.name"></Sub>
+    <Sub
+      :title="this.$store.getters.getCurrentEvent.name"
+      :showShopButton="true"
+    ></Sub>
 
     <ion-content class="has-header" :fullscreen="true">
       <ion-grid>

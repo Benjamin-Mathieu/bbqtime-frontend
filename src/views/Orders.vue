@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <Header></Header>
-    <Sub title="Vos commandes"></Sub>
+    <Sub :showShopButton="true" title="Vos commandes"></Sub>
     <ion-content>
       <ion-card v-for="order in this.$store.state.orders" :key="order.id">
         <ion-grid>

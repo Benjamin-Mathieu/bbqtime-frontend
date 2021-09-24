@@ -1,7 +1,7 @@
 <template>
   <ion-menu color="primary" side="start" menu-id="nav" content-id="main">
-    <ion-content class="menu">
-      <ion-list-header @click="closeMenu()">
+    <ion-content @click="closeMenu()" class="menu">
+      <ion-list-header>
         <router-link :to="{ name: 'Home' }">
           <img src="../../public/assets/logo1.png" alt="logo-bbqtime" />
         </router-link>

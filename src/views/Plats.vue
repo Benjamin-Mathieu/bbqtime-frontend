@@ -1,7 +1,10 @@
 <template>
   <ion-page>
     <Header></Header>
-    <Sub :title="this.$store.getters.getCurrentEvent.name + ' / '"></Sub>
+    <Sub
+      :showShopButton="true"
+      :title="this.$store.getters.getCurrentEvent.name + ' / '"
+    ></Sub>
     <ion-content>
       <div
         v-for="categorie in this.$store.state.eventDetails.categories"

@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <Header></Header>
-    <Sub title="Évènements"></Sub>
+    <Sub :showShopButton="true" title="Évènements"></Sub>
     <ion-content>
       <router-link :to="{ name: 'AddEvent' }">
         <ion-button>Créer un évènement</ion-button>
