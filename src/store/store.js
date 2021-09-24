@@ -27,7 +27,7 @@ const store = createStore({
             orders: [],
             orderDetails: [],
             categories: [],
-            categoryTmp: {},
+            categoryIdTmp: {},
             plats: [],
             shop: []
         };
@@ -74,8 +74,8 @@ const store = createStore({
         setCategories(state, categorie) {
             state.categories.push(categorie)
         },
-        setcategoryTmp(state, categorie) {
-            state.categoryTmp = categorie
+        setCategoryIdTmp(state, categorie) {
+            state.categoryIdTmp = categorie
         },
         setPlats(state, plat) {
             state.plats = plat;
@@ -231,7 +231,7 @@ const store = createStore({
         async getPlats({ commit, state }) {
             await axios({
                 method: "get",
-                url: URL_API + 'plats/' + state.categoryTmp.id,
+                url: URL_API + 'plats/' + state.categoryIdTmp,
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
@@ -335,7 +335,7 @@ const store = createStore({
             formData.append("description", data.description);
             formData.append("stock", data.stock);
             formData.append("event_id", state.eventTmp.id);
-            formData.append("category_id", state.categoryTmp.id);
+            formData.append("category_id", state.categoryIdTmp);
             formData.append("image", data.file, data.file.name);
 
 

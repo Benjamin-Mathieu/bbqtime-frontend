@@ -53,7 +53,7 @@
               v-for="categorie in this.$store.state.categories"
               :key="categorie.id"
               size="6"
-              @click="addPlatToCategorie(categorie)"
+              @click="addPlatToCategorie(categorie.id)"
             >
               <ion-card>
                 <img :src="categorie.photo_url" alt="img-categorie" />
@@ -241,12 +241,14 @@ export default defineComponent({
     },
   },
   methods: {
-    addPlatToCategorie(categorie) {
+    addPlatToCategorie(idCategorie) {
+      console.log(typeof idCategorie);
       this.toggleForm = "menu";
-      this.$store.commit("setCategoryIdTmp", categorie);
+      this.$store.commit("setCategoryIdTmp", idCategorie);
       this.$store.dispatch("getPlats");
     },
     nextStep() {
+      this.currentStep++;
       if (this.currentStep === 3) {
         this.validEvent();
       }
