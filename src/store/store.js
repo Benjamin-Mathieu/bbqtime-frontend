@@ -6,6 +6,8 @@ import router from "../router/index";
 import Map from "../services/map";
 import { BarcodeScanner } from "@capacitor-community/barcode-scanner";
 import { Filesystem, Directory } from "@capacitor/filesystem";
+import { Camera } from '@capacitor/camera';
+
 
 const URL_API = "http://192.168.1.47:3000/";
 
@@ -100,9 +102,9 @@ const store = createStore({
         },
         getLoginStatus(state) {
             if (state.userIsLoggedIn) {
-                return "Connected"
+                return true
             } else {
-                return "Disconnected"
+                return false
             }
         },
         getTotalShop(state) {
@@ -195,7 +197,6 @@ const store = createStore({
                 }
             })
                 .then(resp => {
-                    console.log(typeof resp)
                     commit("setEventDetails", resp.data.event);
                     router.push({
                         name: "Categories",
@@ -400,14 +401,36 @@ const store = createStore({
         },
 
         scan({ dispatch }) {
-            // check or request permission
-            BarcodeScanner.checkPermission({ force: true })
-                .then((res) => console.log(res, "Permissions ok"))
-                .catch((err) => console.log(err));
+            BarcodeScanner.prepare();
 
+            // request permissions
+            const requestPermissions = async () => {
+                const permissions = await Camera.requestPermissions({ permissions: "camera" });
+                if (permissions.camera == "denied" || permissions.camera == "prompt-with-rationale") {
+                    const c = confirm(
+                        `Si vous souhaitez scanner un qrcode: autoriser l'utilisation de votre appareil photo dans les paramètres de l'application.`
+                    );
+                    if (c) {
+                        BarcodeScanner.openAppSettings();
+                    } else {
+                        popup.warning("Impossible d'effectuer un scan, autorisez l'accès dans les paramètres de l'application");
+                    }
+                }
+            }
+            // check permissions
+            const checkPermissions = async () => {
+                const status = await BarcodeScanner.checkPermission({ force: true });
+                console.log("status =>", status);
+                if (status.granted) startScan;
+
+                if (status.denied) {
+                    requestPermissions();
+                }
+            }
+            checkPermissions();
             BarcodeScanner.hideBackground(); // make background of WebView transparent
 
-            BarcodeScanner.startScan()
+            const startScan = BarcodeScanner.startScan()
                 .then((res) => {
                     if (res.hasContent) {
                         dispatch("joinEvent", res.content);
