@@ -4,7 +4,7 @@
     <Sub :showShopButton="true" title="Évènements"></Sub>
     <ion-content>
       <router-link :to="{ name: 'AddEvent' }">
-        <ion-button>Créer un évènement</ion-button>
+        <ion-button size="small" slot="end">Ajouter un évènement</ion-button>
       </router-link>
       <ion-card v-for="event in this.$store.state.events" :key="event.id">
         <ion-grid>
@@ -13,7 +13,7 @@
               <img
                 alt="event-img"
                 src="../../public/uploads/bbq.jpeg"
-                style="width: 100%; height: 100%; object-fit: cover"
+                style="object-fit: cover; min-height: 100px; min-width: 100px"
               />
             </ion-col>
             <ion-col size="10">
@@ -32,13 +32,25 @@
               </ion-item>
 
               <ion-card-content>
-                <p>
+                <ion-item lines="none">
                   {{ event.description }}
-                </p>
-                <p>
+                </ion-item>
+                <ion-item lines="none">
                   <b>Localisation:</b>
                   {{ event.zipcode + " " + event.address + " " + event.city }}
-                </p>
+                </ion-item>
+                <div v-for="order in event.orders" :key="order.id">
+                  <ion-item
+                    v-if="
+                      order.user_id == this.$store.getters.getUserInformation.id
+                    "
+                    detail
+                    :detail-icon="checkmarkCircle"
+                    lines="none"
+                  >
+                    <ion-label> Vous participez à cet évènement </ion-label>
+                  </ion-item>
+                </div>
               </ion-card-content>
             </ion-col>
           </ion-row>
@@ -64,7 +76,7 @@ import {
   IonRow,
   IonCol,
 } from "@ionic/vue";
-import { lockClosed } from "ionicons/icons";
+import { lockClosed, checkmarkCircle } from "ionicons/icons";
 import Header from "../components/Header.vue";
 import Sub from "../components/Sub.vue";
 import Footer from "../components/Footer.vue";
@@ -90,6 +102,7 @@ export default defineComponent({
   setup() {
     return {
       lockClosed,
+      checkmarkCircle,
     };
   },
   ionViewWillEnter() {
@@ -101,5 +114,10 @@ export default defineComponent({
 <style lang="scss" scoped>
 ion-card {
   margin: 1em auto;
+}
+
+ion-item {
+  --detail-icon-color: green;
+  --detail-icon-opacity: 0.7;
 }
 </style>
