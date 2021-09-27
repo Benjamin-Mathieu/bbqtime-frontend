@@ -98,8 +98,12 @@ export default defineComponent({
       this.$store.commit("removePlatInShop", plat);
     },
     postOrder() {
-      this.$store.dispatch("postOrder");
-      this.$router.push("/orders");
+      if (this.$store.getters.getLoginStatus) {
+        this.$store.dispatch("postOrder");
+        this.$router.push("/orders");
+      } else {
+        this.$router.push("/sign-in");
+      }
     },
   },
 });
