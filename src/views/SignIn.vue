@@ -39,7 +39,6 @@ import {
   IonCardContent,
   IonButton,
 } from "@ionic/vue";
-import APIProvider from "../services/api";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
@@ -67,7 +66,8 @@ export default defineComponent({
   },
   methods: {
     authUser() {
-      APIProvider.loginUser(this.email, this.password);
+      const user = { email: this.email, password: this.password };
+      this.$store.dispatch("loginUser", user);
     },
   },
 });

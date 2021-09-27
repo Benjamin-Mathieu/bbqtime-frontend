@@ -6,12 +6,9 @@
           <img src="../../public/assets/logo1.png" alt="logo-bbqtime" />
         </router-link>
       </ion-list-header>
-      <ion-list v-if="this.$store.state.userIsLoggedIn === false" lines="none">
+      <ion-list v-if="!this.$store.state.userIsLoggedIn" lines="none">
         <router-link class="links" :to="{ name: 'Events' }">
           <ion-item>Evènements</ion-item>
-        </router-link>
-        <router-link class="links" :to="{ name: 'Orders' }">
-          <ion-item>Commandes</ion-item>
         </router-link>
         <router-link class="links" :to="{ name: 'Shop' }">
           <ion-item>Panier</ion-item>
@@ -43,7 +40,7 @@
           <ion-item>Paramètres</ion-item>
         </router-link>
         <ion-item slot="end">
-          <ion-button size="medium" @click="logoutUser">
+          <ion-button size="medium" @click="logoutUser()">
             Déconnexion
           </ion-button>
         </ion-item>
@@ -63,6 +60,7 @@ import {
   menuController,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
+import { mapMutations } from "vuex";
 
 export default defineComponent({
   name: "Navigation",
@@ -75,6 +73,8 @@ export default defineComponent({
     IonContent,
   },
   methods: {
+    ...mapMutations(["setUserIsLoggedIn", "setToken", "setUserInformation"]),
+
     openMenu() {
       menuController.enable(true, "nav");
       menuController.open("nav");
@@ -86,9 +86,9 @@ export default defineComponent({
 
     logoutUser() {
       localStorage.clear();
-      this.$store.commit("setUserIsLoggedIn", false);
-      this.$store.commit("setToken", null);
-      this.$store.commit("setUserInformation", null);
+      this.setUserIsLoggedIn(false);
+      this.setToken(null);
+      this.setUserInformation(null);
       this.$router.push("/home");
     },
   },

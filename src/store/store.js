@@ -88,6 +88,9 @@ const store = createStore({
                 popup.success("Plat ajouté au panier");
             }
         },
+        clearShop(state) {
+            state.shop = {}
+        },
         removePlatInShop(state, plat) {
             console.log(state, plat);
             for (var i = 0; i < state.shop.length; i++)
@@ -150,6 +153,32 @@ const store = createStore({
         }
     },
     actions: {
+        async loginUser({ commit }, user) {
+            await axios({
+                method: "post",
+                url: URL_API + 'users/login',
+                data: {
+                    email: user.email,
+                    password: user.password
+                },
+                headers: {
+                    "Accept": "application/json",
+                    "Content-type": "application/json"
+                }
+            }).then(resp => {
+                if (resp.status === 200) {
+                    commit("setUserIsLoggedIn", true);
+                    commit("setToken", resp.data.token);
+                    commit("setUserInformation", JSON.stringify(resp.data.informations));
+                    popup.success("Authentification réussie !");
+                    router.push({
+                        name: "Home",
+                    });
+                }
+            })
+                .catch(httpErrorHandler);
+        },
+
         async getEvents({ commit }) {
             let req = await axios({
                 method: "get",
@@ -359,7 +388,7 @@ const store = createStore({
                 })
         },
 
-        postOrder({ state }) {
+        postOrder({ commit, state }) {
             axios({
                 method: "post",
                 url: URL_API + 'orders',
@@ -375,6 +404,7 @@ const store = createStore({
                 .then(resp => {
                     if (resp.status === 201) {
                         popup.success("Commande effectué");
+                        commit("clearShop");
                     }
                 }
                 ).catch(err => {

@@ -11,6 +11,7 @@ import { IonApp, IonRouterOutlet } from "@ionic/vue";
 import { defineComponent } from "vue";
 import Navigation from "./components/Navigation.vue";
 import ShopMenu from "./components/ShopMenu.vue";
+import jwt_decode from "jwt-decode";
 
 export default defineComponent({
   name: "App",
@@ -21,17 +22,17 @@ export default defineComponent({
     ShopMenu,
   },
   mounted() {
-    console.log(localStorage.getItem("token"));
     // Check if user already logged in
-    if (localStorage.getItem("token") == "null") {
+    if (
+      !localStorage.getItem("token") ||
+      localStorage.getItem("token") === "null"
+    ) {
       this.$store.commit("setUserIsLoggedIn", false);
     } else {
-      this.$store.commit("setToken", localStorage.getItem("token"));
-      this.$store.commit(
-        "setUserInformation",
-        localStorage.getItem("userInformation")
-      );
-      this.$store.commit("setUserIsLoggedIn", true);
+      const token = jwt_decode(localStorage.getItem("token"));
+      const user = { email: token.email, password: token.password };
+
+      this.$store.dispatch("loginUser", user);
     }
   },
 });
