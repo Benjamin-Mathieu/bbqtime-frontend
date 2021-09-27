@@ -88,6 +88,12 @@ const store = createStore({
                 popup.success("Plat ajouté au panier");
             }
         },
+        updateShop(state, plat) {
+            for (var i = 0; i < state.shop.length; i++)
+                if (state.shop[i].id == plat.id) {
+                    state.shop[i].qty = plat.qty;
+                }
+        },
         clearShop(state) {
             state.shop = {}
         },
