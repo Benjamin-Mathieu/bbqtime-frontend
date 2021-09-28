@@ -7,10 +7,9 @@ import Map from "../services/map";
 import { BarcodeScanner } from "@capacitor-community/barcode-scanner";
 import { Filesystem, Directory } from "@capacitor/filesystem";
 import { Camera } from '@capacitor/camera';
-
+import OneSignal from 'onesignal-cordova-plugin';
 
 const URL_API = "http://192.168.1.47:3000/";
-
 
 // Create a new store instance.
 const store = createStore({
@@ -19,6 +18,7 @@ const store = createStore({
             token: null,
             userInformation: null,
             userIsLoggedIn: false,
+            playerId: null,
             address: "",
             respApiAddress: {},
             events: [],
@@ -45,6 +45,9 @@ const store = createStore({
         },
         setUserIsLoggedIn(state, userIsLoggedIn) {
             state.userIsLoggedIn = userIsLoggedIn
+        },
+        setPlayerId(state, playerId) {
+            state.playerId = playerId;
         },
         setAddress(state, address) {
             state.address = address;
@@ -173,6 +176,9 @@ const store = createStore({
                 }
             }).then(resp => {
                 if (resp.status === 200) {
+                    OneSignal.getDeviceState(function (stateChanges) {
+                        commit("setPlayerId", JSON.stringify(stateChanges.userId));
+                    });
                     commit("setUserIsLoggedIn", true);
                     commit("setToken", resp.data.token);
                     commit("setUserInformation", JSON.stringify(resp.data.informations));

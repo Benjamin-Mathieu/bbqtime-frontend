@@ -2,8 +2,28 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store/store';
-
 import { IonicVue } from '@ionic/vue';
+import OneSignal from 'onesignal-cordova-plugin';
+
+document.addEventListener("deviceready", OneSignalInit, false);
+
+// Call this function when your app starts
+function OneSignalInit() {
+  // Uncomment to set OneSignal device logging to VERBOSE  
+  OneSignal.setLogLevel(6, 0);
+
+  // NOTE: Update the setAppId value below with your OneSignal AppId.
+  OneSignal.setAppId("092181b2-f290-4f65-84f4-4878262da5d9");
+  OneSignal.setNotificationOpenedHandler(function (jsonData) {
+    console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
+  });
+
+  // iOS - Prompts the user for notification permissions.
+  //    * Since this shows a generic native prompt, we recommend instead using an In-App Message to prompt for notification permission (See step 6) to better communicate to your users what notifications they will get.
+  OneSignal.promptForPushNotificationsWithUserResponse(function (accepted) {
+    console.log("User accepted notifications: " + accepted);
+  });
+}
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/vue/css/core.css';
