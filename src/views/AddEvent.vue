@@ -4,7 +4,7 @@
     <Sub title="Création de votre évènement"></Sub>
     <ion-content>
       <!-- ETAPES (1: Evènement, 2: Categorie + Menu, 3: Confirmation création évènement) -->
-      <ion-segment>
+      <ion-segment :value="currentStep">
         <ion-segment-button @click="currentStep = 1" value="1">
           <ion-label>1</ion-label>
         </ion-segment-button>
