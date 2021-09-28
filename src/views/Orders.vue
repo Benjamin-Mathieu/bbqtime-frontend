@@ -30,43 +30,32 @@
                   }}
                 </p>
                 <p><b>Total</b> {{ order.cost + " €" }}</p>
-                <ion-button
-                  slot="end"
-                  size="small"
-                  fill="outline"
-                  @click="toggleDetails()"
-                >
-                  <ion-icon :icon="chevronDownOutline"></ion-icon>
-                </ion-button>
+                <ion-item lines="none">
+                  <ion-button slot="end" size="small" @click="toggleDetails()">
+                    <ion-icon :icon="chevronDownOutline"></ion-icon>
+                  </ion-button>
+                </ion-item>
               </ion-card-content>
             </ion-col>
           </ion-row>
           <div v-if="showDetails">
-            <ion-card
+            <ion-list
               v-for="orderplat in order.orders_plats"
               :key="orderplat.id"
+              lines="none"
             >
-              <ion-grid>
-                <ion-row>
-                  <ion-col size="2">
-                    <img alt="plat-img" :src="orderplat.plat.photo_url" />
-                  </ion-col>
-                  <ion-col size="10">
-                    <ion-item>
-                      <ion-label
-                        ><b> {{ orderplat.plat.libelle }} </b></ion-label
-                      >
-                    </ion-item>
-                    <ion-item>
-                      <b>Quantité:</b> {{ orderplat.quantity }}
-                    </ion-item>
-                    <ion-item>
-                      <b>Prix unitaire: </b> {{ orderplat.plat.price }} €
-                    </ion-item>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
-            </ion-card>
+              <ion-item>
+                <ion-avatar slot="start">
+                  <img :src="orderplat.plat.photo_url" alt="img-plat" />
+                </ion-avatar>
+                <ion-label>
+                  {{ orderplat.plat.libelle }}
+                </ion-label>
+                <ion-badge slot="end">
+                  {{ orderplat.quantity }}
+                </ion-badge>
+              </ion-item>
+            </ion-list>
           </div>
         </ion-grid>
       </ion-card>
@@ -89,6 +78,9 @@ import {
   IonCardContent,
   IonIcon,
   IonItem,
+  IonList,
+  IonAvatar,
+  IonBadge,
   IonLabel,
   IonButton,
   IonImg,
@@ -97,7 +89,6 @@ import {
   IonCol,
 } from "@ionic/vue";
 import { chevronDownOutline } from "ionicons/icons";
-import store from "../store/store";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
@@ -111,6 +102,9 @@ export default defineComponent({
     IonCardContent,
     IonIcon,
     IonItem,
+    IonList,
+    IonAvatar,
+    IonBadge,
     IonLabel,
     IonButton,
     IonImg,
@@ -131,9 +125,8 @@ export default defineComponent({
       showDetails: false,
     };
   },
-  beforeRouteEnter(to, from, next) {
-    store.dispatch("getOrders");
-    next();
+  ionViewWillEnter() {
+    this.$store.dispatch("getOrders");
   },
   methods: {
     getDetails(orderId) {

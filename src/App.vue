@@ -28,6 +28,7 @@ export default defineComponent({
       localStorage.getItem("token") === "null"
     ) {
       this.$store.commit("setUserIsLoggedIn", false);
+      this.$router.push("/sign-in");
     } else {
       const token = jwt_decode(localStorage.getItem("token"));
       const user = { email: token.email, password: token.password };

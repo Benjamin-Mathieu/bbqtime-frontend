@@ -21,6 +21,9 @@
             <ion-button slot="end" type="submit">Connexion</ion-button>
           </ion-card-content>
         </ion-card>
+        <router-link :to="{ name: 'SignUp' }">
+          <ion-button size="small"> Nouveau compte </ion-button>
+        </router-link>
       </form>
     </ion-content>
     <Footer></Footer>

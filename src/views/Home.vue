@@ -11,13 +11,18 @@
           </ion-card-header>
 
           <ion-card-content>
-            <input
-              type="text"
-              name="code"
-              v-model="code"
-              placeholder="Entrer un code"
-            />
-            <ion-button @click="goToEvent()">GO</ion-button>
+            <ion-item>
+              <ion-input
+                type="text"
+                name="code"
+                v-model="code"
+                placeholder="Entrer un code"
+              >
+              </ion-input>
+              <ion-button @click="goToEvent()">
+                <ion-icon :icon="sendOutline"></ion-icon>
+              </ion-button>
+            </ion-item>
           </ion-card-content>
         </ion-card>
 
@@ -43,6 +48,9 @@ import {
   IonContent,
   IonPage,
   IonButton,
+  IonIcon,
+  IonItem,
+  IonInput,
   IonCard,
   IonCardHeader,
   IonCardContent,
@@ -50,6 +58,7 @@ import {
 import { defineComponent } from "vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
+import { sendOutline } from "ionicons/icons";
 
 export default defineComponent({
   name: "Home",
@@ -57,11 +66,19 @@ export default defineComponent({
     IonContent,
     IonPage,
     IonButton,
+    IonIcon,
+    IonItem,
+    IonInput,
     IonCard,
     IonCardHeader,
     IonCardContent,
     Header,
     Footer,
+  },
+  setup() {
+    return {
+      sendOutline,
+    };
   },
   data() {
     return {
@@ -70,6 +87,7 @@ export default defineComponent({
   },
   methods: {
     goToEvent() {
+      this.code = "";
       this.$store.dispatch("joinEvent", this.code);
     },
   },
@@ -79,7 +97,6 @@ export default defineComponent({
 <style scoped>
 #container {
   text-align: center;
-
   position: absolute;
   left: 0;
   right: 0;

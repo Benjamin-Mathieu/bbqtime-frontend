@@ -9,7 +9,18 @@
       </ion-title>
 
       <ion-buttons slot="end">
-        <router-link :to="{ name: 'Account' }">
+        <router-link
+          v-if="this.$store.getters.getLoginStatus"
+          :to="{ name: 'Account' }"
+        >
+          <ion-button size="large" color="dark">
+            <ion-icon
+              style="height: 32px; width: 32px"
+              :icon="personCircleOutline"
+            ></ion-icon>
+          </ion-button>
+        </router-link>
+        <router-link v-else :to="{ name: 'SignIn' }">
           <ion-button size="large" color="dark">
             <ion-icon
               style="height: 32px; width: 32px"

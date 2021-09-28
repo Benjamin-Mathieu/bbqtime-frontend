@@ -239,7 +239,9 @@ const store = createStore({
                     });
                     popup.success("Evènement rejoint");
                 })
-                .catch(httpErrorHandler).then(() => dispatch("scan"));
+                .catch(httpErrorHandler).then(() => {
+                    if (router.currentRoute.value.name == "Scan") dispatch("scan");
+                });
         },
 
         async getMyEventDetails({ commit }, id) {

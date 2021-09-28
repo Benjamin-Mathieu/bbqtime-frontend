@@ -3,7 +3,7 @@
     <Header></Header>
     <Sub title="Création de votre évènement"></Sub>
     <ion-content>
-      <!-- ETAPES (1: Evènement, 2: Categorie + Menu, 3: Paiement, 4: Confirmation création évènement) -->
+      <!-- ETAPES (1: Evènement, 2: Categorie + Menu, 3: Confirmation création évènement) -->
       <ion-segment>
         <ion-segment-button @click="currentStep = 1" value="1">
           <ion-label>1</ion-label>
@@ -11,11 +11,8 @@
         <ion-segment-button @click="currentStep = 2" value="2">
           <ion-label>2</ion-label>
         </ion-segment-button>
-        <ion-segment-button @click="currentStep = 3" value="3">
+        <ion-segment-button @click="currentStep = 3" value="3" disabled>
           <ion-label>3</ion-label>
-        </ion-segment-button>
-        <ion-segment-button @click="currentStep = 4" value="4">
-          <ion-label>4</ion-label>
         </ion-segment-button>
       </ion-segment>
 
@@ -91,37 +88,6 @@
       <!-- STEP 3 -->
       <div v-if="currentStep === 3" class="step3">
         <ion-card>
-          <ion-item>
-            <ion-label position="floating">
-              Numéro de compte de l'évènement
-            </ion-label>
-            <ion-input placeholder="Numéro de compte" required></ion-input>
-          </ion-item>
-          <ion-list>
-            <ion-list-header>Moyen de paiement:</ion-list-header>
-            <ion-item lines="none">
-              <ion-label>Carte bancaire:</ion-label>
-              <ion-checkbox color="primary" checked slot="end"></ion-checkbox>
-            </ion-item>
-            <ion-item lines="none">
-              <ion-label>Espèce:</ion-label>
-              <ion-checkbox color="primary" checked slot="end"></ion-checkbox>
-            </ion-item>
-            <ion-item lines="none">
-              <ion-label>Visa:</ion-label>
-              <ion-checkbox color="primary" slot="end"></ion-checkbox>
-            </ion-item>
-          </ion-list>
-          <ion-item>
-            <p>Recevoir les notifications d'inscriptions:</p>
-            <ion-toggle color="primary"></ion-toggle>
-          </ion-item>
-        </ion-card>
-      </div>
-
-      <!-- STEP 4 -->
-      <div v-if="currentStep === 4" class="step4">
-        <ion-card>
           <ion-card-title>L'évènement a été crée !</ion-card-title>
           <ion-card-content>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non
@@ -161,11 +127,7 @@ import {
   IonPage,
   IonSegment,
   IonSegmentButton,
-  IonList,
-  IonListHeader,
   IonItem,
-  IonCheckbox,
-  IonToggle,
   IonLabel,
   IonInput,
   IonButton,
@@ -194,11 +156,7 @@ export default defineComponent({
     IonPage,
     IonSegment,
     IonSegmentButton,
-    IonList,
-    IonListHeader,
     IonItem,
-    IonCheckbox,
-    IonToggle,
     IonLabel,
     IonInput,
     IonButton,
@@ -234,15 +192,11 @@ export default defineComponent({
         case 3:
           console.log(this.currentStep);
           break;
-        case 4:
-          console.log(this.currentStep);
-          break;
       }
     },
   },
   methods: {
     addPlatToCategorie(idCategorie) {
-      console.log(typeof idCategorie);
       this.toggleForm = "menu";
       this.$store.commit("setCategoryIdTmp", idCategorie);
       this.$store.dispatch("getPlats");

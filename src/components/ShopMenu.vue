@@ -53,6 +53,7 @@ import {
   IonMenu,
   IonContent,
   menuController,
+  IonIcon,
   IonList,
   IonItem,
   IonLabel,
@@ -66,6 +67,7 @@ export default defineComponent({
   components: {
     IonMenu,
     IonContent,
+    IonIcon,
     IonList,
     IonItem,
     IonLabel,
@@ -110,7 +112,6 @@ ion-list {
 
 .plat {
   width: 100%;
-  background-color: palegreen;
   display: flex;
   justify-content: space-around;
   align-items: center;

@@ -13,7 +13,7 @@
               <img
                 alt="event-img"
                 src="../../public/uploads/bbq.jpeg"
-                style="object-fit: cover; min-height: 100px; min-width: 100px"
+                style="object-fit: cover, height: 100%; width: 100%"
               />
             </ion-col>
             <ion-col size="10">
@@ -24,7 +24,6 @@
                 <ion-icon v-if="event.private" :icon="lockClosed"></ion-icon>
 
                 <router-link
-                  v-if="!event.private"
                   :to="{ name: 'Categories', params: { id: event.id } }"
                 >
                   <ion-button slot="end">Détails</ion-button>

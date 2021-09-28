@@ -5,7 +5,7 @@
     <ion-content>
       <form @submit.prevent="updateProfile()" method="post">
         <ion-card>
-          <ion-card-content
+          <ion-card-content v-if="this.$store.getters.getUserInformation"
             ><ion-item>
               <ion-label position="floating">Prénom</ion-label>
               <ion-input
@@ -92,6 +92,7 @@ import {
   IonButton,
   IonIcon,
   IonInput,
+  IonLabel,
 } from "@ionic/vue";
 import { settingsOutline, bagOutline, calendarOutline } from "ionicons/icons";
 import Sub from "../components/Sub.vue";
@@ -112,6 +113,7 @@ export default defineComponent({
     IonButton,
     IonIcon,
     IonInput,
+    IonLabel,
     Header,
     Sub,
     Footer,
