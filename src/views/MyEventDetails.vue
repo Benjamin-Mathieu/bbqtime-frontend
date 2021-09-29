@@ -8,6 +8,60 @@
         <ion-icon slot="end" :icon="download"></ion-icon
       ></ion-button>
 
+      <ion-card class="details">
+        <ion-card-header>
+          <ion-card-title>Détails</ion-card-title>
+        </ion-card-header>
+        <ion-card
+          v-for="order in this.$store.state.myEventOrders.orders"
+          :key="order.id"
+          class="commande"
+        >
+          <ion-card-header>
+            Commande de {{ order.user.firstname }} {{ order.user.name }}
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list>
+              <div
+                v-for="(orderPlat, index) in order.orders_plats"
+                :key="orderPlat.id"
+              >
+                <ion-item button type="button" @click="status(index)">
+                  {{ orderPlat.plat.libelle }}
+                  <ion-badge>{{ orderPlat.quantity }}</ion-badge>
+                </ion-item>
+
+                <div v-if="platIsClicked && this.index === index">
+                  <ion-item lines="none">
+                    <ion-label>En cours de préparation</ion-label>
+                    <ion-toggle checked></ion-toggle>
+                  </ion-item>
+
+                  <ion-item lines="none">
+                    <ion-label>Status</ion-label>
+                    <ion-select
+                      value="brown"
+                      ok-text="Valider"
+                      cancel-text="Fermer"
+                    >
+                      <ion-select-option value="preparation"
+                        >En cours de préparation</ion-select-option
+                      >
+                      <ion-select-option value="prepare"
+                        >Préparé</ion-select-option
+                      >
+                      <ion-select-option value="delivred"
+                        >Livré</ion-select-option
+                      >
+                    </ion-select>
+                  </ion-item>
+                </div>
+              </div>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-card>
+
       <ion-card class="commandes">
         <ion-card-header>
           <ion-card-title>Commandes</ion-card-title>
@@ -73,6 +127,7 @@ import {
   IonCard,
   IonCardHeader,
   IonCardTitle,
+  IonCardContent,
   IonButton,
   IonBadge,
   IonIcon,
@@ -83,6 +138,7 @@ import {
   IonCol,
   IonLabel,
   IonItemDivider,
+  IonList,
 } from "@ionic/vue";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
@@ -97,6 +153,7 @@ export default defineComponent({
     IonCard,
     IonCardHeader,
     IonCardTitle,
+    IonCardContent,
     IonButton,
     IonBadge,
     IonIcon,
@@ -107,6 +164,7 @@ export default defineComponent({
     IonCol,
     IonLabel,
     IonItemDivider,
+    IonList,
     Sub,
     Header,
     Footer,
@@ -116,12 +174,24 @@ export default defineComponent({
       download,
     };
   },
+  data() {
+    return {
+      platIsClicked: false,
+      index: null,
+    };
+  },
   ionViewWillEnter() {
     this.$store.dispatch("getMyEventDetails", this.$route.params.id);
+    this.$store.dispatch("getMyEventOrders");
   },
   methods: {
     saveQrcode() {
       this.$store.dispatch("saveQrcode");
+    },
+    status(index) {
+      console.log("this.index =>", this.index, "index =>", index);
+      this.index = index;
+      this.platIsClicked = !this.platIsClicked;
     },
   },
 });
@@ -131,5 +201,9 @@ export default defineComponent({
 .budget {
   width: 80%;
   margin: auto;
+}
+
+ion-card .commande {
+  --background: #ccc;
 }
 </style>
