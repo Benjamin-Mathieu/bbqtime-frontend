@@ -85,11 +85,7 @@ export default defineComponent({
     },
 
     logoutUser() {
-      localStorage.clear();
-      this.setUserIsLoggedIn(false);
-      this.setToken(null);
-      this.setUserInformation(null);
-      this.$router.push("/home");
+      this.$store.dispatch("logoutUser");
     },
   },
 });

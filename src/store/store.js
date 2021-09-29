@@ -18,11 +18,12 @@ const store = createStore({
             token: null,
             userInformation: null,
             userIsLoggedIn: false,
-            playerId: null,
+            device: {},
             address: "",
             respApiAddress: {},
             events: [],
             myEvents: [],
+            myEventOrders: [],
             myEventDetails: [],
             eventTmp: {},
             eventDetails: [],
@@ -46,8 +47,8 @@ const store = createStore({
         setUserIsLoggedIn(state, userIsLoggedIn) {
             state.userIsLoggedIn = userIsLoggedIn
         },
-        setPlayerId(state, playerId) {
-            state.playerId = playerId;
+        setDevice(state, device) {
+            state.device = device;
         },
         setAddress(state, address) {
             state.address = address;
@@ -60,6 +61,9 @@ const store = createStore({
         },
         setMyEvents(state, myEvents) {
             state.myEvents = myEvents;
+        },
+        setMyEventOrders(state, orders) {
+            state.myEventOrders = orders;
         },
         setMyEventDetails(state, details) {
             state.myEventDetails = details;
@@ -162,7 +166,45 @@ const store = createStore({
         }
     },
     actions: {
-        async loginUser({ commit }, user) {
+        async getDevice({ commit, state }) {
+            await OneSignal.getDeviceState(function (stateChanges) {
+                commit("setDevice", stateChanges);
+                console.log("Info device => ", state.device);
+            });
+        },
+
+        async setExternalUserId({ getters }) {
+            const externalUserId = getters.getUserInformation.id;
+            console.log("extenraluserid =>", externalUserId);
+            await OneSignal.setExternalUserId(externalUserId, (results) => {
+                // The results will contain push and email success statuses
+                console.log('Results of setting external user id');
+                console.log(results);
+
+                // Push can be expected in almost every situation with a success status, but
+                // as a pre-caution its good to verify it exists
+                if (results.push && results.push.success) {
+                    console.log('Results of setting external user id push status:');
+                    console.log(results.push.success);
+                }
+            });
+        },
+
+        async removeExternalUserId() {
+            OneSignal.removeExternalUserId((results) => {
+                // The results will contain push and email success statuses
+                console.log('Results of removing external user id');
+                console.log(results);
+                // Push can be expected in almost every situation with a success status, but
+                // as a pre-caution its good to verify it exists
+                if (results.push && results.push.success) {
+                    console.log('Results of removing external user id push status:');
+                    console.log(results.push.success);
+                }
+            });
+        },
+
+        async loginUser({ dispatch, commit }, user) {
             await axios({
                 method: "post",
                 url: URL_API + 'users/login',
@@ -176,12 +218,11 @@ const store = createStore({
                 }
             }).then(resp => {
                 if (resp.status === 200) {
-                    OneSignal.getDeviceState(function (stateChanges) {
-                        commit("setPlayerId", JSON.stringify(stateChanges.userId));
-                    });
+                    dispatch("getDevice");
                     commit("setUserIsLoggedIn", true);
                     commit("setToken", resp.data.token);
                     commit("setUserInformation", JSON.stringify(resp.data.informations));
+                    dispatch("setExternalUserId");
                     popup.success("Authentification réussie !");
                     router.push({
                         name: "Home",
@@ -189,6 +230,16 @@ const store = createStore({
                 }
             })
                 .catch(httpErrorHandler);
+        },
+
+        async logoutUser({ commit, dispatch }) {
+            localStorage.clear();
+            commit("setUserIsLoggedIn", false);
+            commit("setToken", null);
+            commit("setUserInformation", null);
+            dispatch("removeExternalUserId");
+            popup.success("Vous êtes déconnectés");
+            router.push({ name: "Home" });
         },
 
         async getEvents({ commit }) {
@@ -259,6 +310,19 @@ const store = createStore({
                 }
             });
             commit("setMyEventDetails", req.data)
+        },
+
+        async getMyEventOrders({ commit }) {
+            const params = router.currentRoute.value.params.id;
+
+            let req = await axios({
+                method: "get",
+                url: URL_API + 'events/myEvents/' + params + '/orders',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            });
+            commit("setMyEventOrders", req.data)
         },
 
         async getOrders({ commit }) {
