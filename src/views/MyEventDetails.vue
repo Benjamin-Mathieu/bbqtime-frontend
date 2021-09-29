@@ -36,28 +36,23 @@
                     <ion-label>En cours de préparation</ion-label>
                     <ion-toggle checked></ion-toggle>
                   </ion-item>
-
-                  <ion-item lines="none">
-                    <ion-label>Status</ion-label>
-                    <ion-select
-                      value="brown"
-                      ok-text="Valider"
-                      cancel-text="Fermer"
-                    >
-                      <ion-select-option value="preparation"
-                        >En cours de préparation</ion-select-option
-                      >
-                      <ion-select-option value="prepare"
-                        >Préparé</ion-select-option
-                      >
-                      <ion-select-option value="delivred"
-                        >Livré</ion-select-option
-                      >
-                    </ion-select>
-                  </ion-item>
                 </div>
               </div>
             </ion-list>
+
+            <ion-item lines="none">
+              <ion-label>Status</ion-label>
+              <ion-select
+                ok-text="Valider"
+                cancel-text="Fermer"
+                :value="order.status"
+                @ionChange="selectedValue($event, order.id)"
+              >
+                <ion-select-option :value="0">En cours</ion-select-option>
+                <ion-select-option :value="1">Préparé</ion-select-option>
+                <ion-select-option :value="2">Livré</ion-select-option>
+              </ion-select>
+            </ion-item>
           </ion-card-content>
         </ion-card>
       </ion-card>
@@ -139,6 +134,9 @@ import {
   IonLabel,
   IonItemDivider,
   IonList,
+  IonSelect,
+  IonSelectOption,
+  IonToggle,
 } from "@ionic/vue";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
@@ -165,6 +163,9 @@ export default defineComponent({
     IonLabel,
     IonItemDivider,
     IonList,
+    IonSelect,
+    IonSelectOption,
+    IonToggle,
     Sub,
     Header,
     Footer,
@@ -178,6 +179,7 @@ export default defineComponent({
     return {
       platIsClicked: false,
       index: null,
+      statusOrder: "",
     };
   },
   ionViewWillEnter() {
@@ -189,9 +191,16 @@ export default defineComponent({
       this.$store.dispatch("saveQrcode");
     },
     status(index) {
-      console.log("this.index =>", this.index, "index =>", index);
       this.index = index;
       this.platIsClicked = !this.platIsClicked;
+    },
+    selectedValue(ev, orderId) {
+      const order = {
+        id: orderId,
+        status: ev.target.value,
+      };
+      console.log(order);
+      this.$store.dispatch("putOrderStatus", order);
     },
   },
 });

@@ -333,7 +333,21 @@ const store = createStore({
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
             });
-            commit("setOrders", req.data.orders)
+            commit("setOrders", req.data.orders);
+        },
+
+        async putOrderStatus({ state }, data) {
+            console.log(state.userIsLoggedIn);
+            await axios({
+                method: "put",
+                url: URL_API + 'orders/' + data.id,
+                data: {
+                    status: data.status
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            });
         },
 
         async getPlats({ commit, state }) {
