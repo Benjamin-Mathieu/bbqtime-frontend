@@ -45,7 +45,7 @@
               <ion-select
                 ok-text="Valider"
                 cancel-text="Fermer"
-                :value="order.status"
+                v-model="order.status"
                 @ionChange="selectedValue($event, order.id)"
               >
                 <ion-select-option :value="0">En cours</ion-select-option>
@@ -179,7 +179,6 @@ export default defineComponent({
     return {
       platIsClicked: false,
       index: null,
-      statusOrder: "",
     };
   },
   ionViewWillEnter() {
@@ -199,7 +198,6 @@ export default defineComponent({
         id: orderId,
         status: ev.target.value,
       };
-      console.log(order);
       this.$store.dispatch("putOrderStatus", order);
     },
   },
