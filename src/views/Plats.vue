@@ -7,7 +7,7 @@
     ></Sub>
     <ion-content>
       <div
-        v-for="categorie in this.$store.state.eventDetails.categories"
+        v-for="categorie in this.$store.state.events.eventDetails.categories"
         :key="categorie.id"
       >
         <ion-grid>
@@ -23,7 +23,9 @@
                     :src="plat.photo_url"
                     alt="img-plat"
                   />
-
+                  <h3 style="color: red" v-if="plat.stock === 0">
+                    Rupture de stock !
+                  </h3>
                   <ion-card-subtitle
                     >{{ plat.libelle }}
                     {{ plat.price + "€" }}
@@ -39,7 +41,7 @@
                           :ref="'quantity' + plat.id"
                           ok-text="Valider"
                           cancel-text="Fermer"
-                          :value="plat.qty"
+                          :value="this.selectedQty"
                           @ionChange="selectedValue($event)"
                         >
                           <ion-select-option
@@ -139,15 +141,24 @@ export default defineComponent({
       this.selectedQty = ev.target.value;
     },
     addToShop(addedPlat) {
+      // Check if plat is already in shop
       if (addedPlat.qty !== undefined) {
         if (addedPlat.qty >= addedPlat.stock) {
           return popup.error("Plus de stock !");
         } else {
-          addedPlat.qty = addedPlat.qty + this.selectedQty; // add selected quantity if plat is already in shop
-          popup.success(
-            this.selectedQty + " quantité, ajouté à " + addedPlat.libelle
-          );
-          this.$store.commit("setShop", addedPlat);
+          let totalQty = addedPlat.qty + this.selectedQty;
+
+          if (totalQty > addedPlat.stock) {
+            return popup.error(
+              "La quantité ajoutée dépasse le stock disponible !"
+            );
+          } else {
+            popup.success(
+              this.selectedQty + " quantité, ajouté à " + addedPlat.libelle
+            );
+            addedPlat.qty = totalQty;
+            this.$store.commit("setShop", addedPlat);
+          }
         }
       } else {
         addedPlat.qty = this.selectedQty;
