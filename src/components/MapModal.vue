@@ -8,7 +8,7 @@
     </ion-toolbar>
   </ion-header>
   <ion-content>
-    <div id="mapid" v-if="this.$store.state.address"></div>
+    <div id="mapid" v-if="this.$store.state.apiGouv.address"></div>
 
     <form class="form" @submit.prevent="getAddress()">
       <ion-item>
@@ -19,12 +19,10 @@
           @focus="this.showList = true"
         ></ion-input>
       </ion-item>
-      <ion-list
-        inset="true"
-        v-if="this.$store.state.respApiAddress && showList"
-      >
+      <ion-list v-if="this.showList" inset="true">
         <ion-item
-          v-for="selectAddress in this.$store.state.respApiAddress.features"
+          v-for="selectAddress in this.$store.state.apiGouv.respApiAddress
+            .features"
           :key="selectAddress.id"
         >
           <ion-label

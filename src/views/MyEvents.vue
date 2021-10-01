@@ -3,8 +3,11 @@
     <Header></Header>
     <Sub title="Mes évènements"></Sub>
 
-    <ion-content v-if="this.$store.state.myEvents.length > 0">
-      <ion-card v-for="event in this.$store.state.myEvents" :key="event.id">
+    <ion-content v-if="this.$store.state.events.myEvents.length > 0">
+      <ion-card
+        v-for="event in this.$store.state.events.myEvents"
+        :key="event.id"
+      >
         <ion-grid>
           <ion-row>
             <ion-col size="2">

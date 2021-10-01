@@ -13,7 +13,7 @@
           <ion-card-title>Détails</ion-card-title>
         </ion-card-header>
         <ion-card
-          v-for="order in this.$store.state.myEventOrders.orders"
+          v-for="order in this.$store.state.events.myEventOrders.orders"
           :key="order.id"
           class="commande"
         >
@@ -30,13 +30,6 @@
                   {{ orderPlat.plat.libelle }}
                   <ion-badge>{{ orderPlat.quantity }}</ion-badge>
                 </ion-item>
-
-                <div v-if="platIsClicked && this.index === index">
-                  <ion-item lines="none">
-                    <ion-label>En cours de préparation</ion-label>
-                    <ion-toggle checked></ion-toggle>
-                  </ion-item>
-                </div>
               </div>
             </ion-list>
 
@@ -62,7 +55,7 @@
           <ion-card-title>Commandes</ion-card-title>
         </ion-card-header>
         <ion-card
-          v-for="plat in this.$store.state.myEventDetails.plats"
+          v-for="plat in this.$store.state.events.myEventDetails.plats"
           :key="plat.id"
         >
           <ion-grid>
@@ -86,7 +79,7 @@
           <ion-card-title>Budget</ion-card-title>
         </ion-card-header>
         <ion-card
-          v-for="plat in this.$store.state.myEventDetails.plats"
+          v-for="plat in this.$store.state.events.myEventDetails.plats"
           :key="plat.id"
         >
           <ion-grid>
@@ -105,7 +98,8 @@
         </ion-card>
         <ion-item-divider color="primary">
           <ion-label>
-            Montant total: {{ this.$store.state.myEventDetails.totalBudget }} €
+            Montant total:
+            {{ this.$store.state.events.myEventDetails.totalBudget }} €
           </ion-label>
         </ion-item-divider>
       </ion-card>
@@ -136,7 +130,6 @@ import {
   IonList,
   IonSelect,
   IonSelectOption,
-  IonToggle,
 } from "@ionic/vue";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
@@ -165,7 +158,6 @@ export default defineComponent({
     IonList,
     IonSelect,
     IonSelectOption,
-    IonToggle,
     Sub,
     Header,
     Footer,
@@ -175,12 +167,6 @@ export default defineComponent({
       download,
     };
   },
-  data() {
-    return {
-      platIsClicked: false,
-      index: null,
-    };
-  },
   ionViewWillEnter() {
     this.$store.dispatch("getMyEventDetails", this.$route.params.id);
     this.$store.dispatch("getMyEventOrders");
@@ -188,10 +174,6 @@ export default defineComponent({
   methods: {
     saveQrcode() {
       this.$store.dispatch("saveQrcode");
-    },
-    status(index) {
-      this.index = index;
-      this.platIsClicked = !this.platIsClicked;
     },
     selectedValue(ev, orderId) {
       const order = {

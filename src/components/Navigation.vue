@@ -6,7 +6,7 @@
           <img src="../../public/assets/logo1.png" alt="logo-bbqtime" />
         </router-link>
       </ion-list-header>
-      <ion-list v-if="!this.$store.state.userIsLoggedIn" lines="none">
+      <ion-list v-if="!this.$store.state.auth.userIsLoggedIn" lines="none">
         <router-link class="links" :to="{ name: 'Events' }">
           <ion-item>Evènements</ion-item>
         </router-link>

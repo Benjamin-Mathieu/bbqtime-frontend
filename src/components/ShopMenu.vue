@@ -1,11 +1,13 @@
 <template>
   <ion-menu side="end" menu-id="shop" content-id="main">
     <ion-content class="shop">
-      <p v-if="this.$store.state.shop.length === 0">Votre panier est vide</p>
+      <p v-if="this.$store.state.shop.plats.length === 0">
+        Votre panier est vide
+      </p>
 
       <!-- List of Plat in Shop -->
       <ion-list lines="none" v-else>
-        <ion-item v-for="plat in this.$store.state.shop" :key="plat.id">
+        <ion-item v-for="plat in this.$store.state.shop.plats" :key="plat.id">
           <div class="plat">
             <img alt="plat-img" :src="plat.photo_url" />
             <p>{{ plat.libelle }}</p>

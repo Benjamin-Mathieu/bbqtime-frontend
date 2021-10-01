@@ -6,7 +6,7 @@
           <ion-col size="6"
             ><b>Adresse</b>
             {{
-              `${this.$store.state.eventDetails.address} ${this.$store.state.eventDetails.zipcode} ${this.$store.state.eventDetails.city}`
+              `${this.$store.state.events.eventDetails.address} ${this.$store.state.events.eventDetails.zipcode} ${this.$store.state.events.eventDetails.city}`
             }}
           </ion-col>
           <ion-col size="6"

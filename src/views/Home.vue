@@ -27,13 +27,13 @@
         </ion-card>
 
         <router-link :to="{ name: 'SignIn' }">
-          <ion-button v-if="!this.$store.state.userIsLoggedIn">
+          <ion-button v-if="!this.$store.state.auth.userIsLoggedIn">
             Connexion
           </ion-button>
         </router-link>
 
         <router-link :to="{ name: 'SignUp' }">
-          <ion-button v-if="!this.$store.state.userIsLoggedIn">
+          <ion-button v-if="!this.$store.state.auth.userIsLoggedIn">
             Créer un compte
           </ion-button>
         </router-link>
@@ -87,8 +87,8 @@ export default defineComponent({
   },
   methods: {
     goToEvent() {
-      this.code = "";
       this.$store.dispatch("joinEvent", this.code);
+      this.code = "";
     },
   },
 });

@@ -59,17 +59,20 @@
       <div class="buttons">
         <router-link :to="{ name: 'MyEvents' }">
           <ion-button>
+            <ion-label>Evènements </ion-label>
             <ion-icon size="large" :icon="calendarOutline"> </ion-icon>
           </ion-button>
         </router-link>
 
         <router-link :to="{ name: 'Orders' }"
           ><ion-button>
+            <ion-label>Commandes </ion-label>
             <ion-icon size="large" :icon="bagOutline"></ion-icon> </ion-button
         ></router-link>
 
         <router-link :to="{ name: 'Settings' }"
           ><ion-button>
+            <ion-label>Paramètres </ion-label>
             <ion-icon
               size="large"
               :icon="settingsOutline"
@@ -133,6 +136,8 @@ ion-card {
 
 .buttons {
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 </style>

@@ -2,8 +2,8 @@
   <ion-page>
     <Header></Header>
     <Sub title="Panier"></Sub>
-    <ion-content v-if="this.$store.state.shop.length > 0">
-      <ion-card v-for="plat in this.$store.state.shop" :key="plat.id">
+    <ion-content v-if="this.$store.state.shop.plats.length > 0">
+      <ion-card v-for="plat in this.$store.state.shop.plats" :key="plat.id">
         <ion-grid>
           <ion-row>
             <ion-col size="2">

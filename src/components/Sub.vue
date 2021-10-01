@@ -1,7 +1,7 @@
 <template>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-button @click="this.$router.go(-1)">
+      <ion-button @click="this.$router.back()">
         <ion-icon :icon="chevronBackOutline"></ion-icon>
       </ion-button>
     </ion-buttons>

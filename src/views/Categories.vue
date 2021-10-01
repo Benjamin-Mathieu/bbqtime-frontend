@@ -10,7 +10,8 @@
       <ion-grid>
         <ion-row>
           <ion-col
-            v-for="categorie in this.$store.state.eventDetails.categories"
+            v-for="categorie in this.$store.state.events.eventDetails
+              .categories"
             :key="categorie.id"
             size="6"
           >
