@@ -22,6 +22,7 @@ const store = createStore({
             address: "",
             respApiAddress: {},
             events: [],
+            publicEvents: [],
             myEvents: [],
             myEventOrders: [],
             myEventDetails: [],
@@ -32,7 +33,8 @@ const store = createStore({
             categories: [],
             categoryIdTmp: {},
             plats: [],
-            shop: []
+            shop: [],
+            pagination: {}
         };
     },
     mutations: {
@@ -58,6 +60,9 @@ const store = createStore({
         },
         setEvents(state, events) {
             state.events = events;
+        },
+        setPublicEvents(state, publicEvents) {
+            state.publicEvents = publicEvents;
         },
         setMyEvents(state, myEvents) {
             state.myEvents = myEvents;
@@ -110,6 +115,9 @@ const store = createStore({
                 if (state.shop[i].id === plat.id) {
                     state.shop.splice(i, 1);
                 }
+        },
+        setPagination(state, pagination) {
+            state.pagination = pagination;
         }
     },
     getters: {
@@ -224,20 +232,20 @@ const store = createStore({
                     commit("setUserInformation", JSON.stringify(resp.data.informations));
                     dispatch("setExternalUserId");
                     popup.success("Authentification réussie !");
-                    router.push({
-                        name: "Home",
-                    });
+                    // router.push({
+                    //     name: "Home",
+                    // });
                 }
             })
                 .catch(httpErrorHandler);
         },
 
-        async logoutUser({ commit, dispatch }) {
+        async logoutUser({ commit }) {
             localStorage.clear();
             commit("setUserIsLoggedIn", false);
             commit("setToken", null);
             commit("setUserInformation", null);
-            dispatch("removeExternalUserId");
+            // dispatch("removeExternalUserId");
             popup.success("Vous êtes déconnectés");
             router.push({ name: "Home" });
         },
@@ -245,12 +253,26 @@ const store = createStore({
         async getEvents({ commit }) {
             let req = await axios({
                 method: "get",
-                url: URL_API + 'events',
+                url: URL_API + 'events/attented',
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
             });
             commit("setEvents", req.data.events)
+        },
+
+        async getPublicEvents({ commit }, page) {
+            if (page === undefined) page = "1";
+            let req = await axios({
+                method: "get",
+                url: URL_API + 'events/public/' + page,
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            });
+            commit("setPublicEvents", req.data.events);
+            const pagination = { count: req.data.count, currentPage: req.data.currentPage, totalPages: req.data.totalPages };
+            commit("setPagination", pagination);
         },
 
         async getMyEvents({ commit }) {
@@ -281,6 +303,7 @@ const store = createStore({
         },
 
         async joinEvent({ commit, dispatch, state }, password) {
+            console.log("password rentré =>", password);
             await axios({
                 method: "get",
                 url: URL_API + 'events/join/' + password,
@@ -290,6 +313,8 @@ const store = createStore({
             })
                 .then(resp => {
                     commit("setEventDetails", resp.data.event);
+                    console.log("resp.data.event", resp.data.event);
+                    console.log("state.eventDetails.id", state.eventDetails.id);
                     router.push({
                         name: "Categories",
                         params: { id: state.eventDetails.id },
@@ -486,7 +511,6 @@ const store = createStore({
                 url: URL_API + 'orders',
                 data: {
                     event_id: state.eventDetails.id,
-                    heure: "2021-09-01 20:30:00",
                     plats: state.shop,
                 },
                 headers: {

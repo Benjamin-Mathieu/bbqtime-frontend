@@ -3,16 +3,31 @@
     <Header></Header>
     <Sub :showShopButton="true" title="Évènements"></Sub>
     <ion-content>
+      <ion-header translucent>
+        <ion-toolbar>
+          <ion-segment
+            :value="selectedTypeEvent"
+            @ionChange="selectedValue($event)"
+          >
+            <ion-segment-button value="public">
+              <ion-label>Publiques</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="participated">
+              <ion-label>Participés</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </ion-toolbar>
+      </ion-header>
       <router-link :to="{ name: 'AddEvent' }">
         <ion-button size="small" slot="end">Ajouter un évènement</ion-button>
       </router-link>
-      <ion-card v-for="event in this.$store.state.events" :key="event.id">
+      <ion-card v-for="event in this.$store.state.publicEvents" :key="event.id">
         <ion-grid>
           <ion-row>
             <ion-col size="2">
               <img
                 alt="event-img"
-                src="../../public/uploads/bbq.jpeg"
+                :src="event.photo_url"
                 style="object-fit: cover, height: 100%; width: 100%"
               />
             </ion-col>
@@ -55,6 +70,29 @@
           </ion-row>
         </ion-grid>
       </ion-card>
+      <div v-if="this.selectedTypeEvent === 'public'" class="pagination">
+        <ion-button
+          v-if="this.$store.state.pagination.currentPage > 1"
+          @click="prevPage()"
+          fill="clear"
+        >
+          <ion-icon name="chevron-back" fill="clear"></ion-icon>
+        </ion-button>
+        <ion-button
+          v-for="pages in this.$store.state.pagination.totalPages"
+          :key="pages.id"
+          @click="pageChange(pages)"
+        >
+          {{ pages }}
+        </ion-button>
+        <ion-button
+          v-if="!this.$store.state.pagination.totalPages"
+          @click="nextPage()"
+          fill="clear"
+        >
+          <ion-icon name="chevron-forward" fill="clear"></ion-icon>
+        </ion-button>
+      </div>
     </ion-content>
     <Footer></Footer>
   </ion-page>
@@ -74,6 +112,10 @@ import {
   IonGrid,
   IonRow,
   IonCol,
+  IonHeader,
+  IonToolbar,
+  IonSegment,
+  IonSegmentButton,
 } from "@ionic/vue";
 import { lockClosed, checkmarkCircle } from "ionicons/icons";
 import Header from "../components/Header.vue";
@@ -94,9 +136,18 @@ export default defineComponent({
     IonGrid,
     IonRow,
     IonCol,
+    IonHeader,
+    IonToolbar,
+    IonSegment,
+    IonSegmentButton,
     Header,
     Sub,
     Footer,
+  },
+  data() {
+    return {
+      selectedTypeEvent: "public",
+    };
   },
   setup() {
     return {
@@ -105,7 +156,32 @@ export default defineComponent({
     };
   },
   ionViewWillEnter() {
-    this.$store.dispatch("getEvents");
+    this.$store.dispatch("getPublicEvents");
+  },
+  watch: {
+    selectedTypeEvent() {
+      this.selectedTypeEvent === "public"
+        ? this.$store.dispatch("getPublicEvents")
+        : this.$store.dispatch("getEvents");
+    },
+  },
+  methods: {
+    selectedValue(e) {
+      this.selectedTypeEvent = e.target.value;
+    },
+    pageChange(page) {
+      this.$store.dispatch("getPublicEvents", page);
+    },
+    prevPage() {
+      console.log("prev page");
+      let prevPage = this.$store.state.pagination.currentPage - 1;
+      this.$store.dispatch("getPublicEvents", prevPage);
+    },
+    nextPage() {
+      console.log("next page");
+      let nextPage = this.$store.state.pagination.currentPage + 1;
+      this.$store.dispatch("getPublicEvents", nextPage);
+    },
   },
 });
 </script>
@@ -118,5 +194,10 @@ ion-card {
 ion-item {
   --detail-icon-color: green;
   --detail-icon-opacity: 0.7;
+}
+
+div .pagination {
+  display: flex;
+  justify-content: center;
 }
 </style>
