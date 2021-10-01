@@ -21,77 +21,162 @@
       <router-link :to="{ name: 'AddEvent' }">
         <ion-button size="small" slot="end">Ajouter un évènement</ion-button>
       </router-link>
-      <ion-card v-for="event in this.$store.state.publicEvents" :key="event.id">
-        <ion-grid>
-          <ion-row>
-            <ion-col size="2">
-              <img
-                alt="event-img"
-                :src="event.photo_url"
-                style="object-fit: cover, height: 100%; width: 100%"
-              />
-            </ion-col>
-            <ion-col size="10">
-              <ion-item>
-                <ion-label
-                  ><b>{{ event.name }}</b></ion-label
-                >
-                <ion-icon v-if="event.private" :icon="lockClosed"></ion-icon>
 
-                <router-link
-                  :to="{ name: 'Categories', params: { id: event.id } }"
-                >
-                  <ion-button slot="end">Détails</ion-button>
-                </router-link>
-              </ion-item>
-
-              <ion-card-content>
-                <ion-item lines="none">
-                  {{ event.description }}
-                </ion-item>
-                <ion-item lines="none">
-                  <b>Localisation:</b>
-                  {{ event.zipcode + " " + event.address + " " + event.city }}
-                </ion-item>
-                <div v-for="order in event.orders" :key="order.id">
-                  <ion-item
-                    v-if="
-                      order.user_id == this.$store.getters.getUserInformation.id
-                    "
-                    detail
-                    :detail-icon="checkmarkCircle"
-                    lines="none"
+      <div v-if="this.selectedTypeEvent === 'public'">
+        <ion-card
+          v-for="event in this.$store.state.events.publicEvents"
+          :key="event.id"
+        >
+          <ion-grid>
+            <ion-row>
+              <ion-col size="2">
+                <img
+                  alt="event-img"
+                  :src="event.photo_url"
+                  style="object-fit: cover, height: 100%; width: 100%"
+                />
+              </ion-col>
+              <ion-col size="10">
+                <ion-item>
+                  <ion-label
+                    ><b>{{ event.name }}</b></ion-label
                   >
-                    <ion-label> Vous participez à cet évènement </ion-label>
+                  <ion-icon v-if="event.private" :icon="lockClosed"></ion-icon>
+
+                  <router-link
+                    :to="{ name: 'Categories', params: { id: event.id } }"
+                  >
+                    <ion-button slot="end">Détails</ion-button>
+                  </router-link>
+                </ion-item>
+
+                <ion-card-content>
+                  <ion-item lines="none">
+                    {{ event.description }}
                   </ion-item>
-                </div>
-              </ion-card-content>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-card>
-      <div v-if="this.selectedTypeEvent === 'public'" class="pagination">
-        <ion-button
-          v-if="this.$store.state.pagination.currentPage > 1"
-          @click="prevPage()"
-          fill="clear"
+                  <ion-item lines="none">
+                    <b>Localisation:</b>
+                    {{ event.zipcode + " " + event.address + " " + event.city }}
+                  </ion-item>
+                  <div v-for="order in event.orders" :key="order.id">
+                    <ion-item
+                      v-if="
+                        order.user_id ==
+                        this.$store.getters.getUserInformation.id
+                      "
+                      detail
+                      :detail-icon="checkmarkCircle"
+                      lines="none"
+                    >
+                      <ion-label> Vous participez à cet évènement </ion-label>
+                    </ion-item>
+                  </div>
+                </ion-card-content>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card>
+        <div class="pagination">
+          <ion-button
+            v-if="this.$store.state.events.pagination.currentPage > 1"
+            @click="prevPage()"
+            fill="clear"
+          >
+            <ion-icon name="chevron-back" fill="clear"></ion-icon>
+          </ion-button>
+          <ion-button
+            v-for="pages in this.$store.state.events.pagination.totalPages"
+            :key="pages.id"
+            @click="pageChange(pages)"
+          >
+            {{ pages }}
+          </ion-button>
+          <ion-button
+            v-if="!this.$store.state.events.pagination.totalPages"
+            @click="nextPage()"
+            fill="clear"
+          >
+            <ion-icon name="chevron-forward" fill="clear"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+      <div v-if="this.selectedTypeEvent === 'participated'">
+        <ion-card
+          v-for="event in this.$store.state.events.participateEvents"
+          :key="event.id"
         >
-          <ion-icon name="chevron-back" fill="clear"></ion-icon>
-        </ion-button>
-        <ion-button
-          v-for="pages in this.$store.state.pagination.totalPages"
-          :key="pages.id"
-          @click="pageChange(pages)"
-        >
-          {{ pages }}
-        </ion-button>
-        <ion-button
-          v-if="!this.$store.state.pagination.totalPages"
-          @click="nextPage()"
-          fill="clear"
-        >
-          <ion-icon name="chevron-forward" fill="clear"></ion-icon>
-        </ion-button>
+          <ion-grid>
+            <ion-row>
+              <ion-col size="2">
+                <img
+                  alt="event-img"
+                  :src="event.photo_url"
+                  style="object-fit: cover, height: 100%; width: 100%"
+                />
+              </ion-col>
+              <ion-col size="10">
+                <ion-item>
+                  <ion-label
+                    ><b>{{ event.name }}</b></ion-label
+                  >
+                  <ion-icon v-if="event.private" :icon="lockClosed"></ion-icon>
+
+                  <router-link
+                    :to="{ name: 'Categories', params: { id: event.id } }"
+                  >
+                    <ion-button slot="end">Détails</ion-button>
+                  </router-link>
+                </ion-item>
+
+                <ion-card-content>
+                  <ion-item lines="none">
+                    {{ event.description }}
+                  </ion-item>
+                  <ion-item lines="none">
+                    <b>Localisation:</b>
+                    {{ event.zipcode + " " + event.address + " " + event.city }}
+                  </ion-item>
+                  <div v-for="order in event.orders" :key="order.id">
+                    <ion-item
+                      v-if="
+                        order.user_id ==
+                        this.$store.getters.getUserInformation.id
+                      "
+                      detail
+                      :detail-icon="checkmarkCircle"
+                      lines="none"
+                    >
+                      <ion-label> Vous participez à cet évènement </ion-label>
+                    </ion-item>
+                  </div>
+                </ion-card-content>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card>
+        <div class="pagination">
+          <ion-button
+            v-if="this.$store.state.events.pagination.currentPage > 1"
+            @click="prevPage()"
+            fill="clear"
+          >
+            <ion-icon name="chevron-back" fill="clear"></ion-icon>
+          </ion-button>
+          <ion-button
+            v-for="pages in this.$store.state.events.pagination.totalPages"
+            :key="pages.id"
+            @click="pageChange(pages)"
+          >
+            {{ pages }}
+          </ion-button>
+          <ion-button
+            v-if="!this.$store.state.events.pagination.totalPages"
+            @click="nextPage()"
+            fill="clear"
+          >
+            <ion-icon name="chevron-forward" fill="clear"></ion-icon>
+          </ion-button>
+        </div>
       </div>
     </ion-content>
     <Footer></Footer>
@@ -162,7 +247,7 @@ export default defineComponent({
     selectedTypeEvent() {
       this.selectedTypeEvent === "public"
         ? this.$store.dispatch("getPublicEvents")
-        : this.$store.dispatch("getEvents");
+        : this.$store.dispatch("getParticipateEvents");
     },
   },
   methods: {
@@ -170,17 +255,21 @@ export default defineComponent({
       this.selectedTypeEvent = e.target.value;
     },
     pageChange(page) {
-      this.$store.dispatch("getPublicEvents", page);
+      this.selectedTypeEvent === "public"
+        ? this.$store.dispatch("getPublicEvents", page)
+        : this.$store.dispatch("getParticipateEvents", page);
     },
     prevPage() {
-      console.log("prev page");
-      let prevPage = this.$store.state.pagination.currentPage - 1;
-      this.$store.dispatch("getPublicEvents", prevPage);
+      let prevPage = this.$store.state.events.pagination.currentPage - 1;
+      this.selectedTypeEvent === "public"
+        ? this.$store.dispatch("getPublicEvents", prevPage)
+        : this.$store.dispatch("getParticipateEvents", prevPage);
     },
     nextPage() {
-      console.log("next page");
-      let nextPage = this.$store.state.pagination.currentPage + 1;
-      this.$store.dispatch("getPublicEvents", nextPage);
+      let nextPage = this.$store.state.events.pagination.currentPage + 1;
+      this.selectedTypeEvent === "public"
+        ? this.$store.dispatch("getPublicEvents", nextPage)
+        : this.$store.dispatch("getParticipateEvents", nextPage);
     },
   },
 });
