@@ -100,17 +100,9 @@
       <div v-if="this.$store.state.events.currentStep === 3" class="step3">
         <ion-card>
           <ion-card-title>L'évènement a été crée !</ion-card-title>
-          <ion-card-content>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non
-            risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing
-            nec, ultricies sed, dolor. Lorem ipsum dolor sit amet, consectetur
-            adipiscing elit.
-          </ion-card-content>
-        </ion-card>
-        <ion-card>
-          <ion-card-subtitle
-            >Inviter des personnes à votre évènement</ion-card-subtitle
-          >
+          <ion-card-subtitle>
+            Inviter des personnes à votre évènement
+          </ion-card-subtitle>
           <ion-card-content>
             <ion-item>
               <ion-input
@@ -157,6 +149,7 @@ import {
   IonRow,
   IonCol,
   IonCardHeader,
+  IonIcon,
   modalController,
   alertController,
 } from "@ionic/vue";
@@ -189,6 +182,7 @@ export default defineComponent({
     IonRow,
     IonCol,
     IonCardHeader,
+    IonIcon,
     FormEvent,
     FormMailing,
     Sub,

@@ -68,7 +68,15 @@
     </ion-item>
 
     <ion-item>
-      <ion-button type="submit" size="small" slot="end">Valider</ion-button>
+      <ion-button
+        v-if="Object.keys(this.$store.state.events.eventTmp).length === 0"
+        type="submit"
+        size="small"
+        slot="end"
+      >
+        Valider
+      </ion-button>
+      <ion-button v-else @click="updateEvent()">Modifier</ion-button>
     </ion-item>
   </form>
 </template>
@@ -83,6 +91,8 @@ import {
   IonInput,
   IonDatetime,
   IonTextarea,
+  IonThumbnail,
+  IonImg,
   modalController,
 } from "@ionic/vue";
 import MapModal from "./MapModal.vue";
@@ -96,18 +106,30 @@ export default defineComponent({
     IonCheckbox,
     IonInput,
     IonDatetime,
+    IonThumbnail,
+    IonImg,
     IonTextarea,
   },
   data() {
     return {
-      name: "",
+      name: this.$store.state.events.eventTmp.name
+        ? this.$store.state.events.eventTmp.name
+        : "",
       date: "",
       hours: "",
-      description: "",
-      img: null,
+      description: this.$store.state.events.eventTmp.description
+        ? this.$store.state.events.eventTmp.description
+        : "",
+      img: this.$store.state.events.eventTmp.photo_url
+        ? this.$store.state.events.eventTmp.photo_url
+        : null,
       file: null,
-      isPrivate: false,
-      password: null,
+      isPrivate: this.$store.state.events.eventTmp.private
+        ? this.$store.state.events.eventTmp.private
+        : false,
+      password: this.$store.state.events.eventTmp.password
+        ? this.$store.state.events.eventTmp.password
+        : "",
     };
   },
   computed: {
@@ -121,10 +143,6 @@ export default defineComponent({
       this.img = URL.createObjectURL(this.file);
     },
     addInfoEvent() {
-      this.address = this.$store.getters.getAddress.name;
-      this.city = this.$store.getters.getAddress.city;
-      this.zipcode = this.$store.getters.getAddress.postcode;
-
       //Convert date+hours in DATETIME
       this.date = this.date.slice(0, 10);
       this.hours = this.hours.slice(11, 19);
@@ -132,9 +150,9 @@ export default defineComponent({
 
       const event = {
         name: this.name,
-        address: this.address,
-        city: this.city,
-        zipcode: this.zipcode,
+        address: this.$store.getters.getAddress.name,
+        city: this.$store.getters.getAddress.city,
+        zipcode: this.$store.getters.getAddress.postcode,
         date: datetime,
         description: this.description,
         private: this.isPrivate,
@@ -142,8 +160,29 @@ export default defineComponent({
         password: this.password,
       };
 
-      this.$store.commit("setEventTmp", event);
-      this.$store.dispatch("postEvent");
+      this.$store.dispatch("postEvent", event);
+    },
+
+    updateEvent() {
+      //Convert date+hours in DATETIME
+      this.date = this.date.slice(0, 10);
+      this.hours = this.hours.slice(11, 19);
+      const datetime = this.date.concat("T", this.hours, "Z");
+
+      const event = {
+        id: this.$store.state.events.eventTmp.id,
+        name: this.name,
+        address: this.$store.getters.getAddress.name,
+        city: this.$store.getters.getAddress.city,
+        zipcode: this.$store.getters.getAddress.postcode,
+        date: datetime,
+        description: this.description,
+        private: this.isPrivate,
+        file: this.file,
+        password: this.password,
+      };
+
+      this.$store.dispatch("putEvent", event);
     },
 
     async openMapModal() {

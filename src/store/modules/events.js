@@ -126,7 +126,7 @@ const modulEvents = {
                 .then(resp => {
                     commit("setEventDetails", resp.data.event);
                 })
-                .catch(err => console.log(err))
+                .catch(httpErrorHandler)
         },
 
         async joinEvent({ commit, dispatch, state }, password) {
@@ -177,17 +177,17 @@ const modulEvents = {
             commit("setMyEventOrders", req.data)
         },
 
-        async postEvent({ commit, state }) {
+        async postEvent({ commit }, event) {
             let formData = new FormData();
-            formData.append("name", state.eventTmp.name);
-            formData.append("address", state.eventTmp.address);
-            formData.append("city", state.eventTmp.city);
-            formData.append("zipcode", state.eventTmp.zipcode);
-            formData.append("date", state.eventTmp.date);
-            formData.append("description", state.eventTmp.description);
-            formData.append("private", state.eventTmp.private);
-            formData.append("password", state.eventTmp.password);
-            formData.append("image", state.eventTmp.file, state.eventTmp.file.name);
+            formData.append("name", event.name);
+            formData.append("address", event.address);
+            formData.append("city", event.city);
+            formData.append("zipcode", event.zipcode);
+            formData.append("date", event.date);
+            formData.append("description", event.description);
+            formData.append("private", event.private);
+            formData.append("password", event.password);
+            formData.append("image", event.file, event.file.name);
 
             await axios({
                 method: "post",
@@ -202,9 +202,36 @@ const modulEvents = {
                     popup.success("Evènement crée");
                     commit("setCurrentStep", 2);
                 }
-            }).catch(() => {
-                popup.error("Une erreur est survenue");
-            })
+            }).catch((httpErrorHandler))
+        },
+
+        async putEvent({ commit }, event) {
+            let formData = new FormData();
+            formData.append("id", event.id);
+            formData.append("name", event.name);
+            formData.append("address", event.address);
+            formData.append("city", event.city);
+            formData.append("zipcode", event.zipcode);
+            formData.append("date", event.date);
+            formData.append("description", event.description);
+            formData.append("private", event.private);
+            formData.append("password", event.password);
+            formData.append("image", event.file, event.file.name);
+
+            await axios({
+                method: "put",
+                url: URL_API + 'events',
+                data: formData,
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            }).then(resp => {
+                if (resp.status === 200) {
+                    commit("setEventTmp", resp.data.event);
+                    popup.success("Evènement mis à jour");
+                    commit("setCurrentStep", 2);
+                }
+            }).catch((httpErrorHandler))
         },
 
         async sendInvitation({ state }, email) {
@@ -221,9 +248,7 @@ const modulEvents = {
                 }
             }).then(() => {
                 popup.success(`Mail envoyé à l'adresse ${email}`);
-            }).catch(() => {
-                popup.error("Une erreur est survenue");
-            })
+            }).catch((httpErrorHandler))
         }
     }
 }
