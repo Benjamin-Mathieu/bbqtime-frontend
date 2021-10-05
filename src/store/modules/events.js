@@ -7,6 +7,7 @@ const URL_API = "http://192.168.1.47:3000/";
 
 const modulEvents = {
     state: () => ({
+        currentStep: 1,
         participateEvents: [],
         publicEvents: [],
         myEvents: [],
@@ -18,6 +19,9 @@ const modulEvents = {
     }),
 
     mutations: {
+        setCurrentStep(state, currentStep) {
+            state.currentStep = currentStep;
+        },
         setParticipateEvents(state, participateEvents) {
             state.participateEvents = participateEvents;
         },
@@ -83,6 +87,15 @@ const modulEvents = {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
             });
+            // req.data.events.forEach(event => {
+            //     console.log(Object.values(event));
+            //     const obj = Object.values(event);
+            //     for (const property in obj) {
+            //         let key = 14;
+            //         const events = delete obj[key];
+            //         console.log(obj[property]);
+            //     }
+            // });
             commit("setPublicEvents", req.data.events);
             const pagination = { count: req.data.count, currentPage: req.data.currentPage, totalPages: req.data.totalPages };
             commit("setPagination", pagination);
@@ -187,11 +200,31 @@ const modulEvents = {
                 if (resp.status === 201) {
                     commit("setEventTmp", resp.data.event);
                     popup.success("Evènement crée");
+                    commit("setCurrentStep", 2);
                 }
             }).catch(() => {
                 popup.error("Une erreur est survenue");
             })
         },
+
+        async sendInvitation({ state }, email) {
+            console.log("store invit =>", email);
+            await axios({
+                method: "post",
+                url: URL_API + 'events/mail/invitation',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                },
+                data: {
+                    event_id: state.eventTmp.id,
+                    email: email
+                }
+            }).then(() => {
+                popup.success(`Mail envoyé à l'adresse ${email}`);
+            }).catch(() => {
+                popup.error("Une erreur est survenue");
+            })
+        }
     }
 }
 export default modulEvents;

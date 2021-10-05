@@ -4,23 +4,33 @@
     <Sub title="Création de votre évènement"></Sub>
     <ion-content>
       <!-- ETAPES (1: Evènement, 2: Categorie + Menu, 3: Confirmation création évènement) -->
-      <ion-segment :value="currentStep">
-        <ion-segment-button @click="currentStep = 1" value="1">
+      <ion-segment :value="this.$store.state.events.currentStep">
+        <ion-segment-button
+          @click="this.$store.state.events.currentStep = 1"
+          value="1"
+        >
           <ion-label>1</ion-label>
         </ion-segment-button>
-        <ion-segment-button @click="currentStep = 2" value="2">
+        <ion-segment-button
+          @click="this.$store.state.events.currentStep = 2"
+          value="2"
+        >
           <ion-label>2</ion-label>
         </ion-segment-button>
-        <ion-segment-button @click="currentStep = 3" value="3" disabled>
+        <ion-segment-button
+          @click="this.$store.state.events.currentStep = 3"
+          value="3"
+          disabled
+        >
           <ion-label>3</ion-label>
         </ion-segment-button>
       </ion-segment>
 
       <!-- STEP 1 -->
-      <FormEvent v-if="currentStep === 1"></FormEvent>
+      <FormEvent v-if="this.$store.state.events.currentStep === 1"></FormEvent>
 
       <!-- STEP 2 -->
-      <div class="step2" v-if="currentStep === 2">
+      <div class="step2" v-if="this.$store.state.events.currentStep === 2">
         <ion-segment :value="toggleForm">
           <ion-segment-button
             @click="toggleForm = 'categorie'"
@@ -83,10 +93,11 @@
             </ion-col>
           </ion-row>
         </ion-grid>
+        <ion-button @click="validEvent()">Terminer</ion-button>
       </div>
 
       <!-- STEP 3 -->
-      <div v-if="currentStep === 3" class="step3">
+      <div v-if="this.$store.state.events.currentStep === 3" class="step3">
         <ion-card>
           <ion-card-title>L'évènement a été crée !</ion-card-title>
           <ion-card-content>
@@ -103,18 +114,25 @@
           <ion-card-content>
             <ion-item>
               <ion-input
-                :placeholder="this.$store.state.eventTmp.password"
+                :placeholder="this.$store.state.events.eventTmp.password"
                 readonly="true"
                 color="danger"
               ></ion-input>
             </ion-item>
 
-            <ion-button size="small">Partager l'évènement</ion-button>
+            <ion-button size="small" @click="shareEvent()">
+              <ion-icon slot="end" :icon="shareOutline"></ion-icon>
+              <ion-label>Partager</ion-label>
+            </ion-button>
+            <ion-button size="small" @click="sendInvitation()">
+              <ion-icon slot="end" :icon="mailOutline"></ion-icon>
+              <ion-label>Envoyer mail</ion-label>
+            </ion-button>
+
+            <FormMailing></FormMailing>
           </ion-card-content>
         </ion-card>
       </div>
-
-      <ion-button @click="nextStep()">Suivant</ion-button>
     </ion-content>
     <Footer></Footer>
   </ion-page>
@@ -148,6 +166,9 @@ import FormMenu from "../components/FormMenu.vue";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
+import { Share } from "@capacitor/share";
+import { mailOutline, shareOutline } from "ionicons/icons";
+import FormMailing from "../components/FormMailing.vue";
 
 export default defineComponent({
   name: "AddEvent",
@@ -169,28 +190,37 @@ export default defineComponent({
     IonCol,
     IonCardHeader,
     FormEvent,
+    FormMailing,
     Sub,
     Header,
     Footer,
   },
+  setup() {
+    return {
+      mailOutline,
+      shareOutline,
+    };
+  },
   data() {
     return {
-      currentStep: 1,
       toggleForm: "categorie",
       disabledMenu: true,
     };
   },
+  ionViewWillEnter() {
+    this.$store.commit("setCurrentStep", 1);
+  },
   watch: {
     currentStep() {
-      switch (this.currentStep) {
+      switch (this.$store.state.events.currentStep) {
         case 1:
-          console.log(this.currentStep);
+          console.log(this.$store.state.events.currentStep);
           break;
         case 2:
-          console.log(this.currentStep);
+          console.log(this.$store.state.events.currentStep);
           break;
         case 3:
-          console.log(this.currentStep);
+          console.log(this.$store.state.events.currentStep);
           break;
       }
     },
@@ -200,12 +230,6 @@ export default defineComponent({
       this.toggleForm = "menu";
       this.$store.commit("setCategoryIdTmp", idCategorie);
       this.$store.dispatch("getPlats");
-    },
-    nextStep() {
-      this.currentStep++;
-      if (this.currentStep === 3) {
-        this.validEvent();
-      }
     },
 
     async openModalCategorie() {
@@ -241,8 +265,17 @@ export default defineComponent({
       const { role } = await alert.onDidDismiss();
       console.log("onDidDismiss resolved with role", role);
       if (role === "valid") {
-        this.currentStep = 3;
+        this.$store.state.events.currentStep = 3;
       }
+    },
+
+    async shareEvent() {
+      const event = this.$store.state.events.eventTmp;
+      await Share.share({
+        title: "Invitation à un évènement",
+        text: `Je t'invite à rejoindre mon évènement sur l'application BBQ Time via le mot de passe: ${event.password}`,
+        dialogTitle: "Partagez votre évènement",
+      });
     },
   },
 });
