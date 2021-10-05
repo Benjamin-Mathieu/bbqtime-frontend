@@ -37,6 +37,9 @@
     </ion-item>
 
     <ion-item>
+      <ion-thumbnail v-if="this.file" slot="end">
+        <ion-img :src="this.img" alt="img"></ion-img>
+      </ion-thumbnail>
       <input
         style="display: none"
         type="file"
@@ -81,7 +84,6 @@ import {
   IonDatetime,
   IonTextarea,
   modalController,
-  alertController,
 } from "@ionic/vue";
 import MapModal from "./MapModal.vue";
 
@@ -102,6 +104,7 @@ export default defineComponent({
       date: "",
       hours: "",
       description: "",
+      img: null,
       file: null,
       isPrivate: false,
       password: null,
@@ -115,6 +118,7 @@ export default defineComponent({
   methods: {
     pickImage(selected) {
       this.file = selected.target.files[0];
+      this.img = URL.createObjectURL(this.file);
     },
     addInfoEvent() {
       this.address = this.$store.getters.getAddress.name;
@@ -146,34 +150,7 @@ export default defineComponent({
       const modal = await modalController.create({
         component: MapModal,
       });
-
-      // handle "onDidDismiss"
-      // modal.onWillDismiss().then(() => this.validEvent());
-
       return modal.present();
-    },
-
-    async validEvent() {
-      const alert = await alertController.create({
-        subHeader: "Validez l'adresse saisi ?",
-        buttons: [
-          {
-            text: "Non",
-            role: "cancel",
-          },
-          {
-            text: "Oui",
-            role: "valid",
-          },
-        ],
-      });
-      await alert.present();
-
-      const { role } = await alert.onDidDismiss();
-      console.log("onDidDismiss resolved with role", role);
-      if (role === "valid") {
-        console.log(role);
-      }
     },
   },
 });
@@ -181,7 +158,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 form {
-  width: 90%;
+  width: 80%;
   margin: auto;
 }
 </style>
