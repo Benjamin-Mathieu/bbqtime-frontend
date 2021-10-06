@@ -27,13 +27,13 @@
         </ion-card>
 
         <router-link :to="{ name: 'SignIn' }">
-          <ion-button v-if="!this.$store.state.auth.userIsLoggedIn">
+          <ion-button v-if="this.$store.state.auth.userIsLoggedIn === false">
             Connexion
           </ion-button>
         </router-link>
 
         <router-link :to="{ name: 'SignUp' }">
-          <ion-button v-if="!this.$store.state.auth.userIsLoggedIn">
+          <ion-button v-if="this.$store.state.auth.userIsLoggedIn === false">
             Créer un compte
           </ion-button>
         </router-link>

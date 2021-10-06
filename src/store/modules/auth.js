@@ -11,6 +11,7 @@ const moduleAuth = {
         token: null,
         userInformation: null,
         userIsLoggedIn: false,
+        userTmp: null,
         device: {}
     }),
 
@@ -25,6 +26,9 @@ const moduleAuth = {
         },
         setUserIsLoggedIn(state, userIsLoggedIn) {
             state.userIsLoggedIn = userIsLoggedIn
+        },
+        setUserTmp(state, userTmp) {
+            state.userTmp = userTmp
         },
         setDevice(state, device) {
             state.device = device;
@@ -119,6 +123,33 @@ const moduleAuth = {
             // dispatch("removeExternalUserId");
             popup.success("Vous êtes déconnectés");
             router.push({ name: "Home" });
+        },
+
+        async registerUser({ state }) {
+            await axios({
+                method: "post",
+                url: URL_API + 'users',
+                data: {
+                    email: state.userTmp.email,
+                    password: state.userTmp.password,
+                    name: state.userTmp.name,
+                    firstname: state.userTmp.firstname,
+                    phone: state.userTmp.phone,
+                    zipcode: state.userTmp.zipcode,
+                },
+                headers: {
+                    "Accept": "application/json",
+                    "Content-type": "application/json"
+                }
+            }).then(resp => {
+                if (resp.status === 201) {
+                    popup.success("Compte crée, veuillez-vous connectez");
+                    router.push({
+                        name: "SignIn",
+                    });
+                }
+            })
+                .catch(httpErrorHandler);
         }
     }
 }

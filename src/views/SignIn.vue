@@ -18,6 +18,7 @@
                 required
               ></ion-input>
             </ion-item>
+            <p>Mot de passe oublié ?</p>
             <ion-button slot="end" type="submit">Connexion</ion-button>
           </ion-card-content>
         </ion-card>

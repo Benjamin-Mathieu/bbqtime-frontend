@@ -22,11 +22,8 @@
           </ion-card-header>
           <ion-card-content>
             <ion-list>
-              <div
-                v-for="(orderPlat, index) in order.orders_plats"
-                :key="orderPlat.id"
-              >
-                <ion-item button type="button" @click="status(index)">
+              <div v-for="orderPlat in order.orders_plats" :key="orderPlat.id">
+                <ion-item>
                   {{ orderPlat.plat.libelle }}
                   <ion-badge>{{ orderPlat.quantity }}</ion-badge>
                 </ion-item>

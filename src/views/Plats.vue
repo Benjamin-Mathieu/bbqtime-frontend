@@ -34,7 +34,7 @@
 
                 <ion-card-content>
                   {{ plat.description }}
-                  <ion-row>
+                  <ion-row v-if="plat.stock > 0">
                     <ion-col size="6">
                       <ion-item>
                         <ion-select

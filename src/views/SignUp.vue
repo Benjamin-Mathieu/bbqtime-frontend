@@ -75,7 +75,6 @@
 
 <script>
 import { defineComponent } from "vue";
-import { Http } from "@capacitor-community/http";
 import {
   IonPage,
   IonContent,
@@ -139,27 +138,16 @@ export default defineComponent({
         this.isChecked = false;
         alert("Mot de passe ne correspond pas");
       } else {
-        const options = {
-          url: "http://localhost:3000/users",
-          headers: {
-            Accept: "application/json",
-            "Content-type": "application/json",
-          },
-          data: {
-            email: this.email,
-            password: this.password,
-            name: this.name,
-            firstname: this.firstname,
-            phone: this.phone,
-          },
+        const newUser = {
+          email: this.email,
+          password: this.password,
+          name: this.name,
+          firstname: this.firstname,
+          phone: this.phone,
+          zipcode: this.zipcode,
         };
-
-        const resp = Http.post(options)
-          .then((resp) => {
-            console.log(resp);
-          })
-          .catch((err) => console.log(err));
-        return resp;
+        this.$store.commit("setUserTmp", newUser);
+        this.$store.dispatch("registerUser");
       }
     },
   },

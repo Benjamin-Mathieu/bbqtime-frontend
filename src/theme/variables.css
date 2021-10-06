@@ -7,7 +7,7 @@ http://ionicframework.com/docs/theming/ */
   /* --ion-background-color: #D7B59D; */
 
   /** primary **/
-  --ion-color-primary: #75141799;
+  --ion-color-primary: #751417;
   --ion-color-primary-rgb: 56, 128, 255;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
@@ -254,11 +254,12 @@ ion-item {
   --background: #FFFFFF;
 }
 
-ion-button {
+/* ion-button {
   --background: rgba(116, 15, 19, 0.8);
-}
+} */
 
 ion-menu .shop,
 ion-menu .menu {
   --background: #E5E5E5;
 }
+

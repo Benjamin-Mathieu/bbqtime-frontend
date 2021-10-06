@@ -106,7 +106,6 @@ const store = createStore({
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
             });
-            console.log(req.data);
             commit("setOrderDetails", req.data);
         },
 

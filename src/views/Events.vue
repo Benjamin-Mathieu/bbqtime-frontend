@@ -4,7 +4,7 @@
     <Sub :showShopButton="true" title="Évènements"></Sub>
     <ion-content>
       <ion-header translucent>
-        <ion-toolbar>
+        <ion-toolbar v-if="this.$store.getters.getLoginStatus">
           <ion-segment
             :value="selectedTypeEvent"
             @ionChange="selectedValue($event)"
@@ -18,7 +18,10 @@
           </ion-segment>
         </ion-toolbar>
       </ion-header>
-      <router-link :to="{ name: 'AddEvent' }">
+      <router-link
+        v-if="this.$store.getters.getLoginStatus"
+        :to="{ name: 'AddEvent' }"
+      >
         <ion-button size="small" slot="end">Ajouter un évènement</ion-button>
       </router-link>
 
@@ -76,29 +79,6 @@
             </ion-row>
           </ion-grid>
         </ion-card>
-        <div class="pagination">
-          <ion-button
-            v-if="this.$store.state.events.pagination.currentPage > 1"
-            @click="prevPage()"
-            fill="clear"
-          >
-            <ion-icon name="chevron-back" fill="clear"></ion-icon>
-          </ion-button>
-          <ion-button
-            v-for="pages in this.$store.state.events.pagination.totalPages"
-            :key="pages.id"
-            @click="pageChange(pages)"
-          >
-            {{ pages }}
-          </ion-button>
-          <ion-button
-            v-if="!this.$store.state.events.pagination.totalPages"
-            @click="nextPage()"
-            fill="clear"
-          >
-            <ion-icon name="chevron-forward" fill="clear"></ion-icon>
-          </ion-button>
-        </div>
       </div>
       <div v-if="this.selectedTypeEvent === 'participated'">
         <ion-card
@@ -154,29 +134,29 @@
             </ion-row>
           </ion-grid>
         </ion-card>
-        <div class="pagination">
-          <ion-button
-            v-if="this.$store.state.events.pagination.currentPage > 1"
-            @click="prevPage()"
-            fill="clear"
-          >
-            <ion-icon name="chevron-back" fill="clear"></ion-icon>
-          </ion-button>
-          <ion-button
-            v-for="pages in this.$store.state.events.pagination.totalPages"
-            :key="pages.id"
-            @click="pageChange(pages)"
-          >
-            {{ pages }}
-          </ion-button>
-          <ion-button
-            v-if="!this.$store.state.events.pagination.totalPages"
-            @click="nextPage()"
-            fill="clear"
-          >
-            <ion-icon name="chevron-forward" fill="clear"></ion-icon>
-          </ion-button>
-        </div>
+      </div>
+      <div class="pagination">
+        <ion-button
+          v-if="this.$store.state.events.pagination.currentPage > 1"
+          @click="prevPage()"
+          fill="clear"
+        >
+          <ion-icon name="chevron-back" fill="clear"></ion-icon>
+        </ion-button>
+        <ion-button
+          v-for="pages in this.$store.state.events.pagination.totalPages"
+          :key="pages.id"
+          @click="pageChange(pages)"
+        >
+          {{ pages }}
+        </ion-button>
+        <ion-button
+          v-if="!this.$store.state.events.pagination.totalPages"
+          @click="nextPage()"
+          fill="clear"
+        >
+          <ion-icon name="chevron-forward" fill="clear"></ion-icon>
+        </ion-button>
       </div>
     </ion-content>
     <Footer></Footer>
