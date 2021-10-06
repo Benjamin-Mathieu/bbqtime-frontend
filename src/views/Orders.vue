@@ -31,31 +31,37 @@
                 </p>
                 <p><b>Total</b> {{ order.cost + " €" }}</p>
                 <ion-item lines="none">
-                  <ion-button slot="end" size="small" @click="toggleDetails()">
+                  <ion-button
+                    slot="end"
+                    size="small"
+                    @click="toggleDetails(order.id)"
+                  >
                     <ion-icon :icon="chevronDownOutline"></ion-icon>
                   </ion-button>
                 </ion-item>
               </ion-card-content>
             </ion-col>
           </ion-row>
-          <div v-if="showDetails">
-            <ion-list
-              v-for="orderplat in order.orders_plats"
-              :key="orderplat.id"
-              lines="none"
-            >
-              <ion-item>
-                <ion-avatar slot="start">
-                  <img :src="orderplat.plat.photo_url" alt="img-plat" />
-                </ion-avatar>
-                <ion-label>
-                  {{ orderplat.plat.libelle }}
-                </ion-label>
-                <ion-badge slot="end">
-                  {{ orderplat.quantity }}
-                </ion-badge>
-              </ion-item>
-            </ion-list>
+          <div v-for="showDetail in this.showDetails" :key="showDetail.id">
+            <div v-if="showDetail.id == order.id && showDetail.show">
+              <ion-list
+                v-for="orderplat in order.orders_plats"
+                :key="orderplat.id"
+                lines="none"
+              >
+                <ion-item>
+                  <ion-avatar slot="start">
+                    <img :src="orderplat.plat.photo_url" alt="img-plat" />
+                  </ion-avatar>
+                  <ion-label>
+                    {{ orderplat.plat.libelle }}
+                  </ion-label>
+                  <ion-badge slot="end">
+                    {{ orderplat.quantity }}
+                  </ion-badge>
+                </ion-item>
+              </ion-list>
+            </div>
           </div>
         </ion-grid>
       </ion-card>
@@ -122,18 +128,32 @@ export default defineComponent({
   },
   data() {
     return {
-      showDetails: false,
+      showDetails: [],
     };
   },
   ionViewWillEnter() {
     this.$store.dispatch("getOrders");
+    this.$store.state.orders.forEach((order) => {
+      this.showDetails.push({ id: order.id, show: false });
+    });
+
+    // Remove duplicate
+    for (let i = 0; i < this.showDetails.length; i++) {
+      if (this.showDetails[i].id === this.showDetails[i].id) {
+        this.showDetails.slice(i, 1);
+      }
+    }
   },
   methods: {
     getDetails(orderId) {
       this.$store.dispatch("getOrderDetails", { id: orderId });
     },
-    toggleDetails() {
-      this.showDetails = !this.showDetails;
+    toggleDetails(id) {
+      this.showDetails.forEach((element) => {
+        if (element.id === id) {
+          element.show = !element.show;
+        }
+      });
     },
   },
 });
