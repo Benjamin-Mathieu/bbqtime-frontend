@@ -133,16 +133,14 @@ export default defineComponent({
   },
   ionViewWillEnter() {
     this.$store.dispatch("getOrders");
+  },
+  ionViewDidEnter() {
     this.$store.state.orders.forEach((order) => {
       this.showDetails.push({ id: order.id, show: false });
     });
-
-    // Remove duplicate
-    for (let i = 0; i < this.showDetails.length; i++) {
-      if (this.showDetails[i].id === this.showDetails[i].id) {
-        this.showDetails.slice(i, 1);
-      }
-    }
+  },
+  ionViewWillLeave() {
+    this.showDetails = [];
   },
   methods: {
     getDetails(orderId) {
