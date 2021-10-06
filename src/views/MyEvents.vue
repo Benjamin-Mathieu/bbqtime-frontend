@@ -33,6 +33,9 @@
                   <b>Localisation:</b>
                   {{ event.zipcode + " " + event.address + " " + event.city }}
                 </p>
+                <ion-button size="small" @click="duplicateEvent(event.id)">
+                  Copier l'évènement
+                </ion-button>
               </ion-card-content>
             </ion-col>
           </ion-row>
@@ -64,6 +67,7 @@ import {
   IonGrid,
   IonRow,
   IonCol,
+  alertController,
 } from "@ionic/vue";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
@@ -89,6 +93,48 @@ export default defineComponent({
   },
   ionViewWillEnter() {
     this.$store.dispatch("getMyEvents");
+  },
+  methods: {
+    async validRedirect() {
+      const alert = await alertController.create({
+        subHeader:
+          "Voulez-vous être redirigés vers la page de création de l'évènement ?",
+        buttons: [
+          {
+            text: "Non",
+            role: "cancel",
+          },
+          {
+            text: "Oui",
+            role: "valid",
+          },
+        ],
+      });
+      await alert.present();
+
+      const { role } = await alert.onDidDismiss();
+      if (role === "valid") {
+        this.$router.push({ name: "AddEvent" });
+      }
+    },
+    duplicateEvent(id) {
+      this.$store.state.events.myEvents.forEach((event) => {
+        if (event.id === id) {
+          let convertedDate = event.date.slice(0, -5) + "+02:00";
+          const duplicate = {
+            address: event.address,
+            city: event.city,
+            zipcode: event.zipcode,
+            name: event.name,
+            description: event.description,
+            date: convertedDate,
+            private: event.private,
+          };
+          this.$store.commit("setEventTmp", duplicate);
+          this.validRedirect();
+        }
+      });
+    },
   },
 });
 </script>

@@ -7,7 +7,19 @@
     <ion-item>
       <ion-button @click="openMapModal()">Choisir le lieu</ion-button>
     </ion-item>
-    <ion-item> Adresse: {{ this.$store.getters.getAddress.label }} </ion-item>
+    <ion-item v-if="this.$store.state.events.eventTmp.address !== ''">
+      Adresse:
+      {{
+        this.$store.state.events.eventTmp.address +
+        " " +
+        this.$store.state.events.eventTmp.zipcode +
+        " " +
+        this.$store.state.events.eventTmp.city
+      }}
+    </ion-item>
+    <ion-item v-else>
+      Adresse: {{ this.$store.getters.getAddress.label }}
+    </ion-item>
     <ion-item>
       <ion-label>Date</ion-label>
       <ion-datetime
@@ -69,7 +81,10 @@
 
     <ion-item>
       <ion-button
-        v-if="Object.keys(this.$store.state.events.eventTmp).length === 0"
+        v-if="
+          Object.keys(this.$store.state.events.eventTmp).length === 0 ||
+          this.$store.state.events.eventTmp.id == undefined
+        "
         type="submit"
         size="small"
         slot="end"
@@ -115,8 +130,12 @@ export default defineComponent({
       name: this.$store.state.events.eventTmp.name
         ? this.$store.state.events.eventTmp.name
         : "",
-      date: "",
-      hours: "",
+      date: this.$store.state.events.eventTmp.date
+        ? this.$store.state.events.eventTmp.date
+        : "",
+      hours: this.$store.state.events.eventTmp.date
+        ? this.$store.state.events.eventTmp.date
+        : "",
       description: this.$store.state.events.eventTmp.description
         ? this.$store.state.events.eventTmp.description
         : "",
