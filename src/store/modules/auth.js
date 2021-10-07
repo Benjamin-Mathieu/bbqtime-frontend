@@ -12,7 +12,8 @@ const moduleAuth = {
         userInformation: null,
         userIsLoggedIn: false,
         userTmp: null,
-        device: {}
+        device: {},
+        resetPassword: {}
     }),
 
     mutations: {
@@ -32,6 +33,9 @@ const moduleAuth = {
         },
         setDevice(state, device) {
             state.device = device;
+        },
+        setResetPassword(state, data) {
+            state.resetPassword = data;
         }
     },
 
@@ -150,7 +154,64 @@ const moduleAuth = {
                 }
             })
                 .catch(httpErrorHandler);
-        }
+        },
+
+        async sendCode({ state }) {
+            try {
+                const req = await axios({
+                    method: "post",
+                    url: URL_API + 'users/send-code',
+                    data: {
+                        email: state.resetPassword.email,
+                    },
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-type": "application/json"
+                    }
+                })
+                popup.success(req.data.message);
+                return true;
+            } catch (error) {
+                console.error(error);
+            }
+        },
+
+        async verifCode({ state, commit }, code) {
+            await axios({
+                method: "post",
+                url: URL_API + 'users/check-code',
+                data: {
+                    email: state.resetPassword.email,
+                    code: code
+                },
+                headers: {
+                    "Accept": "application/json",
+                    "Content-type": "application/json"
+                }
+            }).then(resp => {
+                popup.success(resp.data.message);
+                commit("setResetPassword", resp.data.token);
+            })
+                .catch(httpErrorHandler);
+        },
+
+        async resetPassword({ state }, password) {
+            await axios({
+                method: "post",
+                url: URL_API + 'users/reset-password',
+                data: {
+                    new_password: password
+                },
+                headers: {
+                    "Accept": "application/json",
+                    "Content-type": "application/json",
+                    "Authorization": `Bearer ${state.resetPassword}`
+                }
+            }).then(resp => {
+                popup.success(resp.data.message);
+            })
+                .catch(httpErrorHandler);
+        },
     }
 }
 export default moduleAuth;

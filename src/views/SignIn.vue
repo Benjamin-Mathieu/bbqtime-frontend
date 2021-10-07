@@ -18,7 +18,9 @@
                 required
               ></ion-input>
             </ion-item>
-            <p>Mot de passe oublié ?</p>
+            <router-link :to="{ name: 'ResetPassword' }">
+              <ion-item>Mot de passe oublié ?</ion-item>
+            </router-link>
             <ion-button slot="end" type="submit">Connexion</ion-button>
           </ion-card-content>
         </ion-card>
