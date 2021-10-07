@@ -3,6 +3,9 @@
     <Header></Header>
     <Sub :showShopButton="true" title="Vos commandes"></Sub>
     <ion-content>
+      <ion-refresher slot="fixed" @ionRefresh="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
       <ion-card v-for="order in this.$store.state.orders" :key="order.id">
         <ion-grid>
           <ion-row>
@@ -93,6 +96,8 @@ import {
   IonGrid,
   IonRow,
   IonCol,
+  IonRefresher,
+  IonRefresherContent,
 } from "@ionic/vue";
 import { chevronDownOutline } from "ionicons/icons";
 import Sub from "../components/Sub.vue";
@@ -117,6 +122,8 @@ export default defineComponent({
     IonGrid,
     IonRow,
     IonCol,
+    IonRefresher,
+    IonRefresherContent,
     Header,
     Sub,
     Footer,
@@ -152,6 +159,10 @@ export default defineComponent({
           element.show = !element.show;
         }
       });
+    },
+    async doRefresh(event) {
+      await this.$store.dispatch("getOrders");
+      event.target.complete();
     },
   },
 });
