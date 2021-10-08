@@ -101,7 +101,7 @@ import { addCircleOutline } from "ionicons/icons";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
-import popup from "../services/popup";
+import popup from "../components/ToastController";
 
 export default defineComponent({
   name: "Categories",

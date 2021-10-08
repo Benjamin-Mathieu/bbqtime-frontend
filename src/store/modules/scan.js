@@ -1,5 +1,5 @@
 import router from "../../router/index";
-import popup from '../../services/popup';
+import popup from '../../components/ToastController';
 import { BarcodeScanner } from "@capacitor-community/barcode-scanner";
 import { Filesystem, Directory } from "@capacitor/filesystem";
 import { Camera } from '@capacitor/camera';

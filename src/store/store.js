@@ -1,6 +1,6 @@
 import { createStore } from 'vuex';
 import axios from "axios";
-import popup from '../services/popup';
+import popup from '../components/ToastController';
 import modulAuth from "./modules/auth";
 import modulApiGouv from "./modules/apigouv";
 import modulEvents from './modules/events';

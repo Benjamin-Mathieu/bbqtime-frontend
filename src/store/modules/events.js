@@ -1,6 +1,6 @@
 import httpErrorHandler from '../httpErrorHandler';
 import axios from "axios";
-import popup from '../../services/popup';
+import popup from '../../components/ToastController';
 import router from "../../router/index";
 
 const URL_API = "http://192.168.1.47:3000/";

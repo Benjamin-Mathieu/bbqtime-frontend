@@ -1,6 +1,6 @@
 import httpErrorHandler from '../httpErrorHandler';
 import axios from "axios";
-import popup from '../../services/popup';
+import popup from '../../components/ToastController';
 import router from "../../router/index";
 import OneSignal from 'onesignal-cordova-plugin';
 
