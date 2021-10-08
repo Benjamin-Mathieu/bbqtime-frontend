@@ -3,6 +3,7 @@
     <Header></Header>
     <Sub title="Détails"></Sub>
     <ion-content>
+      <RefreshData callApi="getMyEventOrders"></RefreshData>
       <ion-button @click="saveQrcode()">
         Télécharger Qrcode
         <ion-icon slot="end" :icon="download"></ion-icon
@@ -132,6 +133,7 @@ import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
 import { download } from "ionicons/icons";
+import RefreshData from "../components/RefreshData.vue";
 
 export default defineComponent({
   name: "MyEventDetails",
@@ -158,6 +160,7 @@ export default defineComponent({
     Sub,
     Header,
     Footer,
+    RefreshData,
   },
   setup() {
     return {

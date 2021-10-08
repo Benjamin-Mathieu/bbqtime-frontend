@@ -3,9 +3,7 @@
     <Header></Header>
     <Sub :showShopButton="true" title="Vos commandes"></Sub>
     <ion-content>
-      <ion-refresher slot="fixed" @ionRefresh="doRefresh($event)">
-        <ion-refresher-content></ion-refresher-content>
-      </ion-refresher>
+      <RefreshData callApi="getOrders"></RefreshData>
       <ion-card v-for="order in this.$store.state.orders" :key="order.id">
         <ion-grid>
           <ion-row>
@@ -96,13 +94,12 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-  IonRefresher,
-  IonRefresherContent,
 } from "@ionic/vue";
 import { chevronDownOutline } from "ionicons/icons";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
+import RefreshData from "../components/RefreshData.vue";
 
 export default defineComponent({
   name: "Orders",
@@ -122,11 +119,10 @@ export default defineComponent({
     IonGrid,
     IonRow,
     IonCol,
-    IonRefresher,
-    IonRefresherContent,
     Header,
     Sub,
     Footer,
+    RefreshData,
   },
   setup() {
     return {
@@ -159,10 +155,6 @@ export default defineComponent({
           element.show = !element.show;
         }
       });
-    },
-    async doRefresh(event) {
-      await this.$store.dispatch("getOrders");
-      event.target.complete();
     },
   },
 });

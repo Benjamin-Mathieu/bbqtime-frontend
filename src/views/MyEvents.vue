@@ -2,12 +2,12 @@
   <ion-page>
     <Header></Header>
     <Sub title="Mes évènements"></Sub>
-
     <ion-content v-if="this.$store.state.events.myEvents.length > 0">
       <ion-card
         v-for="event in this.$store.state.events.myEvents"
         :key="event.id"
       >
+        <RefreshData callApi="getMyEvents"></RefreshData>
         <ion-grid>
           <ion-row>
             <ion-col size="2">
@@ -72,6 +72,7 @@ import {
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
+import RefreshData from "../components/RefreshData.vue";
 
 export default defineComponent({
   name: "MyEvents",
@@ -90,6 +91,7 @@ export default defineComponent({
     Sub,
     Header,
     Footer,
+    RefreshData,
   },
   ionViewWillEnter() {
     this.$store.dispatch("getMyEvents");
