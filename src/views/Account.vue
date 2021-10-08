@@ -69,15 +69,6 @@
             <ion-label>Commandes </ion-label>
             <ion-icon size="large" :icon="bagOutline"></ion-icon> </ion-button
         ></router-link>
-
-        <router-link :to="{ name: 'Settings' }"
-          ><ion-button>
-            <ion-label>Paramètres </ion-label>
-            <ion-icon
-              size="large"
-              :icon="settingsOutline"
-            ></ion-icon> </ion-button
-        ></router-link>
       </div>
     </ion-content>
     <Footer></Footer>
@@ -97,7 +88,7 @@ import {
   IonInput,
   IonLabel,
 } from "@ionic/vue";
-import { settingsOutline, bagOutline, calendarOutline } from "ionicons/icons";
+import { bagOutline, calendarOutline } from "ionicons/icons";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
@@ -105,7 +96,7 @@ import Footer from "../components/Footer.vue";
 export default defineComponent({
   name: "Account",
   setup() {
-    return { settingsOutline, bagOutline, calendarOutline };
+    return { bagOutline, calendarOutline };
   },
   components: {
     IonPage,

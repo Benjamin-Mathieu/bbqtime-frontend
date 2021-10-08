@@ -36,9 +36,6 @@
         <router-link class="links" :to="{ name: 'Account' }">
           <ion-item>Mon compte</ion-item>
         </router-link>
-        <router-link class="links" :to="{ name: 'Settings' }">
-          <ion-item>Paramètres</ion-item>
-        </router-link>
         <ion-item slot="end">
           <ion-button size="medium" @click="logoutUser()">
             Déconnexion

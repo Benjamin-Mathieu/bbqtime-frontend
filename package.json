@@ -12,7 +12,6 @@
   "dependencies": {
     "@capacitor-community/barcode-scanner": "^2.0.1",
     "@capacitor-community/http": "^1.2.0",
-    "@capacitor-community/screen-brightness": "^1.0.1",
     "@capacitor/android": "^3.2.0",
     "@capacitor/app": "1.0.2",
     "@capacitor/camera": "^1.0.5",
