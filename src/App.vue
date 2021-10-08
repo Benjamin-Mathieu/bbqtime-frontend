@@ -12,6 +12,7 @@ import { defineComponent } from "vue";
 import Navigation from "./components/Navigation.vue";
 import ShopMenu from "./components/ShopMenu.vue";
 import jwt_decode from "jwt-decode";
+import { SplashScreen } from "@capacitor/splash-screen";
 
 export default defineComponent({
   name: "App",
@@ -22,6 +23,10 @@ export default defineComponent({
     ShopMenu,
   },
   mounted() {
+    SplashScreen.show({
+      showDuration: 2000,
+      autoHide: true,
+    });
     // Check if user already logged in
     if (
       !localStorage.getItem("token") ||
