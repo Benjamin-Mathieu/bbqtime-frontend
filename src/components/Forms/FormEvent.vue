@@ -111,7 +111,7 @@ import {
   IonImg,
   modalController,
 } from "@ionic/vue";
-import MapModal from "./MapModal.vue";
+import MapModal from "../MapModal.vue";
 
 export default defineComponent({
   name: "FormEvent",

@@ -158,15 +158,15 @@ import {
   modalController,
   alertController,
 } from "@ionic/vue";
-import FormEvent from "../components/FormEvent.vue";
-import FormCategorie from "../components/FormCategorie.vue";
-import FormMenu from "../components/FormMenu.vue";
+import FormEvent from "../components/Forms/FormEvent.vue";
+import FormCategorie from "../components/Forms/FormCategorie.vue";
+import FormMenu from "../components/Forms/FormMenu.vue";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
 import { Share } from "@capacitor/share";
 import { mailOutline, shareSocial } from "ionicons/icons";
-import FormMailing from "../components/FormMailing.vue";
+import FormMailing from "../components/Forms/FormMailing.vue";
 
 export default defineComponent({
   name: "AddEvent",
