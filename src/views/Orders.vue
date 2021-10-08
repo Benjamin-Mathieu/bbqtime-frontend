@@ -5,73 +5,73 @@
     <ion-content>
       <RefreshData callApi="getOrders"></RefreshData>
       <ion-card v-for="order in this.$store.state.orders" :key="order.id">
-        <ion-grid>
-          <ion-row>
-            <ion-col size="2">
-              <ion-img alt="event-img" :src="order.event.photo_url"></ion-img>
-            </ion-col>
-            <ion-col size="10">
-              <ion-item>
-                <ion-icon slot="start"></ion-icon>
-                <ion-label
-                  ><b>{{ order.event.name }}</b></ion-label
-                >
-              </ion-item>
+        <Skeleton v-if="loaded === false"></Skeleton>
 
-              <ion-card-content>
-                <p>
-                  {{ order.description }}
-                  <b>Localisation:</b>
-                  {{
-                    order.event.zipcode +
-                    " " +
-                    order.event.address +
-                    " " +
-                    order.event.city
-                  }}
-                </p>
-                <p><b>Total</b> {{ order.cost + " €" }}</p>
-                <ion-item lines="none">
-                  <ion-button
-                    slot="end"
-                    size="small"
-                    @click="toggleDetails(order.id)"
-                  >
-                    <ion-icon :icon="chevronDownOutline"></ion-icon>
-                  </ion-button>
-                </ion-item>
-              </ion-card-content>
-            </ion-col>
-          </ion-row>
-          <div v-for="showDetail in this.showDetails" :key="showDetail.id">
-            <div v-if="showDetail.id == order.id && showDetail.show">
-              <ion-list
-                v-for="orderplat in order.orders_plats"
-                :key="orderplat.id"
-                lines="none"
-              >
-                <ion-item>
-                  <ion-avatar slot="start">
-                    <img :src="orderplat.plat.photo_url" alt="img-plat" />
-                  </ion-avatar>
-                  <ion-label>
-                    {{ orderplat.plat.libelle }}
-                  </ion-label>
-                  <ion-badge slot="end">
-                    {{ orderplat.quantity }}
-                  </ion-badge>
-                </ion-item>
-              </ion-list>
-            </div>
+        <div v-if="loaded === true" class="event">
+          <div class="img-container">
+            <img alt="event-img" :src="order.event.photo_url" />
           </div>
-        </ion-grid>
+
+          <div class="preview-container">
+            <ion-card-title>
+              <h5>{{ order.event.name }}</h5>
+            </ion-card-title>
+            <ion-card-content class="preview">
+              <p>
+                {{ order.description }}
+                <b>Localisation:</b>
+                {{
+                  order.event.zipcode +
+                  " " +
+                  order.event.address +
+                  " " +
+                  order.event.city
+                }}
+              </p>
+              <p><b>Total</b> {{ order.cost + " €" }}</p>
+              <ion-item lines="none">
+                <ion-button
+                  slot="end"
+                  size="small"
+                  @click="toggleDetails(order.id)"
+                >
+                  <ion-icon :icon="chevronDownOutline"></ion-icon>
+                </ion-button>
+              </ion-item>
+            </ion-card-content>
+          </div>
+        </div>
+        <div
+          class="detail-order"
+          v-for="showDetail in this.showDetails"
+          :key="showDetail.id"
+        >
+          <div v-if="showDetail.id == order.id && showDetail.show">
+            <ion-list
+              v-for="orderplat in order.orders_plats"
+              :key="orderplat.id"
+              lines="none"
+            >
+              <ion-list-header lines="inset">
+                <ion-label>Plats commandés</ion-label>
+              </ion-list-header>
+              <ion-item>
+                <ion-avatar slot="start">
+                  <img :src="orderplat.plat.photo_url" alt="img-plat" />
+                </ion-avatar>
+                <ion-label>
+                  {{ orderplat.plat.libelle }}
+                </ion-label>
+                <ion-badge slot="end">
+                  {{ orderplat.quantity }}
+                </ion-badge>
+              </ion-item>
+            </ion-list>
+          </div>
+        </div>
       </ion-card>
     </ion-content>
-    <!-- <ion-content>
-      <ion-card>
-        <ion-card-content>Pas de commande pour le moment</ion-card-content>
-      </ion-card>
-    </ion-content> -->
+
     <Footer></Footer>
   </ion-page>
 </template>
@@ -86,20 +86,18 @@ import {
   IonIcon,
   IonItem,
   IonList,
+  IonListHeader,
   IonAvatar,
   IonBadge,
   IonLabel,
   IonButton,
-  IonImg,
-  IonGrid,
-  IonRow,
-  IonCol,
 } from "@ionic/vue";
 import { chevronDownOutline } from "ionicons/icons";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
 import RefreshData from "../components/RefreshData.vue";
+import Skeleton from "../components/Skeletons/SkeletonOrder.vue";
 
 export default defineComponent({
   name: "Orders",
@@ -111,18 +109,16 @@ export default defineComponent({
     IonIcon,
     IonItem,
     IonList,
+    IonListHeader,
     IonAvatar,
     IonBadge,
     IonLabel,
     IonButton,
-    IonImg,
-    IonGrid,
-    IonRow,
-    IonCol,
     Header,
     Sub,
     Footer,
     RefreshData,
+    Skeleton,
   },
   setup() {
     return {
@@ -132,10 +128,12 @@ export default defineComponent({
   data() {
     return {
       showDetails: [],
+      loaded: false,
     };
   },
-  ionViewWillEnter() {
-    this.$store.dispatch("getOrders");
+  async ionViewWillEnter() {
+    await this.$store.dispatch("getOrders");
+    this.loaded = true;
   },
   ionViewDidEnter() {
     this.$store.state.orders.forEach((order) => {
@@ -159,3 +157,26 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+.event {
+  display: flex;
+
+  .img-container {
+    width: 30%;
+    padding: 0.5em;
+    img {
+      border-radius: 5px;
+      height: 100%;
+    }
+  }
+
+  .preview-container {
+    padding: 0.5em;
+    width: 70%;
+    .preview {
+      padding: 0px;
+    }
+  }
+}
+</style>
