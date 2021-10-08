@@ -30,7 +30,9 @@
           v-for="event in this.$store.state.events.publicEvents"
           :key="event.id"
         >
-          <ion-grid>
+          <Skeleton v-if="loaded === false"></Skeleton>
+
+          <ion-grid v-if="loaded === true">
             <ion-row>
               <ion-col size="2">
                 <img
@@ -173,6 +175,7 @@ import { lockClosed, checkmarkCircle } from "ionicons/icons";
 import Header from "../components/Header.vue";
 import Sub from "../components/Sub.vue";
 import Footer from "../components/Footer.vue";
+import Skeleton from "../components/Skeletons/SkeletonEvent.vue";
 
 export default defineComponent({
   name: "Events",
@@ -195,10 +198,12 @@ export default defineComponent({
     Header,
     Sub,
     Footer,
+    Skeleton,
   },
   data() {
     return {
       selectedTypeEvent: "public",
+      loaded: false,
     };
   },
   setup() {
@@ -207,8 +212,9 @@ export default defineComponent({
       checkmarkCircle,
     };
   },
-  ionViewWillEnter() {
-    this.$store.dispatch("getPublicEvents");
+  async ionViewWillEnter() {
+    await this.$store.dispatch("getPublicEvents");
+    this.loaded = true;
   },
   watch: {
     selectedTypeEvent() {
