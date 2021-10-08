@@ -7,6 +7,7 @@
       <ion-segment :value="this.$store.state.events.currentStep">
         <ion-segment-button
           @click="this.$store.state.events.currentStep = 1"
+          :disabled="disabledStep1"
           value="1"
         >
           <ion-label>1</ion-label>
@@ -14,13 +15,14 @@
         <ion-segment-button
           @click="this.$store.state.events.currentStep = 2"
           value="2"
+          :disabled="disabledStep2"
         >
           <ion-label>2</ion-label>
         </ion-segment-button>
         <ion-segment-button
           @click="this.$store.state.events.currentStep = 3"
           value="3"
-          disabled
+          :disabled="disabledStep3"
         >
           <ion-label>3</ion-label>
         </ion-segment-button>
@@ -113,15 +115,18 @@
             </ion-item>
 
             <ion-button size="small" @click="shareEvent()">
-              <ion-icon slot="end" :icon="shareOutline"></ion-icon>
-              <ion-label>Partager</ion-label>
+              <ion-icon slot="end" :icon="shareSocial"></ion-icon>
+              <ion-label>Partager le lien</ion-label>
             </ion-button>
-            <ion-button size="small" @click="sendInvitation()">
+            <ion-button
+              size="small"
+              @click="this.formMailing = !this.formMailing"
+            >
               <ion-icon slot="end" :icon="mailOutline"></ion-icon>
               <ion-label>Envoyer mail</ion-label>
             </ion-button>
 
-            <FormMailing></FormMailing>
+            <FormMailing v-if="formMailing"></FormMailing>
           </ion-card-content>
         </ion-card>
       </div>
@@ -160,7 +165,7 @@ import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
 import { Share } from "@capacitor/share";
-import { mailOutline, shareOutline } from "ionicons/icons";
+import { mailOutline, shareSocial } from "ionicons/icons";
 import FormMailing from "../components/FormMailing.vue";
 
 export default defineComponent({
@@ -189,33 +194,41 @@ export default defineComponent({
     Header,
     Footer,
   },
+
   setup() {
     return {
       mailOutline,
-      shareOutline,
+      shareSocial,
     };
   },
   data() {
     return {
       toggleForm: "categorie",
       disabledMenu: true,
+      disabledStep1: false,
+      disabledStep2: true,
+      disabledStep3: true,
+      formMailing: false,
     };
   },
   ionViewWillEnter() {
     this.$store.commit("setCurrentStep", 1);
   },
+  ionViewDidLeave() {
+    this.$store.commit("setEventTmp", {});
+  },
   watch: {
-    currentStep() {
-      switch (this.$store.state.events.currentStep) {
-        case 1:
-          console.log(this.$store.state.events.currentStep);
-          break;
+    "$store.state.events.currentStep": function (step) {
+      switch (step) {
         case 2:
-          console.log(this.$store.state.events.currentStep);
+          this.disabledStep2 = false;
           break;
         case 3:
-          console.log(this.$store.state.events.currentStep);
+          this.disabledStep1 = true;
+          this.disabledStep2 = true;
           break;
+        default:
+          this.$store.commit("setEventTmp", 1);
       }
     },
   },

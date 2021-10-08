@@ -71,7 +71,7 @@
                       :detail-icon="checkmarkCircle"
                       lines="none"
                     >
-                      <ion-label> Vous participez à cet évènement </ion-label>
+                      <ion-label>Vous participez</ion-label>
                     </ion-item>
                   </div>
                 </ion-card-content>
@@ -116,19 +116,6 @@
                     <b>Localisation:</b>
                     {{ event.zipcode + " " + event.address + " " + event.city }}
                   </ion-item>
-                  <div v-for="order in event.orders" :key="order.id">
-                    <ion-item
-                      v-if="
-                        order.user_id ==
-                        this.$store.getters.getUserInformation.id
-                      "
-                      detail
-                      :detail-icon="checkmarkCircle"
-                      lines="none"
-                    >
-                      <ion-label> Vous participez à cet évènement </ion-label>
-                    </ion-item>
-                  </div>
                 </ion-card-content>
               </ion-col>
             </ion-row>
