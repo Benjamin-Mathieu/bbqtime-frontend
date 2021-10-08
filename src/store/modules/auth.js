@@ -209,6 +209,9 @@ const moduleAuth = {
                 }
             }).then(resp => {
                 popup.success(resp.data.message);
+                router.push({
+                    name: "SignIn",
+                });
             })
                 .catch(httpErrorHandler);
         },

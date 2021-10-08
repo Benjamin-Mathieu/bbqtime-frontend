@@ -87,4 +87,16 @@ const router = createRouter({
   routes
 });
 
+router.beforeEach((to, from, next) => {
+  let currentRoute = from;
+  if (currentRoute.name === "AddEvent") {
+    if (confirm("Voulez-vous quitter la page ? Vous allez perdre les modifications en cours")) {
+      next();
+    } else {
+      next(false);
+    }
+  }
+  next();
+})
+
 export default router;

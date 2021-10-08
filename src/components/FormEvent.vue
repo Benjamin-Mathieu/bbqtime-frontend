@@ -5,9 +5,10 @@
       <ion-input type="text" v-model="name" required></ion-input>
     </ion-item>
     <ion-item>
-      <ion-button @click="openMapModal()">Choisir le lieu</ion-button>
+      <ion-label>Choisir le lieu</ion-label>
+      <ion-button @click="openMapModal()">Ouvrir carte</ion-button>
     </ion-item>
-    <ion-item v-if="this.$store.state.events.eventTmp.address !== ''">
+    <ion-item v-if="Object.keys(this.$store.state.events.eventTmp).length > 0">
       Adresse:
       {{
         this.$store.state.events.eventTmp.address +

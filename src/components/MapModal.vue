@@ -2,9 +2,6 @@
   <ion-header>
     <ion-toolbar>
       <ion-title>Lieu de l'évènement</ion-title>
-      <ion-button slot="end" @click="closeModal()">
-        <ion-icon name="close"></ion-icon>
-      </ion-button>
     </ion-toolbar>
   </ion-header>
   <ion-content>
@@ -13,6 +10,9 @@
     <form class="form" @submit.prevent="getAddress()">
       <ion-item>
         <ion-label position="floating">Tapez l'adresse:</ion-label>
+        <ion-button @click="validAddress()" slot="end">
+          <ion-icon :icon="checkmark"></ion-icon>
+        </ion-button>
         <ion-input
           type="text"
           v-model="address"
@@ -53,6 +53,7 @@ import {
   IonList,
   modalController,
 } from "@ionic/vue";
+import { checkmark } from "ionicons/icons";
 
 export default defineComponent({
   name: "MapModal",
@@ -68,6 +69,11 @@ export default defineComponent({
     IonButton,
     IonList,
   },
+  setup() {
+    return {
+      checkmark,
+    };
+  },
   data() {
     return {
       address: "",
@@ -81,7 +87,7 @@ export default defineComponent({
     },
   },
   methods: {
-    closeModal() {
+    validAddress() {
       modalController.dismiss();
     },
   },
