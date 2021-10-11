@@ -87,15 +87,6 @@ const modulEvents = {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
             });
-            // req.data.events.forEach(event => {
-            //     console.log(Object.values(event));
-            //     const obj = Object.values(event);
-            //     for (const property in obj) {
-            //         let key = 14;
-            //         const events = delete obj[key];
-            //         console.log(obj[property]);
-            //     }
-            // });
             commit("setPublicEvents", req.data.events);
             const pagination = { count: req.data.count, currentPage: req.data.currentPage, totalPages: req.data.totalPages };
             commit("setPagination", pagination);
@@ -220,7 +211,7 @@ const modulEvents = {
 
             await axios({
                 method: "put",
-                url: URL_API + 'events',
+                url: URL_API + 'events/update',
                 data: formData,
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")

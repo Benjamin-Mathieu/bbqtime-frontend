@@ -227,8 +227,6 @@ export default defineComponent({
           this.disabledStep1 = true;
           this.disabledStep2 = true;
           break;
-        default:
-          this.$store.commit("setEventTmp", 1);
       }
     },
   },
