@@ -26,102 +26,79 @@
       </router-link>
 
       <div v-if="this.selectedTypeEvent === 'public'">
+        <RefreshData callApi="getPublicEvents"></RefreshData>
         <ion-card
           v-for="event in this.$store.state.events.publicEvents"
           :key="event.id"
         >
           <Skeleton v-if="loaded === false"></Skeleton>
 
-          <ion-grid v-if="loaded === true">
-            <ion-row>
-              <ion-col size="2">
-                <img
-                  alt="event-img"
-                  :src="event.photo_url"
-                  style="object-fit: cover, height: 100%; width: 100%"
-                />
-              </ion-col>
-              <ion-col size="10">
+          <div v-if="loaded === true" class="event" @click="getEvent(event.id)">
+            <div class="img-container">
+              <img alt="event-img" :src="event.photo_url" />
+            </div>
+            <div class="info">
+              <ion-card-content>
                 <ion-item>
-                  <ion-label
-                    ><b>{{ event.name }}</b></ion-label
-                  >
+                  <ion-label>
+                    <b>{{ event.name }}</b>
+                  </ion-label>
                   <ion-icon v-if="event.private" :icon="lockClosed"></ion-icon>
-
-                  <router-link
-                    :to="{ name: 'Categories', params: { id: event.id } }"
-                  >
-                    <ion-button slot="end">Détails</ion-button>
-                  </router-link>
                 </ion-item>
-
-                <ion-card-content>
-                  <ion-item lines="none">
-                    {{ event.description }}
+                <p>
+                  {{ event.description }}
+                </p>
+                <p>
+                  {{ event.zipcode + " " + event.address + " " + event.city }}
+                </p>
+                <!-- <div v-for="order in event.orders" :key="order.id">
+                  <ion-item
+                    v-if="
+                      this.$store.getters.getLoginStatus &&
+                      order.user_id == this.$store.getters.getUserInformation.id
+                    "
+                    detail
+                    :detail-icon="checkmarkCircle"
+                    lines="none"
+                  >
+                    <p>Vous participez à cet évènement</p>
                   </ion-item>
-                  <ion-item lines="none">
-                    <b>Localisation:</b>
-                    {{ event.zipcode + " " + event.address + " " + event.city }}
-                  </ion-item>
-                  <div v-for="order in event.orders" :key="order.id">
-                    <ion-item
-                      v-if="
-                        order.user_id ==
-                        this.$store.getters.getUserInformation.id
-                      "
-                      detail
-                      :detail-icon="checkmarkCircle"
-                      lines="none"
-                    >
-                      <ion-label>Vous participez</ion-label>
-                    </ion-item>
-                  </div>
-                </ion-card-content>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
+                </div> -->
+              </ion-card-content>
+            </div>
+          </div>
         </ion-card>
       </div>
+
       <div v-if="this.selectedTypeEvent === 'participated'">
+        <RefreshData callApi="getParticipateEvents"></RefreshData>
         <ion-card
           v-for="event in this.$store.state.events.participateEvents"
           :key="event.id"
         >
-          <ion-grid>
-            <ion-row>
-              <ion-col size="2">
-                <img
-                  alt="event-img"
-                  :src="event.photo_url"
-                  style="object-fit: cover, height: 100%; width: 100%"
-                />
-              </ion-col>
-              <ion-col size="10">
+          <Skeleton v-if="loaded === false"></Skeleton>
+
+          <div v-if="loaded === true" class="event" @click="getEvent(event.id)">
+            <div class="img-container">
+              <img alt="event-img" :src="event.photo_url" />
+            </div>
+            <div class="info">
+              <ion-card-content>
                 <ion-item>
-                  <ion-label
-                    ><b>{{ event.name }}</b></ion-label
-                  >
+                  <ion-label>
+                    <b>{{ event.name }}</b>
+                  </ion-label>
                   <ion-icon v-if="event.private" :icon="lockClosed"></ion-icon>
-
-                  <router-link
-                    :to="{ name: 'Categories', params: { id: event.id } }"
-                  >
-                    <ion-button slot="end">Détails</ion-button>
-                  </router-link>
                 </ion-item>
-
-                <ion-card-content>
-                  <ion-item lines="none">
-                    {{ event.description }}
-                  </ion-item>
-                  <ion-item lines="none">
-                    <b>Localisation:</b>
-                    {{ event.zipcode + " " + event.address + " " + event.city }}
-                  </ion-item>
-                </ion-card-content>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
+                <p>
+                  {{ event.description }}
+                </p>
+                <p>
+                  {{ event.zipcode + " " + event.address + " " + event.city }}
+                </p>
+              </ion-card-content>
+            </div>
+          </div>
         </ion-card>
       </div>
       <div class="pagination">
@@ -163,9 +140,6 @@ import {
   IonItem,
   IonLabel,
   IonButton,
-  IonGrid,
-  IonRow,
-  IonCol,
   IonHeader,
   IonToolbar,
   IonSegment,
@@ -175,6 +149,7 @@ import { lockClosed, checkmarkCircle } from "ionicons/icons";
 import Header from "../components/Header.vue";
 import Sub from "../components/Sub.vue";
 import Footer from "../components/Footer.vue";
+import RefreshData from "../components/RefreshData.vue";
 import Skeleton from "../components/Skeletons/SkeletonEvent.vue";
 
 export default defineComponent({
@@ -188,9 +163,6 @@ export default defineComponent({
     IonItem,
     IonLabel,
     IonButton,
-    IonGrid,
-    IonRow,
-    IonCol,
     IonHeader,
     IonToolbar,
     IonSegment,
@@ -199,6 +171,7 @@ export default defineComponent({
     Sub,
     Footer,
     Skeleton,
+    RefreshData,
   },
   data() {
     return {
@@ -224,6 +197,9 @@ export default defineComponent({
     },
   },
   methods: {
+    getEvent(id) {
+      this.$router.push({ name: "Categories", params: { id: id } });
+    },
     selectedValue(e) {
       this.selectedTypeEvent = e.target.value;
     },
@@ -256,6 +232,29 @@ ion-card {
 ion-item {
   --detail-icon-color: green;
   --detail-icon-opacity: 0.7;
+  --padding-start: 0px;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.event {
+  display: flex;
+  min-height: 129px;
+  .img-container {
+    width: 30%;
+    padding: 0.5em;
+    img {
+      border-radius: 5px;
+      height: 100%;
+      object-fit: fill;
+    }
+  }
+
+  .info {
+    width: 70%;
+  }
 }
 
 div .pagination {
