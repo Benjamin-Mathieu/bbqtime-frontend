@@ -1,6 +1,7 @@
 import { createStore } from 'vuex';
 import axios from "axios";
 import popup from '../components/ToastController';
+import httpErrorHandler from './httpErrorHandler';
 import modulAuth from "./modules/auth";
 import modulApiGouv from "./modules/apigouv";
 import modulEvents from './modules/events';
@@ -34,8 +35,8 @@ const store = createStore({
         setOrderDetails(state, orderDetails) {
             state.orderDetails = orderDetails;
         },
-        setCategories(state, categorie) {
-            state.categories.push(categorie)
+        setCategories(state, categories) {
+            state.categories = categories;
         },
         setCategoryIdTmp(state, categorie) {
             state.categoryIdTmp = categorie
@@ -82,17 +83,15 @@ const store = createStore({
             })
         },
 
-        async getCategories({ commit, state }) {
+        async getCategories({ commit, rootState }) {
             await axios({
                 method: "get",
-                url: URL_API + 'categories/' + state.eventTmp.id,
+                url: URL_API + 'categories/' + rootState.events.eventTmp.id,
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
             }).then(resp => {
-                resp.data.categories.forEach(categorie => {
-                    commit("setCategories", categorie);
-                });
+                commit("setCategories", resp.data.categories);
             })
 
         },
@@ -109,8 +108,7 @@ const store = createStore({
             commit("setOrderDetails", req.data);
         },
 
-        async postCategorie({ commit, state }, data) {
-            console.log("data.file =>", data.file.name);
+        async postCategorie({ state }, data) {
             let formData = new FormData();
             formData.append("libelle", data.libelle);
             formData.append("event_id", state.events.eventTmp.id);
@@ -128,7 +126,6 @@ const store = createStore({
                 .then(resp => {
                     if (resp.status === 201) {
                         popup.success("Catégorie ajouté");
-                        commit("setCategories", resp.data.categorie[0])
                     }
                 })
                 .catch(err => {
@@ -138,6 +135,45 @@ const store = createStore({
                         popup.error("Une erreur est survenue");
                     }
                 })
+        },
+
+        async putCategorie({ store }, categorie) {
+            console.log(store);
+            let formData = new FormData();
+            formData.append("id", categorie.id);
+            formData.append("libelle", categorie.libelle);
+            formData.append("image", categorie.file, categorie.file.name);
+
+            await axios({
+                method: "put",
+                url: URL_API + 'categories/update',
+                data: formData,
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            }).then(resp => {
+                if (resp.status === 200) {
+                    popup.success("Catégorie mis à jour");
+                }
+            }).catch((httpErrorHandler))
+        },
+
+        async deleteCategorie({ store }, id) {
+            await axios({
+                method: "delete",
+                url: URL_API + 'categories/delete',
+                data: {
+                    id: id
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            }).then(resp => {
+                if (resp.status === 200) {
+                    console.log(store);
+                    popup.success(resp.data.message);
+                }
+            }).catch((httpErrorHandler))
         },
 
         async postPlat({ state }, data) {
@@ -161,13 +197,35 @@ const store = createStore({
             })
                 .then(resp => {
                     if (resp.status === 201) {
-                        popup.success("Plat ajouté");
+                        popup.success(resp.data.message);
                         state.plats.push(resp.data.plat);
                     }
-                    if (resp.status === 500) {
-                        popup.error("Une erreur est survenue");
-                    }
-                })
+                }).catch(httpErrorHandler)
+        },
+
+        async putPlat({ state }, data) {
+            let formData = new FormData();
+            formData.append("id", data.id);
+            formData.append("libelle", data.libelle);
+            formData.append("price", data.price);
+            formData.append("description", data.description);
+            formData.append("stock", data.stock);
+            formData.append("event_id", state.events.eventTmp.id);
+            formData.append("category_id", state.categoryIdTmp);
+            formData.append("image", data.file, data.file.name);
+
+
+            await axios({
+                method: "put",
+                url: URL_API + 'plats/update',
+                data: formData,
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            })
+                .then(resp => {
+                    popup.success(resp.data.message);
+                }).catch((httpErrorHandler))
         }
     }
 });

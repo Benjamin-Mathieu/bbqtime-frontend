@@ -33,30 +33,21 @@
 
       <!-- STEP 2 -->
       <div class="step2" v-if="this.$store.state.events.currentStep === 2">
-        <ion-segment :value="toggleForm">
-          <ion-segment-button
-            @click="toggleForm = 'categorie'"
-            value="categorie"
-          >
+        <ion-segment :value="toggleForm" @ionChange="selectedValue($event)">
+          <ion-segment-button value="categorie">
             <ion-label>Catégorie</ion-label>
           </ion-segment-button>
-          <ion-segment-button
-            @click="toggleForm = 'menu'"
-            value="menu"
-            :disabled="disabledMenu"
-          >
+          <ion-segment-button value="menu">
             <ion-label>Plats</ion-label>
           </ion-segment-button>
         </ion-segment>
 
-        <ion-button
-          @click="openModalCategorie"
-          v-if="toggleForm === 'categorie'"
-          >Ajouter une catégorie</ion-button
-        >
-        <ion-button @click="openModalMenu" v-else>Ajouter un plat</ion-button>
-
         <ion-grid v-if="toggleForm === 'categorie'">
+          <ion-button
+            @click="openModalCategorie()"
+            v-if="toggleForm === 'categorie'"
+            >Ajouter une catégorie</ion-button
+          >
           <ion-row>
             <ion-col
               v-for="categorie in this.$store.state.categories"
@@ -67,14 +58,35 @@
               <ion-card>
                 <img :src="categorie.photo_url" alt="img-categorie" />
                 <ion-card-header>
-                  <ion-card-title> {{ categorie.libelle }} </ion-card-title>
+                  <ion-card-title>
+                    {{ categorie.libelle }}
+                  </ion-card-title>
                 </ion-card-header>
+                <ion-card-content>
+                  <ion-button
+                    slot="end"
+                    size="small"
+                    @click.stop="
+                      openModalUpdateCategorie(categorie.id, categorie.libelle)
+                    "
+                  >
+                    <ion-icon :icon="pencilOutline"></ion-icon>
+                  </ion-button>
+                  <ion-button
+                    slot="end"
+                    size="small"
+                    @click.stop="deleteCategorie(categorie.id)"
+                  >
+                    <ion-icon :icon="trashBinOutline"></ion-icon>
+                  </ion-button>
+                </ion-card-content>
               </ion-card>
             </ion-col>
           </ion-row>
         </ion-grid>
 
         <ion-grid v-if="toggleForm === 'menu'">
+          <ion-button @click="openModalMenu">Ajouter un plat</ion-button>
           <ion-row>
             <ion-col
               v-for="plat in this.$store.state.plats"
@@ -90,6 +102,13 @@
                 </ion-card-header>
                 <ion-card-content>
                   Description: {{ plat.description }} Stock: {{ plat.stock }}
+                  <ion-button
+                    slot="end"
+                    size="small"
+                    @click.stop="openModalUpdatePlat(plat)"
+                  >
+                    <ion-icon :icon="pencilOutline"></ion-icon>
+                  </ion-button>
                 </ion-card-content>
               </ion-card>
             </ion-col>
@@ -155,18 +174,21 @@ import {
   IonCol,
   IonCardHeader,
   IonIcon,
-  modalController,
-  alertController,
 } from "@ionic/vue";
 import FormEvent from "../components/Forms/FormEvent.vue";
-import FormCategorie from "../components/Forms/FormCategorie.vue";
-import FormMenu from "../components/Forms/FormMenu.vue";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
 import { Share } from "@capacitor/share";
-import { mailOutline, shareSocial } from "ionicons/icons";
+import {
+  mailOutline,
+  shareSocial,
+  pencilOutline,
+  trashBinOutline,
+} from "ionicons/icons";
 import FormMailing from "../components/Forms/FormMailing.vue";
+import ShowAlert from "../components/AlertController";
+import ShowModal from "../components/ModalController";
 
 export default defineComponent({
   name: "AddEvent",
@@ -199,12 +221,13 @@ export default defineComponent({
     return {
       mailOutline,
       shareSocial,
+      pencilOutline,
+      trashBinOutline,
     };
   },
   data() {
     return {
       toggleForm: "categorie",
-      disabledMenu: true,
       disabledStep1: false,
       disabledStep2: true,
       disabledStep3: true,
@@ -229,49 +252,49 @@ export default defineComponent({
           break;
       }
     },
+
+    toggleForm() {
+      if (this.toggleForm === "categorie") {
+        this.$store.dispatch("getCategories");
+      }
+      if (this.toggleForm === "menu") {
+        this.$store.dispatch("getPlats");
+      }
+    },
   },
   methods: {
+    selectedValue(e) {
+      this.toggleForm = e.target.value;
+    },
+
     addPlatToCategorie(idCategorie) {
       this.toggleForm = "menu";
       this.$store.commit("setCategoryIdTmp", idCategorie);
       this.$store.dispatch("getPlats");
     },
 
-    async openModalCategorie() {
-      const modal = await modalController.create({
-        component: FormCategorie,
-      });
-      return modal.present();
+    deleteCategorie(id) {
+      ShowAlert.validDelete(id);
     },
 
-    async openModalMenu() {
-      const modal = await modalController.create({
-        component: FormMenu,
-      });
-      return modal.present();
+    openModalCategorie() {
+      ShowModal.addCategorie();
+    },
+
+    openModalUpdateCategorie(id, libelle) {
+      ShowModal.updateCategorie(id, libelle);
+    },
+
+    openModalMenu() {
+      ShowModal.addPlat();
+    },
+
+    openModalUpdatePlat(plat) {
+      ShowModal.updatePlat(plat);
     },
 
     async validEvent() {
-      const alert = await alertController.create({
-        subHeader: "Avez-vous terminé ?",
-        buttons: [
-          {
-            text: "Retour",
-            role: "cancel",
-          },
-          {
-            text: "Valider",
-            role: "valid",
-          },
-        ],
-      });
-      await alert.present();
-
-      const { role } = await alert.onDidDismiss();
-      console.log("onDidDismiss resolved with role", role);
-      if (role === "valid") {
-        this.$store.state.events.currentStep = 3;
-      }
+      ShowAlert.validEvent();
     },
 
     async shareEvent() {

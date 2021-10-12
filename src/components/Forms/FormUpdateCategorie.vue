@@ -1,7 +1,7 @@
 <template>
   <ion-header>
     <ion-toolbar>
-      <ion-title><h2>Ajout catégorie</h2></ion-title>
+      <ion-title><h2>Modifier catégorie</h2></ion-title>
       <ion-button slot="end" @click="closeModal()">
         <ion-icon name="close"></ion-icon>
       </ion-button>
@@ -9,7 +9,7 @@
   </ion-header>
   <ion-content class="ion-padding">
     <form
-      @submit.prevent="addCategorie()"
+      @submit.prevent="updateCategorie()"
       enctype="multipart/form-data"
       method="post"
     >
@@ -17,7 +17,7 @@
         <ion-card-content>
           <ion-item>
             <ion-label position="floating">Nom de la catégorie</ion-label>
-            <ion-input type="text" v-model="libelle" required></ion-input>
+            <ion-input type="text" v-model="editLibelle" required></ion-input>
           </ion-item>
           <input
             style="display: none"
@@ -36,7 +36,7 @@
           </ion-button>
         </ion-card-content>
         <ion-item>
-          <ion-button type="submit" size="small">Ajouter</ion-button>
+          <ion-button type="submit" size="small">Mettre à jour</ion-button>
         </ion-item>
       </ion-card>
     </form>
@@ -60,7 +60,8 @@ import {
 } from "@ionic/vue";
 
 export default defineComponent({
-  name: "FormCategorie",
+  name: "FormUpdateCategorie",
+  props: ["id", "libelle"],
   components: {
     IonLabel,
     IonItem,
@@ -76,22 +77,24 @@ export default defineComponent({
 
   data() {
     return {
-      libelle: "",
       file: null,
+      editLibelle: this.libelle,
     };
   },
   methods: {
     pickImage(selected) {
       this.file = selected.target.files[0];
     },
-    addCategorie() {
+    updateCategorie() {
       const data = {
-        libelle: this.libelle,
+        id: this.id,
+        libelle: this.editLibelle,
         file: this.file,
       };
-      this.$store.dispatch("postCategorie", data);
-      this.libelle = "";
+      this.$store.dispatch("putCategorie", data);
+      this.editLibelle = "";
     },
+
     async closeModal() {
       await this.$store.dispatch("getCategories");
       modalController.dismiss();

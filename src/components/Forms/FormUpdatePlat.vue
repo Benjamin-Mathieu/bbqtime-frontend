@@ -1,7 +1,7 @@
 <template>
   <ion-header>
     <ion-toolbar>
-      <ion-title><h2>Ajout plat</h2></ion-title>
+      <ion-title><h2>Modifier plat</h2></ion-title>
       <ion-button slot="end" @click="closeModal()">
         <ion-icon name="close"></ion-icon>
       </ion-button>
@@ -9,7 +9,7 @@
   </ion-header>
   <ion-content>
     <form
-      @submit.prevent="addMenu()"
+      @submit.prevent="updatePlat()"
       method="post"
       enctype="multipart/form-data"
     >
@@ -56,7 +56,7 @@
             Poster une image
           </ion-button>
           <ion-item>
-            <ion-button type="submit" size="small">Ajouter</ion-button>
+            <ion-button type="submit" size="small">Mettre à jour</ion-button>
           </ion-item>
         </ion-card-content>
       </ion-card>
@@ -84,6 +84,7 @@ import {
 
 export default defineComponent({
   name: "FormMenu",
+  props: ["plat"],
   components: {
     IonLabel,
     IonItem,
@@ -100,10 +101,10 @@ export default defineComponent({
   },
   data() {
     return {
-      name: "test",
-      price: 25,
-      description: "zezaezae",
-      stock: 10,
+      name: this.plat.libelle,
+      price: this.plat.price,
+      description: this.plat.description,
+      stock: this.plat.stock,
       file: null,
     };
   },
@@ -111,16 +112,16 @@ export default defineComponent({
     pickImage(selected) {
       this.file = selected.target.files[0];
     },
-    addMenu() {
+    updatePlat() {
       const plat = {
+        id: this.plat.id,
         libelle: this.name,
         price: this.price,
-        photo_url: this.photo_url,
         description: this.description,
         stock: this.stock,
         file: this.file,
       };
-      this.$store.dispatch("postPlat", plat);
+      this.$store.dispatch("putPlat", plat);
 
       this.name = "";
       this.price = "";
@@ -128,7 +129,8 @@ export default defineComponent({
       this.stock = "";
     },
 
-    closeModal() {
+    async closeModal() {
+      await this.$store.dispatch("getPlats");
       modalController.dismiss();
     },
   },
