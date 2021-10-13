@@ -22,7 +22,7 @@
         v-if="this.$store.getters.getLoginStatus"
         :to="{ name: 'AddEvent' }"
       >
-        <ion-button size="small" slot="end">Ajouter un évènement</ion-button>
+        <ion-button size="small">Ajouter un évènement</ion-button>
       </router-link>
 
       <div v-if="this.selectedTypeEvent === 'public'">
@@ -90,11 +90,9 @@
                   </ion-label>
                   <ion-icon v-if="event.private" :icon="lockClosed"></ion-icon>
                 </ion-item>
+                <p>{{ event.description }}</p>
                 <p>
-                  {{ event.description }}
-                </p>
-                <p>
-                  {{ event.zipcode + " " + event.address + " " + event.city }}
+                  {{ event.zipcode + " " + event.address + ", " + event.city }}
                 </p>
               </ion-card-content>
             </div>
@@ -105,20 +103,32 @@
         <ion-button
           v-if="this.$store.state.events.pagination.currentPage > 1"
           @click="prevPage()"
+          size="small"
           fill="clear"
         >
           <ion-icon name="chevron-back" fill="clear"></ion-icon>
         </ion-button>
-        <ion-button
+        <div
           v-for="pages in this.$store.state.events.pagination.totalPages"
-          :key="pages.id"
+          :key="pages"
           @click="pageChange(pages)"
         >
-          {{ pages }}
-        </ion-button>
+          <p
+            :class="{
+              'is-current-page':
+                pages === this.$store.state.events.pagination.currentPage,
+            }"
+          >
+            {{ pages }}
+          </p>
+        </div>
         <ion-button
-          v-if="!this.$store.state.events.pagination.totalPages"
+          v-if="
+            this.$store.state.events.pagination.currentPage <
+            this.$store.state.events.pagination.totalPages
+          "
           @click="nextPage()"
+          size="small"
           fill="clear"
         >
           <ion-icon name="chevron-forward" fill="clear"></ion-icon>
@@ -150,7 +160,7 @@ import Header from "../components/Header.vue";
 import Sub from "../components/Sub.vue";
 import Footer from "../components/Footer.vue";
 import RefreshData from "../components/RefreshData.vue";
-import Skeleton from "../components/Skeletons/SkeletonEvent.vue";
+import Skeleton from "../components/Skeletons/SkeletonOrder.vue";
 
 export default defineComponent({
   name: "Events",
@@ -195,6 +205,10 @@ export default defineComponent({
         ? this.$store.dispatch("getPublicEvents")
         : this.$store.dispatch("getParticipateEvents");
     },
+
+    "$store.state.events.pagination.currentPage": function (currentPage) {
+      console.log("currentPage =>", currentPage);
+    },
   },
   methods: {
     getEvent(id) {
@@ -235,6 +249,11 @@ ion-item {
   --padding-start: 0px;
 }
 
+ion-card-content {
+  --padding-start: 0px;
+  --padding-end: 0px;
+}
+
 .link {
   text-decoration: none;
 }
@@ -243,7 +262,7 @@ ion-item {
   display: flex;
   min-height: 129px;
   .img-container {
-    width: 30%;
+    width: 35%;
     padding: 0.5em;
     img {
       border-radius: 5px;
@@ -253,12 +272,27 @@ ion-item {
   }
 
   .info {
-    width: 70%;
+    width: 65%;
   }
 }
 
 div .pagination {
   display: flex;
   justify-content: center;
+  align-items: center;
+
+  div {
+    margin: 0 0.5em;
+    width: 2em;
+    p {
+      text-align: center;
+      color: #7e2727;
+    }
+    .is-current-page {
+      border-radius: 5px;
+      background-color: #9c544d;
+      color: whitesmoke;
+    }
+  }
 }
 </style>
