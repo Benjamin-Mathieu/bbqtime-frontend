@@ -3,44 +3,40 @@
     <Header></Header>
     <Sub title="Mon compte"></Sub>
     <ion-content>
-      <form @submit.prevent="updateProfile()" method="post">
+      <form @submit.prevent="updateProfil()" method="post">
         <ion-card>
           <ion-card-content v-if="this.$store.getters.getUserInformation"
             ><ion-item>
               <ion-label position="floating">Prénom</ion-label>
-              <ion-input
-                type="text"
-                :value="this.$store.getters.getUserInformation.name"
-              ></ion-input>
+              <ion-input type="text" v-model="firstname"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating">Nom</ion-label>
-              <ion-input
-                type="text"
-                :value="this.$store.getters.getUserInformation.firstname"
-              ></ion-input>
+              <ion-input type="text" v-model="name"></ion-input>
             </ion-item>
-            <ion-item>
-              <ion-label position="floating">Téléphone</ion-label>
-              <ion-input
-                type="text"
-                :value="this.$store.getters.getUserInformation.phone"
-                inputmode="tel"
-              ></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label position="floating">Code postale</ion-label>
-              <ion-input
-                type="text"
-                :value="this.$store.getters.getUserInformation.zipcode"
-                inputmode="decimal"
-              ></ion-input>
-            </ion-item>
+            <div style="display: flex">
+              <ion-item>
+                <ion-label position="floating">Téléphone</ion-label>
+                <ion-input
+                  type="text"
+                  v-model="phone"
+                  inputmode="tel"
+                ></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">Code postale</ion-label>
+                <ion-input
+                  type="text"
+                  v-model="zipcode"
+                  inputmode="decimal"
+                ></ion-input>
+              </ion-item>
+            </div>
             <ion-item>
               <ion-label position="floating">Email</ion-label>
               <ion-input
                 type="email"
-                :value="this.$store.getters.getUserInformation.email"
+                v-model="email"
                 inputmode="email"
               ></ion-input>
             </ion-item>
@@ -112,9 +108,26 @@ export default defineComponent({
     Sub,
     Footer,
   },
+  data() {
+    return {
+      name: this.$store.getters.getUserInformation.name,
+      firstname: this.$store.getters.getUserInformation.firstname,
+      phone: this.$store.getters.getUserInformation.phone,
+      zipcode: this.$store.getters.getUserInformation.zipcode,
+      email: this.$store.getters.getUserInformation.email,
+    };
+  },
   methods: {
-    updateProfile() {
-      alert("Update");
+    updateProfil() {
+      const data = {
+        name: this.name,
+        firstname: this.firstname,
+        phone: this.phone,
+        zipcode: this.zipcode,
+        email: this.email,
+      };
+      console.log(data);
+      this.$store.dispatch("updateProfil", data);
     },
   },
 });
