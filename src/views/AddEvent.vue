@@ -109,6 +109,13 @@
                   >
                     <ion-icon :icon="pencilOutline"></ion-icon>
                   </ion-button>
+                  <ion-button
+                    slot="end"
+                    size="small"
+                    @click.stop="deletePlat(plat.id)"
+                  >
+                    <ion-icon :icon="trashBinOutline"></ion-icon>
+                  </ion-button>
                 </ion-card-content>
               </ion-card>
             </ion-col>
@@ -274,7 +281,11 @@ export default defineComponent({
     },
 
     deleteCategorie(id) {
-      ShowAlert.validDelete(id);
+      ShowAlert.validDelete(
+        id,
+        "Voulez-vous supprimez cette catégorie ?",
+        "categorie"
+      );
     },
 
     openModalCategorie() {
@@ -291,6 +302,10 @@ export default defineComponent({
 
     openModalUpdatePlat(plat) {
       ShowModal.updatePlat(plat);
+    },
+
+    deletePlat(id) {
+      ShowAlert.validDelete(id, "Voulez-vous supprimez ce plat ?", "plat");
     },
 
     async validEvent() {

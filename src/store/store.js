@@ -226,7 +226,23 @@ const store = createStore({
                 .then(resp => {
                     popup.success(resp.data.message);
                 }).catch((httpErrorHandler))
-        }
+        },
+
+        async deletePlat({ store }, id) {
+            await axios({
+                method: "delete",
+                url: URL_API + 'plats/delete',
+                data: {
+                    id: id
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            }).then(resp => {
+                console.log(store);
+                popup.success(resp.data.message);
+            }).catch((httpErrorHandler))
+        },
     }
 });
 

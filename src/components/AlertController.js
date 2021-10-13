@@ -2,9 +2,9 @@ import { alertController } from "@ionic/vue";
 import store from "../store/store";
 
 const showAlert = {
-    async validDelete(id) {
+    async validDelete(id, message, type) {
         const alert = await alertController.create({
-            subHeader: "Etes-vous sûr de supprimer cette catégorie ?",
+            subHeader: message,
             buttons: [
                 {
                     text: "Non",
@@ -20,8 +20,14 @@ const showAlert = {
 
         const { role } = await alert.onDidDismiss();
         if (role === "valid") {
-            await store.dispatch("deleteCategorie", id);
-            store.dispatch("getCategories");
+            if (type === "categorie") {
+                await store.dispatch("deleteCategorie", id);
+                store.dispatch("getCategories");
+            }
+            if (type === "plat") {
+                await store.dispatch("deletePlat", id);
+                store.dispatch("getPlats");
+            }
         }
     },
 
