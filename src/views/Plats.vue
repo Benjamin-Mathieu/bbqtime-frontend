@@ -3,7 +3,7 @@
     <Header></Header>
     <Sub
       :showShopButton="true"
-      :title="this.$store.getters.getCurrentEvent.name + ' / '"
+      :title="this.$store.getters.getCurrentEvent.name + ' / ' + this.categorie"
     ></Sub>
     <ion-content>
       <div
@@ -14,7 +14,6 @@
           <ion-row>
             <ion-col v-for="plat in categorie.plats" :key="plat.id" size="6">
               <ion-card
-                style="height: 100%"
                 v-if="plat.category_id == this.$route.params.idCategorie"
               >
                 <ion-card-header>
@@ -26,47 +25,45 @@
                   <h3 style="color: red" v-if="plat.stock === 0">
                     Rupture de stock !
                   </h3>
-                  <ion-card-subtitle
-                    >{{ plat.libelle }}
-                    {{ plat.price + "€" }}
+                  <ion-card-subtitle>
+                    {{ plat.libelle + plat.price + "€" }}
                   </ion-card-subtitle>
                 </ion-card-header>
 
                 <ion-card-content>
-                  {{ plat.description }}
-                  <ion-row v-if="plat.stock > 0">
-                    <ion-col size="6">
-                      <ion-item>
-                        <ion-select
-                          :ref="'quantity' + plat.id"
-                          ok-text="Valider"
-                          cancel-text="Fermer"
-                          :value="this.selectedQty"
-                          @ionChange="selectedValue($event)"
+                  <p>{{ plat.description }}</p>
+                  <div class="quantity" v-if="plat.stock > 0">
+                    <ion-item lines="none">
+                      <ion-select
+                        :ref="'quantity' + plat.id"
+                        ok-text="Valider"
+                        cancel-text="Fermer"
+                        :value="this.selectedQty"
+                        @ionChange="selectedValue($event)"
+                      >
+                        <ion-select-option
+                          v-for="(selectQty, index) in plat.stock"
+                          :key="index"
+                          :value="selectQty"
+                          v-model="qty[index]"
                         >
-                          <ion-select-option
-                            v-for="(selectQty, index) in plat.stock"
-                            :key="index"
-                            :value="selectQty"
-                            v-model="qty[index]"
-                          >
-                            {{ selectQty }}
-                          </ion-select-option>
-                        </ion-select>
-                      </ion-item>
-                    </ion-col>
-                    <ion-col size="6">
-                      <ion-button @click="addToShop(plat)" size="small">
-                        <ion-icon
-                          :icon="addCircleOutline"
-                        ></ion-icon> </ion-button
-                    ></ion-col>
-                  </ion-row>
-                  <ion-progress-bar
-                    v-if="plat.qty"
-                    :value="1 - plat.qty / plat.stock"
-                    color="secondary"
-                  ></ion-progress-bar>
+                          {{ selectQty }}
+                        </ion-select-option>
+                      </ion-select>
+                    </ion-item>
+                    <ion-button
+                      slot="icon-only"
+                      @click="addToShop(plat)"
+                      size="small"
+                    >
+                      <ion-icon :icon="addCircleOutline"></ion-icon>
+                    </ion-button>
+                  </div>
+                  <div class="stock">
+                    <ion-progress-bar
+                      :value="1 - plat.qty / plat.stock"
+                    ></ion-progress-bar>
+                  </div>
                 </ion-card-content>
               </ion-card>
             </ion-col>
@@ -136,6 +133,17 @@ export default defineComponent({
       selectedQty: 1,
     };
   },
+  computed: {
+    categorie() {
+      let value = "";
+      this.$store.getters.getCurrentEvent.categories.forEach((categorie) => {
+        if (this.$route.params.idCategorie == categorie.id) {
+          value = categorie.libelle;
+        }
+      });
+      return value;
+    },
+  },
   methods: {
     selectedValue(ev) {
       this.selectedQty = ev.target.value;
@@ -169,5 +177,34 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+ion-card {
+  width: 90%;
+}
+ion-select {
+  color: #7a1c1e;
+  border: 2px solid #7a1c1e;
+  border-radius: 4px;
+  background-color: white;
+  width: 2000px;
+}
+ion-select::part(icon) {
+  color: #7a1c1e;
+  opacity: 1;
+}
+
+ion-item {
+  --padding-start: 0px;
+}
+
+ion-card-content {
+  p {
+    margin-bottom: 1em;
+  }
+  .quantity {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1em;
+  }
+}
 </style>
