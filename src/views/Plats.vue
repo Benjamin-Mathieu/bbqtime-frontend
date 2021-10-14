@@ -38,7 +38,7 @@
                         :ref="'quantity' + plat.id"
                         ok-text="Valider"
                         cancel-text="Fermer"
-                        :value="this.selectedQty"
+                        :value="1"
                         @ionChange="selectedValue($event)"
                       >
                         <ion-select-option
