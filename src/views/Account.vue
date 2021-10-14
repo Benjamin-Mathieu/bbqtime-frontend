@@ -3,68 +3,68 @@
     <Header></Header>
     <Sub title="Mon compte"></Sub>
     <ion-content>
-      <form @submit.prevent="updateProfil()" method="post">
-        <ion-card>
-          <ion-card-content v-if="this.$store.getters.getUserInformation"
-            ><ion-item>
-              <ion-label position="floating">Prénom</ion-label>
-              <ion-input type="text" v-model="firstname"></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label position="floating">Nom</ion-label>
-              <ion-input type="text" v-model="name"></ion-input>
-            </ion-item>
-            <div style="display: flex">
+      <div id="container">
+        <form @submit.prevent="updateProfil()" method="post">
+          <ion-card>
+            <ion-card-content v-if="this.$store.getters.getUserInformation"
+              ><ion-item>
+                <ion-label position="floating">Prénom</ion-label>
+                <ion-input type="text" v-model="firstname"></ion-input>
+              </ion-item>
               <ion-item>
-                <ion-label position="floating">Téléphone</ion-label>
+                <ion-label position="floating">Nom</ion-label>
+                <ion-input type="text" v-model="name"></ion-input>
+              </ion-item>
+              <div style="display: flex">
+                <ion-item>
+                  <ion-label position="floating">Téléphone</ion-label>
+                  <ion-input
+                    type="text"
+                    v-model="phone"
+                    inputmode="tel"
+                  ></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="floating">Code postale</ion-label>
+                  <ion-input
+                    type="text"
+                    v-model="zipcode"
+                    inputmode="decimal"
+                  ></ion-input>
+                </ion-item>
+              </div>
+              <ion-item>
+                <ion-label position="floating">Email</ion-label>
                 <ion-input
-                  type="text"
-                  v-model="phone"
-                  inputmode="tel"
+                  type="email"
+                  v-model="email"
+                  inputmode="email"
                 ></ion-input>
               </ion-item>
               <ion-item>
-                <ion-label position="floating">Code postale</ion-label>
                 <ion-input
-                  type="text"
-                  v-model="zipcode"
-                  inputmode="decimal"
-                ></ion-input>
-              </ion-item>
-            </div>
+                  type="password"
+                  placeholder="Mot de passe"
+                ></ion-input> </ion-item
+            ></ion-card-content>
             <ion-item>
-              <ion-label position="floating">Email</ion-label>
-              <ion-input
-                type="email"
-                v-model="email"
-                inputmode="email"
-              ></ion-input>
+              <ion-button type="submit" slot="end">Modifier</ion-button>
             </ion-item>
-            <ion-item>
-              <ion-input
-                type="password"
-                placeholder="Mot de passe"
-              ></ion-input> </ion-item
-          ></ion-card-content>
-          <ion-item>
-            <ion-button type="submit" slot="end">Modifier</ion-button>
-          </ion-item>
-        </ion-card>
-      </form>
+          </ion-card>
+        </form>
 
-      <div class="buttons">
-        <router-link :to="{ name: 'MyEvents' }">
-          <ion-button>
-            <ion-label>Evènements </ion-label>
-            <ion-icon size="large" :icon="calendarOutline"> </ion-icon>
-          </ion-button>
-        </router-link>
+        <div class="buttons">
+          <router-link :to="{ name: 'MyEvents' }">
+            <ion-button>
+              <ion-icon size="large" :icon="calendarOutline"> </ion-icon>
+            </ion-button>
+          </router-link>
 
-        <router-link :to="{ name: 'Orders' }"
-          ><ion-button>
-            <ion-label>Commandes </ion-label>
-            <ion-icon size="large" :icon="bagOutline"></ion-icon> </ion-button
-        ></router-link>
+          <router-link :to="{ name: 'Orders' }"
+            ><ion-button>
+              <ion-icon size="large" :icon="bagOutline"></ion-icon> </ion-button
+          ></router-link>
+        </div>
       </div>
     </ion-content>
     <Footer></Footer>
@@ -134,13 +134,17 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-ion-card {
-  margin: auto;
+#container {
+  text-align: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .buttons {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
 }

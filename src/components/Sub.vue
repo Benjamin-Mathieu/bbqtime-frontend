@@ -14,9 +14,9 @@
       <ion-menu-button menu="end" color="dark">
         <ion-icon :icon="bagHandle" style="width: 50px"></ion-icon>
       </ion-menu-button>
-      <ion-badge color="primary">{{
-        this.$store.getters.getNumberItemInShop
-      }}</ion-badge>
+      <div class="numberItemsInShop">
+        {{ this.$store.getters.getNumberItemInShop }}
+      </div>
     </ion-buttons>
   </ion-toolbar>
 </template>
@@ -29,7 +29,6 @@ import {
   IonMenuButton,
   IonTitle,
   IonIcon,
-  IonBadge,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { chevronBackOutline, bagHandle } from "ionicons/icons";
@@ -52,7 +51,6 @@ export default defineComponent({
     IonMenuButton,
     IonTitle,
     IonIcon,
-    IonBadge,
   },
   setup() {
     return {
@@ -62,3 +60,20 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+ion-icon,
+ion-title {
+  color: #d7b59d;
+}
+.numberItemsInShop {
+  background-color: #d7b59d;
+  border-radius: 50%;
+  padding: 0em 0.3em;
+  position: relative;
+  left: -10px;
+  top: -10px;
+  color: #7f2928;
+  font-weight: bold;
+}
+</style>

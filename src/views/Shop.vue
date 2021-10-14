@@ -4,36 +4,34 @@
     <Sub title="Panier"></Sub>
     <ion-content v-if="this.$store.state.shop.plats.length > 0">
       <ion-card v-for="plat in this.$store.state.shop.plats" :key="plat.id">
-        <ion-grid>
-          <ion-row>
-            <ion-col size="2">
-              <ion-img alt="plat-img" :src="plat.photo_url"></ion-img>
-            </ion-col>
-            <ion-col size="10">
-              <ion-item>
-                <ion-label>
-                  <b>{{ plat.libelle }}</b>
-                </ion-label>
-                <ion-button @click="removePlat(plat)">
-                  <ion-icon :icon="trashBinOutline"></ion-icon>
-                </ion-button>
-              </ion-item>
-              <ion-item>
-                <ion-label>Quantité</ion-label>
-                <ion-input type="number" :value="plat.qty"></ion-input>
-              </ion-item>
-              <ion-item>Prix unitaire: {{ plat.price }} €</ion-item>
-              <ion-item
-                ><b>Total: {{ plat.qty * plat.price }} €</b></ion-item
-              >
-            </ion-col>
-          </ion-row>
-        </ion-grid>
+        <div class="container">
+          <div class="img">
+            <ion-img alt="plat-img" :src="plat.photo_url"></ion-img>
+          </div>
+          <div class="info-plat">
+            <ion-item lines="none">
+              <ion-label>
+                <b>{{ plat.libelle }}</b>
+              </ion-label>
+              <ion-button @click="removePlat(plat)">
+                <ion-icon name="close"></ion-icon>
+              </ion-button>
+            </ion-item>
+            <ion-item lines="none">
+              <ion-label>Quantité</ion-label>
+              <ion-input type="number" :value="plat.qty"></ion-input>
+            </ion-item>
+            <ion-item lines="none">
+              <b>Total :</b>
+              <p>{{ plat.qty * plat.price + "€" }}</p>
+            </ion-item>
+          </div>
+        </div>
       </ion-card>
-      <ion-item>
-        Montant total: {{ this.$store.getters.getTotalShop }} €
-      </ion-item>
-      <ion-button fill="solid" @click="postOrder()">Commander</ion-button>
+      <div class="total">
+        <p>Montant total: {{ this.$store.getters.getTotalShop }} €</p>
+        <ion-button fill="solid" @click="postOrder()">Commander</ion-button>
+      </div>
     </ion-content>
     <ion-content v-else>
       <ion-card>
@@ -55,14 +53,11 @@ import {
   IonLabel,
   IonItem,
   IonButton,
-  IonGrid,
-  IonRow,
-  IonCol,
   IonInput,
 } from "@ionic/vue";
-import { trashBinOutline } from "ionicons/icons";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
+import AlertController from "../components/AlertController";
 
 export default defineComponent({
   name: "Shop",
@@ -76,17 +71,9 @@ export default defineComponent({
     IonLabel,
     IonItem,
     IonButton,
-    IonGrid,
-    IonRow,
-    IonCol,
     IonInput,
     Sub,
     Header,
-  },
-  setup() {
-    return {
-      trashBinOutline,
-    };
   },
   data() {
     return {
@@ -95,7 +82,11 @@ export default defineComponent({
   },
   methods: {
     removePlat(plat) {
-      this.$store.commit("removePlatInShop", plat);
+      AlertController.validDelete(
+        plat,
+        "Confirmez-vous la suppression du plat de votre panier ?",
+        "platInShop"
+      );
     },
     postOrder() {
       if (this.$store.getters.getLoginStatus) {
@@ -109,5 +100,23 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.container {
+  display: flex;
+
+  .img {
+    width: 35%;
+  }
+  .info-plat {
+    width: 65%;
+  }
+}
+
+.total {
+  font-weight: bold;
+  color: #7a1c1e;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
 </style>
