@@ -277,7 +277,6 @@ export default defineComponent({
     addPlatToCategorie(idCategorie) {
       this.toggleForm = "menu";
       this.$store.commit("setCategoryIdTmp", idCategorie);
-      this.$store.dispatch("getPlats");
     },
 
     deleteCategorie(id) {
