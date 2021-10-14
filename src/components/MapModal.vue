@@ -16,13 +16,12 @@
         <ion-input
           type="text"
           v-model="address"
-          @focus="this.showList = true"
+          @ionFocus="this.showList = true"
         ></ion-input>
       </ion-item>
-      <ion-list v-if="this.showList" inset="true">
+      <ion-list v-if="this.showList">
         <ion-item
-          v-for="selectAddress in this.$store.state.apiGouv.respApiAddress
-            .features"
+          v-for="selectAddress in this.$store.state.apiGouv.respApiAddress"
           :key="selectAddress.id"
         >
           <ion-label
