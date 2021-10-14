@@ -1,43 +1,53 @@
 <template>
   <ion-menu side="end" menu-id="shop" content-id="main">
     <ion-content class="shop">
-      <p v-if="this.$store.state.shop.plats.length === 0">
-        Votre panier est vide
-      </p>
+      <div v-if="this.$store.state.shop.plats.length === 0" class="empty">
+        <p>Votre panier est vide</p>
+      </div>
 
       <!-- List of Plat in Shop -->
       <ion-list lines="none" v-else>
-        <ion-item v-for="plat in this.$store.state.shop.plats" :key="plat.id">
-          <div class="plat">
-            <img alt="plat-img" :src="plat.photo_url" />
-            <p>{{ plat.libelle }}</p>
-            <div>
-              <ion-icon name="close" @click="removePlat(plat)"></ion-icon>
-              <ion-item>
-                <ion-select
-                  :id="plat.id"
-                  ok-text="Valider"
-                  cancel-text="Fermer"
-                  :value="plat.qty"
-                  @ionChange="selectedValue($event)"
-                >
-                  <ion-select-option
-                    v-for="(selectQty, index) in plat.stock"
-                    :key="index"
-                    :value="selectQty"
-                    v-model="qty[index]"
+        <ion-item-sliding
+          v-for="plat in this.$store.state.shop.plats"
+          :key="plat.id"
+        >
+          <ion-item>
+            <div class="plat">
+              <img alt="plat-img" :src="plat.photo_url" />
+              <p>{{ plat.libelle }}</p>
+              <div>
+                <ion-icon name="close" @click="removePlat(plat)"></ion-icon>
+                <ion-item>
+                  <ion-select
+                    :id="plat.id"
+                    ok-text="Valider"
+                    cancel-text="Fermer"
+                    :value="plat.qty"
+                    @ionChange="selectedValue($event)"
                   >
-                    {{ selectQty }}
-                  </ion-select-option>
-                </ion-select>
-              </ion-item>
-              <ion-label>{{ plat.price + "€" }} </ion-label>
+                    <ion-select-option
+                      v-for="(selectQty, index) in plat.stock"
+                      :key="index"
+                      :value="selectQty"
+                      v-model="qty[index]"
+                    >
+                      {{ selectQty }}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+                <ion-item>{{ plat.price * plat.qty + "€" }} </ion-item>
+              </div>
             </div>
-          </div>
-        </ion-item>
-        <ion-item-divider color="primary"></ion-item-divider>
+          </ion-item>
+          <ion-item-options>
+            <ion-item-option @click="removePlat(plat)" color="primary">
+              <ion-icon slot="end" name="close"></ion-icon>
+              Supprimer
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
         <ion-item>
-          <b>Montant total: {{ this.$store.getters.getTotalShop }}</b>
+          <b>Montant total: {{ this.$store.getters.getTotalShop + "€" }}</b>
         </ion-item>
         <ion-item>
           <router-link :to="{ name: 'Shop' }">
@@ -58,12 +68,15 @@ import {
   IonIcon,
   IonList,
   IonItem,
-  IonLabel,
+  IonItemSliding,
+  IonItemOptions,
+  IonItemOption,
   IonButton,
-  IonItemDivider,
   IonSelect,
   IonSelectOption,
 } from "@ionic/vue";
+import AlertController from "../components/AlertController";
+
 export default defineComponent({
   name: "ShopMenu",
   components: {
@@ -71,10 +84,11 @@ export default defineComponent({
     IonContent,
     IonIcon,
     IonList,
+    IonItemSliding,
+    IonItemOptions,
+    IonItemOption,
     IonItem,
-    IonLabel,
     IonButton,
-    IonItemDivider,
     IonSelect,
     IonSelectOption,
   },
@@ -96,7 +110,11 @@ export default defineComponent({
       menuController.open("shop");
     },
     removePlat(plat) {
-      this.$store.commit("removePlatInShop", plat);
+      AlertController.validDelete(
+        plat,
+        "Voulez-vous supprimez le plat de votre panier ?",
+        "platInShop"
+      );
     },
   },
 });
@@ -109,14 +127,45 @@ ion-list {
 
   ion-item {
     --background: #e5e5e5;
+    --color: #7f2928;
   }
 }
 
-.plat {
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
+ion-select {
+  /* Applies to the value and placeholder color */
+  color: #7a1c1e;
+  border: 2px solid #7a1c1e;
+  border-radius: 4px;
+  background-color: white;
+  --padding-start: 10px;
+}
+/* Set the icon color and opacity */
+ion-select::part(icon) {
+  color: #7a1c1e;
+  opacity: 1;
+}
+
+p {
+  font-weight: 600;
+}
+
+.shop {
+  .empty {
+    text-align: center;
+    color: #7f2928;
+    position: relative;
+    top: 30%;
+  }
+
+  .plat {
+    width: 100%;
+    margin: 1em 0;
+    color: #7f2928;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+
   div {
     text-align: right;
   }

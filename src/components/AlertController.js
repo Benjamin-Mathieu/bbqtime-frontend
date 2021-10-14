@@ -28,6 +28,9 @@ const showAlert = {
                 await store.dispatch("deletePlat", id);
                 store.dispatch("getPlats");
             }
+            if (type === "platInShop") {
+                await store.commit("removePlatInShop", id);
+            }
         }
     },
 
