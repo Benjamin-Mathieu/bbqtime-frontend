@@ -246,6 +246,8 @@ export default defineComponent({
   },
   ionViewDidLeave() {
     this.$store.commit("setEventTmp", {});
+    this.$store.commit("setCategories", []);
+    this.$store.commit("setPlats", []);
   },
   watch: {
     "$store.state.events.currentStep": function (step) {

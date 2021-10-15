@@ -19,21 +19,26 @@
             <ion-label position="floating">Nom de la catégorie</ion-label>
             <ion-input type="text" v-model="libelle" required></ion-input>
           </ion-item>
-          <input
-            style="display: none"
-            type="file"
-            name="image"
-            @change="pickImage"
-            ref="fileInput"
-          />
+          <ion-item lines="none">
+            <ion-thumbnail v-if="this.file" slot="end">
+              <ion-img :src="this.img" alt="img"></ion-img>
+            </ion-thumbnail>
+            <input
+              style="display: none"
+              type="file"
+              name="image"
+              @change="pickImage"
+              ref="fileInput"
+            />
 
-          <ion-button
-            size="small"
-            fill="clear"
-            @click="$refs.fileInput.click()"
-          >
-            Poster une image
-          </ion-button>
+            <ion-button
+              size="small"
+              fill="clear"
+              @click="$refs.fileInput.click()"
+            >
+              Poster une image
+            </ion-button>
+          </ion-item>
         </ion-card-content>
         <ion-item>
           <ion-button type="submit" size="small">Ajouter</ion-button>
@@ -78,11 +83,13 @@ export default defineComponent({
     return {
       libelle: "",
       file: null,
+      img: null,
     };
   },
   methods: {
     pickImage(selected) {
       this.file = selected.target.files[0];
+      this.img = URL.createObjectURL(this.file);
     },
     addCategorie() {
       const data = {

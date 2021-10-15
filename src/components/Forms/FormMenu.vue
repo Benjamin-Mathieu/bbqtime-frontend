@@ -44,21 +44,30 @@
               required
             ></ion-input>
           </ion-item>
-          <input
-            style="display: none"
-            type="file"
-            name="image"
-            @change="pickImage"
-            ref="fileInput"
-          />
+          <ion-item lines="none">
+            <ion-thumbnail v-if="this.file" slot="end">
+              <ion-img :src="this.img" alt="img"></ion-img>
+            </ion-thumbnail>
+            <input
+              style="display: none"
+              type="file"
+              name="image"
+              @change="pickImage"
+              ref="fileInput"
+            />
 
-          <ion-button size="small" @click="$refs.fileInput.click()">
-            Poster une image
-          </ion-button>
-          <ion-item>
-            <ion-button type="submit" size="small">Ajouter</ion-button>
+            <ion-button
+              size="small"
+              fill="clear"
+              @click="$refs.fileInput.click()"
+            >
+              Poster une image
+            </ion-button>
           </ion-item>
         </ion-card-content>
+        <ion-item>
+          <ion-button type="submit" size="small">Ajouter</ion-button>
+        </ion-item>
       </ion-card>
     </form>
   </ion-content>
@@ -105,11 +114,13 @@ export default defineComponent({
       description: "zezaezae",
       stock: 10,
       file: null,
+      img: null,
     };
   },
   methods: {
     pickImage(selected) {
       this.file = selected.target.files[0];
+      this.img = URL.createObjectURL(this.file);
     },
     addMenu() {
       const plat = {
@@ -128,7 +139,8 @@ export default defineComponent({
       this.stock = "";
     },
 
-    closeModal() {
+    async closeModal() {
+      await this.$store.dispatch("getPlats");
       modalController.dismiss();
     },
   },

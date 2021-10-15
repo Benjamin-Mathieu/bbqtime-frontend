@@ -44,17 +44,26 @@
               required
             ></ion-input>
           </ion-item>
-          <input
-            style="display: none"
-            type="file"
-            name="image"
-            @change="pickImage"
-            ref="fileInput"
-          />
+          <ion-item lines="none">
+            <ion-thumbnail slot="end">
+              <ion-img :src="img" alt="img"></ion-img>
+            </ion-thumbnail>
+            <input
+              style="display: none"
+              type="file"
+              name="image"
+              @change="pickImage"
+              ref="fileInput"
+            />
 
-          <ion-button size="small" @click="$refs.fileInput.click()">
-            Poster une image
-          </ion-button>
+            <ion-button
+              size="small"
+              fill="clear"
+              @click="$refs.fileInput.click()"
+            >
+              Poster une image
+            </ion-button>
+          </ion-item>
           <ion-item>
             <ion-button type="submit" size="small">Mettre à jour</ion-button>
           </ion-item>
@@ -106,6 +115,7 @@ export default defineComponent({
       description: this.plat.description,
       stock: this.plat.stock,
       file: null,
+      img: this.plat.photo_url,
     };
   },
   methods: {

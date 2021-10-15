@@ -53,7 +53,7 @@
       </ion-item>
 
       <ion-item>
-        <ion-thumbnail v-if="this.file" slot="end">
+        <ion-thumbnail slot="end">
           <ion-img :src="this.img" alt="img"></ion-img>
         </ion-thumbnail>
         <input
@@ -64,7 +64,7 @@
           ref="fileInput"
           accept=".jpeg, jpg, .png"
         />
-        <ion-button size="small" @click="$refs.fileInput.click()">
+        <ion-button size="small" fill="clear" @click="$refs.fileInput.click()">
           Ajouter une image
         </ion-button>
       </ion-item>
