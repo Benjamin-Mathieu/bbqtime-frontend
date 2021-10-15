@@ -11,7 +11,6 @@ import { IonApp, IonRouterOutlet } from "@ionic/vue";
 import { defineComponent } from "vue";
 import Navigation from "./components/Navigation.vue";
 import ShopMenu from "./components/ShopMenu.vue";
-import jwt_decode from "jwt-decode";
 import { SplashScreen } from "@capacitor/splash-screen";
 
 export default defineComponent({
@@ -27,19 +26,7 @@ export default defineComponent({
       showDuration: 2000,
       autoHide: true,
     });
-    // Check if user already logged in
-    if (
-      !localStorage.getItem("token") ||
-      localStorage.getItem("token") === "null"
-    ) {
-      this.$store.commit("setUserIsLoggedIn", false);
-      this.$router.push("/sign-in");
-    } else {
-      const token = jwt_decode(localStorage.getItem("token"));
-      const user = { email: token.email, password: token.password };
-
-      this.$store.dispatch("loginUser", user);
-    }
+    this.$store.dispatch("userIsLogged");
   },
 });
 </script>

@@ -19,12 +19,7 @@
               placeholder="Saisir votre adresse mail"
               required
             ></ion-input>
-            <ion-button
-              type="submit"
-              size="small"
-              :disabled="disabledFormSendCode"
-              >Envoyer le code</ion-button
-            >
+            <ion-button type="submit" size="small">Envoyer le code</ion-button>
           </form>
 
           <form
@@ -38,12 +33,7 @@
               placeholder="Saisir code"
               required
             ></ion-input>
-            <ion-button
-              type="submit"
-              size="small"
-              :disabled="disabledFormVerifCode"
-              >Valider</ion-button
-            >
+            <ion-button type="submit" size="small">Valider</ion-button>
           </form>
 
           <form
@@ -98,6 +88,7 @@ import {
 import Header from "../components/Header.vue";
 import Sub from "../components/Sub.vue";
 import Footer from "../components/Footer.vue";
+import popup from "../components/ToastController";
 
 export default defineComponent({
   components: {
@@ -121,8 +112,6 @@ export default defineComponent({
       code: "",
       password: "",
       checkpwd: "",
-      disabledFormSendCode: false,
-      disabledFormVerifCode: false,
       showFormSendCode: true,
       showFormVerifCode: false,
       showFormResetPassword: false,
@@ -132,21 +121,25 @@ export default defineComponent({
     async sendCode() {
       this.$store.commit("setResetPassword", { email: this.email });
       const mailIsend = await this.$store.dispatch("sendCode");
-      console.log("return mailIsSend =>", mailIsend);
       if (mailIsend) {
-        this.disabledFormSendCode = true;
+        this.showFormSendCode = false;
         this.showFormVerifCode = true;
       }
     },
     async verifCode() {
-      await this.$store.dispatch("verifCode", this.code);
-      this.disabledFormVerifCode = true;
-      this.showFormResetPassword = true;
+      const success = await this.$store.dispatch("verifCode", this.code);
+      if (success) {
+        this.showFormVerifCode = false;
+        this.showFormResetPassword = true;
+      } else {
+        popup.error("Code incorrect");
+        this.code = "";
+      }
     },
 
     async resetPassword() {
       if (this.password !== this.checkpwd) {
-        alert("Mot de passe ne correspondent pas");
+        popup.error("Les mots de passes saisies ne correspondent pas");
       } else {
         await this.$store.dispatch("resetPassword", this.checkpwd);
       }

@@ -119,6 +119,27 @@ const moduleAuth = {
                 .catch(httpErrorHandler);
         },
 
+        async userIsLogged({ dispatch, commit }) {
+            await axios({
+                method: "get",
+                url: URL_API + 'users/isLogged',
+                headers: {
+                    "Accept": "application/json",
+                    "Content-type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                }
+            }).then(resp => {
+                dispatch("getDevice");
+                commit("setUserIsLoggedIn", true);
+                commit("setUserInformation", JSON.stringify(resp.data.informations));
+                dispatch("setExternalUserId");
+                popup.success("Authentification réussie !");
+            })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
+
         async logoutUser({ commit }) {
             localStorage.clear();
             commit("setUserIsLoggedIn", false);
@@ -177,22 +198,26 @@ const moduleAuth = {
         },
 
         async verifCode({ state, commit }, code) {
-            await axios({
-                method: "post",
-                url: URL_API + 'users/check-code',
-                data: {
-                    email: state.resetPassword.email,
-                    code: code
-                },
-                headers: {
-                    "Accept": "application/json",
-                    "Content-type": "application/json"
-                }
-            }).then(resp => {
-                popup.success(resp.data.message);
-                commit("setResetPassword", resp.data.token);
-            })
-                .catch(httpErrorHandler);
+            try {
+                const req = await axios({
+                    method: "post",
+                    url: URL_API + 'users/check-code',
+                    data: {
+                        email: state.resetPassword.email,
+                        code: code
+                    },
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-type": "application/json"
+                    }
+                });
+                popup.success(req.data.message);
+                commit("setResetPassword", req.data.token);
+                return true;
+            } catch (error) {
+                console.error(error);
+            }
+
         },
 
         async resetPassword({ state }, password) {
