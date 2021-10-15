@@ -10,9 +10,11 @@ const modulShop = {
 
     mutations: {
         setShop(state, plat) {
-            if (!state.plats.includes(plat)) {
+            if (!state.plats.map(plat => plat.id).includes(plat.id)) {
                 state.plats.push(plat);
                 popup.success("Plat ajouté au panier");
+            } else {
+                this.commit("updateShop", plat);
             }
         },
         updateShop(state, plat) {
