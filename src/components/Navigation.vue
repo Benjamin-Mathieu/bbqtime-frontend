@@ -57,7 +57,6 @@ import {
   menuController,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
-import { mapMutations } from "vuex";
 
 export default defineComponent({
   name: "Navigation",
@@ -70,8 +69,6 @@ export default defineComponent({
     IonContent,
   },
   methods: {
-    ...mapMutations(["setUserIsLoggedIn", "setToken", "setUserInformation"]),
-
     openMenu() {
       menuController.enable(true, "nav");
       menuController.open("nav");

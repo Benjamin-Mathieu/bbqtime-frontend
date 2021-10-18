@@ -149,7 +149,6 @@ export default defineComponent({
       this.selectedQty = ev.target.value;
     },
     addToShop(addedPlat) {
-      // Check if plat is already in shop
       if (addedPlat.qty !== undefined) {
         if (addedPlat.qty >= addedPlat.stock) {
           return popup.error("Plus de stock !");
