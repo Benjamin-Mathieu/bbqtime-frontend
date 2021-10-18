@@ -1,6 +1,6 @@
 <template>
   <ion-menu side="end" menu-id="shop" content-id="main">
-    <ion-content class="shop">
+    <ion-content @click="closeShop()" class="shop">
       <div v-if="this.$store.state.shop.plats.length === 0" class="empty">
         <p>Votre panier est vide</p>
       </div>
@@ -108,6 +108,9 @@ export default defineComponent({
     openShop() {
       menuController.enable(true, "shop");
       menuController.open("shop");
+    },
+    closeShop() {
+      menuController.close();
     },
     removePlat(plat) {
       AlertController.validDelete(
