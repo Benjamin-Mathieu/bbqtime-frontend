@@ -10,7 +10,16 @@
       >
         <Skeleton v-if="loaded === false"></Skeleton>
 
-        <div v-if="loaded === true" class="event">
+        <div
+          @click="
+            this.$router.push({
+              name: 'MyEventDetails',
+              params: { id: event.id },
+            })
+          "
+          v-if="loaded === true"
+          class="event"
+        >
           <div class="img-container">
             <img alt="event-img" :src="event.photo_url" />
           </div>
@@ -21,7 +30,7 @@
                   <b>{{ event.name }}</b>
                 </ion-label>
                 <ion-button
-                  @click="showActions(event.id)"
+                  @click.stop="showActions(event.id)"
                   slot="end"
                   size="small"
                 >

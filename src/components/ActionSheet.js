@@ -1,6 +1,11 @@
 import { ActionSheet, ActionSheetButtonStyle } from '@capacitor/action-sheet';
+import axios from "axios";
+import httpErrorHandler from '../store/httpErrorHandler';
+import popup from './ToastController';
 import router from "../router/index";
 import store from "../store/store";
+
+const URL_API = "http://192.168.1.47:3000/";
 
 const showActions = {
   async event(id) {
@@ -28,15 +33,16 @@ const showActions = {
         router.push({ name: 'MyEventDetails', params: { id: id } })
         break;
       case 1:
-        this.duplicateEvent(id);
+        actions.duplicateEvent(id);
         break;
       case 2:
-        console.log("supprimer event");
+        actions.deleteEvent(id);
         break;
     }
-    console.log(result);
   },
+}
 
+const actions = {
   duplicateEvent(id) {
     store.state.events.myEvents.forEach((event) => {
       if (event.id === id) {
@@ -54,6 +60,24 @@ const showActions = {
         router.push({ name: "AddEvent" });
       }
     });
+  },
+
+  async deleteEvent(id) {
+    await axios({
+      method: "delete",
+      url: URL_API + 'events/delete',
+      data: {
+        id: id
+      },
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem("token")
+      }
+    })
+      .then(res => {
+        popup.success(res.data.message);
+        router.push({ name: "MyEvents" });
+      })
+      .catch(httpErrorHandler)
   },
 }
 
