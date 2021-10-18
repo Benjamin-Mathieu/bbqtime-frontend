@@ -4,103 +4,201 @@
     <Sub title="Détails"></Sub>
     <ion-content>
       <RefreshData callApi="getMyEventOrders"></RefreshData>
+      <ion-segment :value="tab">
+        <ion-segment-button @click="this.tab = 'gestion'" value="gestion">
+          <ion-label>Gestion</ion-label>
+        </ion-segment-button>
+        <ion-segment-button @click="this.tab = 'budget'" value="budget">
+          <ion-label>Budget</ion-label>
+        </ion-segment-button>
+      </ion-segment>
       <ion-button @click="saveQrcode()">
         Télécharger Qrcode
         <ion-icon slot="end" :icon="download"></ion-icon
       ></ion-button>
 
-      <ion-card class="details">
+      <ion-card v-if="this.tab === 'gestion'" class="details">
         <ion-card-header>
-          <ion-card-title>Détails</ion-card-title>
+          <ion-segment :value="toggleStatusOrder">
+            <ion-segment-button
+              @click="this.toggleStatusOrder = 'pending'"
+              value="pending"
+            >
+              <ion-label>En cours</ion-label>
+            </ion-segment-button>
+            <ion-segment-button
+              @click="this.toggleStatusOrder = 'prepared'"
+              value="prepared"
+            >
+              <ion-label>En cours</ion-label>
+            </ion-segment-button>
+            <ion-segment-button
+              @click="this.toggleStatusOrder = 'delivered'"
+              value="delivered"
+            >
+              <ion-label>Livrés</ion-label>
+            </ion-segment-button>
+          </ion-segment>
         </ion-card-header>
         <ion-card
           v-for="order in this.$store.state.events.myEventOrders.orders"
           :key="order.id"
-          class="commande"
+          class="orders"
         >
+          <div
+            class="pending-orders"
+            v-if="order.status === 0 && this.toggleStatusOrder === 'pending'"
+          >
+            <ion-card-header>
+              Commande de {{ order.user.firstname }} {{ order.user.name }}
+            </ion-card-header>
+            <ion-card-content>
+              <ion-list>
+                <div
+                  v-for="orderPlat in order.orders_plats"
+                  :key="orderPlat.id"
+                >
+                  <ion-item>
+                    {{ orderPlat.plat.libelle }}
+                    <ion-badge slot="end">{{ orderPlat.quantity }}</ion-badge>
+                  </ion-item>
+                </div>
+              </ion-list>
+
+              <ion-item lines="none">
+                <ion-label>Status</ion-label>
+                <ion-select
+                  ok-text="Valider"
+                  cancel-text="Fermer"
+                  v-model="order.status"
+                  @ionChange="selectedValue($event, order.id)"
+                >
+                  <ion-select-option :value="0">En cours</ion-select-option>
+                  <ion-select-option :value="1">Préparé</ion-select-option>
+                  <ion-select-option :value="2">Livré</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-card-content>
+          </div>
+
+          <div
+            class="prepared-orders"
+            v-if="order.status === 1 && this.toggleStatusOrder === 'prepared'"
+          >
+            <ion-card-header>
+              Commande de {{ order.user.firstname }} {{ order.user.name }}
+            </ion-card-header>
+            <ion-card-content>
+              <ion-list>
+                <div
+                  v-for="orderPlat in order.orders_plats"
+                  :key="orderPlat.id"
+                >
+                  <ion-item lines="none">
+                    {{ orderPlat.plat.libelle }}
+                    <ion-badge slot="end">{{ orderPlat.quantity }}</ion-badge>
+                  </ion-item>
+                </div>
+              </ion-list>
+              <ion-item lines="none">
+                <ion-label>Status</ion-label>
+                <ion-select
+                  ok-text="Valider"
+                  cancel-text="Fermer"
+                  v-model="order.status"
+                  @ionChange="selectedValue($event, order.id)"
+                >
+                  <ion-select-option :value="2">Livré</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-card-content>
+          </div>
+
+          <div
+            class="delivered-orders"
+            v-if="order.status === 2 && this.toggleStatusOrder === 'delivered'"
+          >
+            <ion-card-header>
+              Commande de {{ order.user.firstname }} {{ order.user.name }}
+            </ion-card-header>
+            <ion-card-content>
+              <ion-list>
+                <div
+                  v-for="orderPlat in order.orders_plats"
+                  :key="orderPlat.id"
+                >
+                  <ion-item lines="none">
+                    {{ orderPlat.plat.libelle }}
+                    <ion-badge slot="end">{{ orderPlat.quantity }}</ion-badge>
+                  </ion-item>
+                </div>
+              </ion-list>
+            </ion-card-content>
+          </div>
+        </ion-card>
+      </ion-card>
+
+      <div v-if="this.tab === 'budget'">
+        <ion-card class="commandes">
           <ion-card-header>
-            Commande de {{ order.user.firstname }} {{ order.user.name }}
+            <ion-card-title>Commandes</ion-card-title>
+            <ion-card-subtitle
+              >Total:
+              {{
+                this.$store.state.events.myEventOrders.orders.length
+              }}</ion-card-subtitle
+            >
           </ion-card-header>
-          <ion-card-content>
-            <ion-list>
-              <div v-for="orderPlat in order.orders_plats" :key="orderPlat.id">
-                <ion-item>
-                  {{ orderPlat.plat.libelle }}
-                  <ion-badge>{{ orderPlat.quantity }}</ion-badge>
-                </ion-item>
-              </div>
-            </ion-list>
-
-            <ion-item lines="none">
-              <ion-label>Status</ion-label>
-              <ion-select
-                ok-text="Valider"
-                cancel-text="Fermer"
-                v-model="order.status"
-                @ionChange="selectedValue($event, order.id)"
-              >
-                <ion-select-option :value="0">En cours</ion-select-option>
-                <ion-select-option :value="1">Préparé</ion-select-option>
-                <ion-select-option :value="2">Livré</ion-select-option>
-              </ion-select>
-            </ion-item>
-          </ion-card-content>
+          <ion-card
+            v-for="plat in this.$store.state.events.myEventDetails.plats"
+            :key="plat.id"
+          >
+            <ion-grid>
+              <ion-row>
+                <ion-col size="2">
+                  <ion-img alt="plat-img" :src="plat.public_img"></ion-img>
+                </ion-col>
+                <ion-col size="10">
+                  <ion-item>
+                    <ion-label>{{ plat.libelle }}</ion-label>
+                    <ion-badge slot="end">{{ plat.quantity }}</ion-badge>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card>
         </ion-card>
-      </ion-card>
 
-      <ion-card class="commandes">
-        <ion-card-header>
-          <ion-card-title>Commandes</ion-card-title>
-        </ion-card-header>
-        <ion-card
-          v-for="plat in this.$store.state.events.myEventDetails.plats"
-          :key="plat.id"
-        >
-          <ion-grid>
-            <ion-row>
-              <ion-col size="2">
-                <ion-img alt="plat-img" :src="plat.public_img"></ion-img>
-              </ion-col>
-              <ion-col size="10">
-                <ion-item>
-                  <ion-label>{{ plat.libelle }}</ion-label>
-                  <ion-badge slot="end">{{ plat.quantity }}</ion-badge>
-                </ion-item>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
+        <ion-card class="budget">
+          <ion-card-header>
+            <ion-card-title>Budget</ion-card-title>
+          </ion-card-header>
+          <ion-card
+            v-for="plat in this.$store.state.events.myEventDetails.plats"
+            :key="plat.id"
+          >
+            <ion-grid>
+              <ion-row>
+                <ion-col size="2">
+                  <ion-img alt="plat-img" :src="plat.public_img"></ion-img>
+                </ion-col>
+                <ion-col size="10">
+                  <ion-item>
+                    <ion-label>{{ plat.libelle }}</ion-label>
+                    <ion-item slot="end">{{ plat.total }} €</ion-item>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card>
+          <ion-item-divider color="primary">
+            <ion-label>
+              Montant total:
+              {{ this.$store.state.events.myEventDetails.totalBudget }} €
+            </ion-label>
+          </ion-item-divider>
         </ion-card>
-      </ion-card>
-
-      <ion-card class="budget">
-        <ion-card-header>
-          <ion-card-title>Budget</ion-card-title>
-        </ion-card-header>
-        <ion-card
-          v-for="plat in this.$store.state.events.myEventDetails.plats"
-          :key="plat.id"
-        >
-          <ion-grid>
-            <ion-row>
-              <ion-col size="2">
-                <ion-img alt="plat-img" :src="plat.public_img"></ion-img>
-              </ion-col>
-              <ion-col size="10">
-                <ion-item>
-                  <ion-label>{{ plat.libelle }}</ion-label>
-                  <ion-item slot="end">{{ plat.total }} €</ion-item>
-                </ion-item>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-card>
-        <ion-item-divider color="primary">
-          <ion-label>
-            Montant total:
-            {{ this.$store.state.events.myEventDetails.totalBudget }} €
-          </ion-label>
-        </ion-item-divider>
-      </ion-card>
+      </div>
     </ion-content>
     <Footer></Footer>
   </ion-page>
@@ -114,6 +212,7 @@ import {
   IonCard,
   IonCardHeader,
   IonCardTitle,
+  IonCardSubtitle,
   IonCardContent,
   IonButton,
   IonBadge,
@@ -128,6 +227,8 @@ import {
   IonList,
   IonSelect,
   IonSelectOption,
+  IonSegment,
+  IonSegmentButton,
 } from "@ionic/vue";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
@@ -143,6 +244,7 @@ export default defineComponent({
     IonCard,
     IonCardHeader,
     IonCardTitle,
+    IonCardSubtitle,
     IonCardContent,
     IonButton,
     IonBadge,
@@ -161,10 +263,18 @@ export default defineComponent({
     Header,
     Footer,
     RefreshData,
+    IonSegment,
+    IonSegmentButton,
   },
   setup() {
     return {
       download,
+    };
+  },
+  data() {
+    return {
+      tab: "gestion",
+      toggleStatusOrder: "pending",
     };
   },
   ionViewWillEnter() {
@@ -192,7 +302,7 @@ export default defineComponent({
   margin: auto;
 }
 
-ion-card .commande {
-  --background: #ccc;
+.budget {
+  margin-top: 1em;
 }
 </style>
