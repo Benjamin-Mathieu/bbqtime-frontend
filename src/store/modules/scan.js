@@ -45,9 +45,9 @@ const modulScan = {
                 .catch((err) => console.log(err)); // start scanning and wait for a result
         },
 
-        saveQrcode({ state }) {
+        saveQrcode({ rootState }) {
             const params = router.currentRoute.value.params.id;
-            state.myEvents.forEach((event) => {
+            rootState.events.myEvents.forEach((event) => {
                 if (event.id == params) {
                     Filesystem.appendFile({
                         path: `${event.name}-${event.id}.png`,
