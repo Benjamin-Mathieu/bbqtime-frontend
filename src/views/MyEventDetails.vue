@@ -16,7 +16,7 @@
         Télécharger Qrcode
         <ion-icon slot="end" :icon="download"></ion-icon
       ></ion-button>
-      <ion-button @click="addAdmin()">
+      <ion-button v-if="isCreator" @click="addAdmin()">
         Ajouter administrateur
         <ion-icon slot="end" :icon="download"></ion-icon>
       </ion-button>
@@ -274,6 +274,22 @@ export default defineComponent({
       interval: null,
     };
   },
+  computed: {
+    isCreator() {
+      let isCreator = null;
+      this.$store.state.events.myEvents.forEach((event) => {
+        if (event.id == this.$route.params.id) {
+          console.log(event.user_id, this.$store.getters.getUserInformation.id);
+          if (event.user_id == this.$store.getters.getUserInformation.id) {
+            isCreator = true;
+          } else {
+            isCreator = false;
+          }
+        }
+      });
+      return isCreator;
+    },
+  },
   ionViewWillEnter() {
     this.$store.dispatch("getMyEventDetails", this.$route.params.id);
     this.$store.dispatch("getMyEventOrders");
@@ -309,7 +325,6 @@ export default defineComponent({
 .budget {
   width: 80%;
   margin: auto;
-  color: #7f2928;
 }
 
 .budget {
