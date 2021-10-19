@@ -3,6 +3,7 @@ import FormCategorie from "../components/Forms/FormCategorie.vue";
 import FormUpdateCategorie from "../components/Forms/FormUpdateCategorie.vue";
 import FormUpdatePlat from "../components/Forms/FormUpdatePlat.vue";
 import FormMenu from "../components/Forms/FormMenu.vue";
+import FormAddAssociate from "../components/Forms/FormAddAssociate.vue";
 
 const showModal = {
     async addCategorie() {
@@ -31,6 +32,13 @@ const showModal = {
         const modal = await modalController.create({
             component: FormUpdatePlat,
             componentProps: { plat },
+        });
+        return modal.present();
+    },
+
+    async addAssociate() {
+        const modal = await modalController.create({
+            component: FormAddAssociate,
         });
         return modal.present();
     }
