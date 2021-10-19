@@ -16,6 +16,10 @@
         Télécharger Qrcode
         <ion-icon slot="end" :icon="download"></ion-icon
       ></ion-button>
+      <ion-button @click="addAdmin()">
+        Ajouter administrateur
+        <ion-icon slot="end" :icon="download"></ion-icon>
+      </ion-button>
 
       <ion-card v-if="this.tab === 'gestion'" class="details">
         <ion-card-header>
@@ -30,13 +34,13 @@
               @click="this.toggleStatusOrder = 'prepared'"
               value="prepared"
             >
-              <ion-label>En cours</ion-label>
+              <ion-label>Préparer</ion-label>
             </ion-segment-button>
             <ion-segment-button
               @click="this.toggleStatusOrder = 'delivered'"
               value="delivered"
             >
-              <ion-label>Livrés</ion-label>
+              <ion-label>Livrer</ion-label>
             </ion-segment-button>
           </ion-segment>
         </ion-card-header>
@@ -73,9 +77,8 @@
                   v-model="order.status"
                   @ionChange="selectedValue($event, order.id)"
                 >
-                  <ion-select-option :value="0">En cours</ion-select-option>
-                  <ion-select-option :value="1">Préparé</ion-select-option>
-                  <ion-select-option :value="2">Livré</ion-select-option>
+                  <ion-select-option :value="1">Préparer</ion-select-option>
+                  <ion-select-option :value="2">Livrer</ion-select-option>
                 </ion-select>
               </ion-item>
             </ion-card-content>
@@ -142,12 +145,6 @@
         <ion-card class="commandes">
           <ion-card-header>
             <ion-card-title>Commandes</ion-card-title>
-            <ion-card-subtitle
-              >Total:
-              {{
-                this.$store.state.events.myEventOrders.orders.length
-              }}</ion-card-subtitle
-            >
           </ion-card-header>
           <ion-card
             v-for="plat in this.$store.state.events.myEventDetails.plats"
@@ -159,7 +156,7 @@
                   <ion-img alt="plat-img" :src="plat.public_img"></ion-img>
                 </ion-col>
                 <ion-col size="10">
-                  <ion-item>
+                  <ion-item lines="none">
                     <ion-label>{{ plat.libelle }}</ion-label>
                     <ion-badge slot="end">{{ plat.quantity }}</ion-badge>
                   </ion-item>
@@ -212,7 +209,6 @@ import {
   IonCard,
   IonCardHeader,
   IonCardTitle,
-  IonCardSubtitle,
   IonCardContent,
   IonButton,
   IonBadge,
@@ -235,6 +231,7 @@ import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
 import { download } from "ionicons/icons";
 import RefreshData from "../components/RefreshData.vue";
+import ShowModal from "../components/ModalController";
 
 export default defineComponent({
   name: "MyEventDetails",
@@ -244,7 +241,6 @@ export default defineComponent({
     IonCard,
     IonCardHeader,
     IonCardTitle,
-    IonCardSubtitle,
     IonCardContent,
     IonButton,
     IonBadge,
@@ -275,13 +271,26 @@ export default defineComponent({
     return {
       tab: "gestion",
       toggleStatusOrder: "pending",
+      interval: null,
     };
   },
   ionViewWillEnter() {
     this.$store.dispatch("getMyEventDetails", this.$route.params.id);
     this.$store.dispatch("getMyEventOrders");
   },
+  ionViewDidEnter() {
+    this.interval = setInterval(
+      () => this.$store.dispatch("getMyEventOrders"),
+      5000
+    );
+  },
+  ionViewWillLeave() {
+    clearInterval(this.interval);
+  },
   methods: {
+    addAdmin() {
+      ShowModal.addAssociate();
+    },
     saveQrcode() {
       this.$store.dispatch("saveQrcode");
     },
@@ -300,6 +309,7 @@ export default defineComponent({
 .budget {
   width: 80%;
   margin: auto;
+  color: #7f2928;
 }
 
 .budget {
