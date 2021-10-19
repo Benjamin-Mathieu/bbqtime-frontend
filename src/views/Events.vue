@@ -196,7 +196,9 @@ export default defineComponent({
     };
   },
   async ionViewWillEnter() {
-    await this.$store.dispatch("getPublicEvents");
+    this.selectedTypeEvent === "public"
+      ? await this.$store.dispatch("getPublicEvents")
+      : await this.$store.dispatch("getParticipateEvents");
     this.loaded = true;
   },
   watch: {
