@@ -1,11 +1,7 @@
 import { ActionSheet, ActionSheetButtonStyle } from '@capacitor/action-sheet';
-import axios from "axios";
-import httpErrorHandler from '../store/httpErrorHandler';
-import popup from './ToastController';
 import router from "../router/index";
 import store from "../store/store";
-
-const URL_API = "http://192.168.1.47:3000/";
+import showAlert from './AlertController';
 
 const showActions = {
   async event(id) {
@@ -13,7 +9,7 @@ const showActions = {
       title: 'Choisissez une option',
       options: [
         {
-          title: 'Détails',
+          title: 'Gérer',
         },
         {
           title: 'Copier',
@@ -30,7 +26,7 @@ const showActions = {
     });
     switch (result.index) {
       case 0:
-        router.push({ name: 'MyEventDetails', params: { id: id } })
+        router.push({ name: 'MyEventDetails', params: { id: id } });
         break;
       case 1:
         actions.duplicateEvent(id);
@@ -62,22 +58,8 @@ const actions = {
     });
   },
 
-  async deleteEvent(id) {
-    await axios({
-      method: "delete",
-      url: URL_API + 'events/delete',
-      data: {
-        id: id
-      },
-      headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem("token")
-      }
-    })
-      .then(res => {
-        popup.success(res.data.message);
-        router.push({ name: "MyEvents" });
-      })
-      .catch(httpErrorHandler)
+  deleteEvent(id) {
+    showAlert.validDelete(id, "Voulez-vous supprimez cet évènement", "event");
   },
 }
 

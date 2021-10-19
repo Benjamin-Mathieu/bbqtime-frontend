@@ -1,5 +1,11 @@
 import { alertController } from "@ionic/vue";
 import store from "../store/store";
+import axios from "axios";
+import httpErrorHandler from '../store/httpErrorHandler';
+import popup from './ToastController';
+import router from "../router/index";
+
+const URL_API = "http://192.168.1.47:3000/";
 
 const showAlert = {
     async validDelete(id, message, type) {
@@ -30,6 +36,23 @@ const showAlert = {
             }
             if (type === "platInShop") {
                 await store.commit("removePlatInShop", id);
+            }
+            if (type === "event") {
+                await axios({
+                    method: "delete",
+                    url: URL_API + 'events/delete',
+                    data: {
+                        id: id
+                    },
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    }
+                })
+                    .then(res => {
+                        popup.success(res.data.message);
+                        router.push({ name: "MyEvents" });
+                    })
+                    .catch(httpErrorHandler)
             }
         }
     },
