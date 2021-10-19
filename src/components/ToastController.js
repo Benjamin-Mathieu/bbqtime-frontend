@@ -5,7 +5,7 @@ const popups = {
         const toast = await toastController
             .create({
                 message: message,
-                duration: 2000,
+                duration: 3000,
                 color: "success",
                 header: "Succès"
             })
@@ -27,10 +27,13 @@ const popups = {
         const toast = await toastController
             .create({
                 message: message,
-                duration: 3000,
-                color: "danger",
-                header: "Problème",
-                position: "middle"
+                header: "Erreur",
+                buttons: [
+                    {
+                        icon: 'close',
+                        role: 'cancel'
+                    }
+                ]
             })
         return toast.present();
     }
