@@ -28,6 +28,13 @@
               <ion-item>
                 <ion-label>
                   <b>{{ event.name }}</b>
+                  <p
+                    v-if="
+                      event.user_id !== this.$store.getters.getUserInformation.id
+                    "
+                  >
+                    Associé
+                  </p>
                 </ion-label>
                 <ion-button
                   @click.stop="showActions(event.id)"
@@ -110,11 +117,14 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+ion-item {
+  --padding-start: 0px;
+}
+
 .event {
   display: flex;
-  max-height: 129px;
   .img-container {
-    width: 30%;
+    width: 35%;
     padding: 0.5em;
     img {
       border-radius: 5px;
@@ -124,7 +134,7 @@ export default defineComponent({
   }
 
   .info {
-    width: 70%;
+    width: 65%;
   }
 }
 </style>

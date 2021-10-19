@@ -165,17 +165,18 @@ export default defineComponent({
   display: flex;
 
   .img-container {
-    width: 30%;
+    width: 35%;
     padding: 0.5em;
     img {
       border-radius: 5px;
       height: 100%;
+      object-fit: fill;
     }
   }
 
   .preview-container {
     padding: 0.5em;
-    width: 70%;
+    width: 65%;
     .preview {
       padding: 0px;
     }

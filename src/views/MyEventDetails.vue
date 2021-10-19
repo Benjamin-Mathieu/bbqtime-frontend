@@ -12,14 +12,16 @@
           <ion-label>Budget</ion-label>
         </ion-segment-button>
       </ion-segment>
-      <ion-button @click="saveQrcode()">
-        Télécharger Qrcode
-        <ion-icon slot="end" :icon="download"></ion-icon
-      ></ion-button>
-      <ion-button v-if="isCreator" @click="addAdmin()">
-        Ajouter administrateur
-        <ion-icon slot="end" :icon="download"></ion-icon>
-      </ion-button>
+      <div class="buttons">
+        <ion-button @click="saveQrcode()" size="small">
+          Télécharger Qrcode
+          <ion-icon slot="end" :icon="download"></ion-icon
+        ></ion-button>
+        <ion-button v-if="isCreator" @click="addAdmin()" size="small">
+          Ajouter administrateur
+          <ion-icon slot="end" :icon="download"></ion-icon>
+        </ion-button>
+      </div>
 
       <ion-card v-if="this.tab === 'gestion'" class="details">
         <ion-card-header>
@@ -320,7 +322,16 @@ export default defineComponent({
   },
 });
 </script>
-<style>
+
+<style lang="scss" scoped>
+.buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 1em;
+}
+
 .commandes,
 .budget {
   width: 80%;

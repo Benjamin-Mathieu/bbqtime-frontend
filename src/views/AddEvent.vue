@@ -127,12 +127,12 @@
       <!-- STEP 3 -->
       <div v-if="this.$store.state.events.currentStep === 3" class="step3">
         <ion-card>
-          <ion-card-title>L'évènement a été crée !</ion-card-title>
           <ion-card-subtitle>
             Inviter des personnes à votre évènement
           </ion-card-subtitle>
           <ion-card-content>
             <ion-item>
+              <ion-icon :icon="lockClosed"></ion-icon>
               <ion-input
                 :placeholder="this.$store.state.events.eventTmp.password"
                 readonly="true"
@@ -192,6 +192,7 @@ import {
   shareSocial,
   pencilOutline,
   trashBinOutline,
+  lockClosed,
 } from "ionicons/icons";
 import FormMailing from "../components/Forms/FormMailing.vue";
 import ShowAlert from "../components/AlertController";
@@ -230,6 +231,7 @@ export default defineComponent({
       shareSocial,
       pencilOutline,
       trashBinOutline,
+      lockClosed,
     };
   },
   data() {
@@ -248,6 +250,8 @@ export default defineComponent({
     this.$store.commit("setEventTmp", {});
     this.$store.commit("setCategories", []);
     this.$store.commit("setPlats", []);
+    this.$store.commit("setAddress", "");
+    this.$store.commit("setApiAddress", {});
   },
   watch: {
     "$store.state.events.currentStep": function (step) {
@@ -330,10 +334,7 @@ export default defineComponent({
   display: none;
 }
 
-.steps {
-  ion-segment-button {
-    --background-checked: #9c544d;
-    --color-checked: #d7b59d;
-  }
+.step3 {
+  text-align: center;
 }
 </style>

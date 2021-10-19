@@ -18,8 +18,7 @@
               </ion-button>
             </ion-item>
             <ion-item lines="none">
-              <ion-label>Quantité</ion-label>
-              <ion-input type="number" :value="plat.qty"></ion-input>
+              <ion-label>Quantité {{ plat.qty }}</ion-label>
             </ion-item>
             <ion-item lines="none">
               <b>Total :</b>
@@ -53,7 +52,6 @@ import {
   IonLabel,
   IonItem,
   IonButton,
-  IonInput,
 } from "@ionic/vue";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
@@ -71,7 +69,6 @@ export default defineComponent({
     IonLabel,
     IonItem,
     IonButton,
-    IonInput,
     Sub,
     Header,
   },
