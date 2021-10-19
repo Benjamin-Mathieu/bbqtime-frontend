@@ -105,7 +105,6 @@ const modulEvents = {
 
         async getEventDetails({ commit }) {
             const params = router.currentRoute.value.params.id;
-            console.log(params);
 
             await axios({
                 method: "get",
@@ -116,6 +115,32 @@ const modulEvents = {
             })
                 .then(resp => {
                     commit("setEventDetails", resp.data.event);
+                })
+                .catch(httpErrorHandler)
+        },
+
+        async duplicateEvent({ commit }, id) {
+            await axios({
+                method: "get",
+                url: URL_API + 'events/' + id,
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            })
+                .then(async resp => {
+                    console.log("resp =>", resp);
+                    const duplicate = {
+                        address: resp.data.event.address,
+                        city: resp.data.event.city,
+                        zipcode: resp.data.event.zipcode,
+                        name: resp.data.event.name,
+                        description: resp.data.event.description,
+                        private: resp.data.event.private,
+                    };
+                    await commit("setEventTmp", duplicate);
+                    await commit("setCategories", resp.data.event.categories);
+
+                    router.push({ name: "AddEvent" });
                 })
                 .catch(httpErrorHandler)
         },
@@ -239,6 +264,22 @@ const modulEvents = {
                 }
             }).then(() => {
                 popup.success(`Mail envoyé à l'adresse ${email}`);
+            }).catch((httpErrorHandler))
+        },
+
+        async addAdmin({ state }, email) {
+            await axios({
+                method: "post",
+                url: URL_API + 'events/addAssociate',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                },
+                data: {
+                    event_id: state.myEventDetails.id,
+                    email: email
+                }
+            }).then((res) => {
+                popup.success(res.data.message);
             }).catch((httpErrorHandler))
         }
     }
