@@ -41,32 +41,33 @@
             </ion-card-content>
           </div>
         </div>
-        <div
-          class="detail-order"
-          v-for="showDetail in this.showDetails"
-          :key="showDetail.id"
-        >
+        <div v-for="showDetail in this.showDetails" :key="showDetail.id">
           <div v-if="showDetail.id == order.id && showDetail.show">
-            <ion-list
-              v-for="orderplat in order.orders_plats"
-              :key="orderplat.id"
-              lines="none"
-            >
-              <ion-list-header lines="inset">
-                <ion-label>Plats commandés</ion-label>
-              </ion-list-header>
-              <ion-item>
-                <ion-avatar slot="start">
-                  <img :src="orderplat.plat.photo_url" alt="img-plat" />
-                </ion-avatar>
-                <ion-label>
-                  {{ orderplat.plat.libelle }}
-                </ion-label>
-                <ion-badge slot="end">
-                  {{ orderplat.quantity }}
-                </ion-badge>
-              </ion-item>
-            </ion-list>
+            <div class="list-plats">
+              <ion-list
+                v-for="orderplat in order.orders_plats"
+                :key="orderplat.id"
+                lines="none"
+              >
+                <ion-list-header lines="inset">
+                  <ion-label>Plats commandés</ion-label>
+                </ion-list-header>
+                <ion-item>
+                  <ion-avatar slot="start">
+                    <img :src="orderplat.plat.photo_url" alt="img-plat" />
+                  </ion-avatar>
+                  <ion-label>
+                    {{ orderplat.plat.libelle }}
+                  </ion-label>
+                  <ion-badge slot="end">
+                    {{ orderplat.quantity }}
+                  </ion-badge>
+                </ion-item>
+              </ion-list>
+            </div>
+            <ion-item lines="none">
+              <ion-label>{{ "Total commande: " + order.cost + "€" }}</ion-label>
+            </ion-item>
           </div>
         </div>
       </ion-card>
@@ -165,7 +166,7 @@ export default defineComponent({
   display: flex;
 
   .img-container {
-    width: 35%;
+    width: 40%;
     padding: 0.5em;
     img {
       border-radius: 5px;
@@ -176,7 +177,7 @@ export default defineComponent({
 
   .preview-container {
     padding: 0.5em;
-    width: 65%;
+    width: 60%;
     .preview {
       padding: 0px;
     }

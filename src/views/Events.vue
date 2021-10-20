@@ -15,6 +15,9 @@
             <ion-segment-button value="participated">
               <ion-label>Participés</ion-label>
             </ion-segment-button>
+            <ion-segment-button value="myEvents">
+              <ion-label>Mes évènements</ion-label>
+            </ion-segment-button>
           </ion-segment>
         </ion-toolbar>
       </ion-header>
@@ -51,19 +54,21 @@
                 <p>
                   {{ event.zipcode + " " + event.address + " " + event.city }}
                 </p>
-                <!-- <div v-for="order in event.orders" :key="order.id">
+                <div v-for="(order, index) in event.orders" :key="order.id">
                   <ion-item
                     v-if="
                       this.$store.getters.getLoginStatus &&
-                      order.user_id == this.$store.getters.getUserInformation.id
+                      order.user_id ==
+                        this.$store.getters.getUserInformation.id &&
+                      index === 0
                     "
                     detail
                     :detail-icon="checkmarkCircle"
                     lines="none"
                   >
-                    <p>Vous participez à cet évènement</p>
+                    <p>Vous participez</p>
                   </ion-item>
-                </div> -->
+                </div>
               </ion-card-content>
             </div>
           </div>
@@ -99,6 +104,62 @@
           </div>
         </ion-card>
       </div>
+
+      <div v-if="this.selectedTypeEvent === 'myEvents'">
+        <RefreshData callApi="getMyEvents"></RefreshData>
+        <ion-card
+          v-for="event in this.$store.state.events.myEvents"
+          :key="event.id"
+        >
+          <Skeleton v-if="loaded === false"></Skeleton>
+
+          <div
+            @click="
+              this.$router.push({
+                name: 'MyEventDetails',
+                params: { id: event.id },
+              })
+            "
+            v-if="loaded === true"
+            class="event"
+          >
+            <div class="img-container">
+              <img alt="event-img" :src="event.photo_url" />
+            </div>
+            <div class="info">
+              <ion-card-content>
+                <ion-item>
+                  <ion-label>
+                    <b>{{ event.name }}</b>
+                    <p
+                      v-if="
+                        event.user_id !==
+                        this.$store.getters.getUserInformation.id
+                      "
+                    >
+                      Associé
+                    </p>
+                  </ion-label>
+                  <ion-button
+                    @click.stop="showActions(event.id)"
+                    slot="end"
+                    size="small"
+                  >
+                    <ion-icon :icon="ellipsisHorizontalOutline"></ion-icon>
+                  </ion-button>
+                </ion-item>
+                <p>
+                  {{ event.description }}
+                </p>
+                <p>
+                  {{ event.zipcode + " " + event.address + " " + event.city }}
+                </p>
+              </ion-card-content>
+            </div>
+          </div>
+        </ion-card>
+      </div>
+
       <div class="pagination">
         <ion-button
           v-if="this.$store.state.events.pagination.currentPage > 1"
@@ -155,12 +216,18 @@ import {
   IonSegment,
   IonSegmentButton,
 } from "@ionic/vue";
-import { lockClosed, checkmarkCircle } from "ionicons/icons";
+import {
+  lockClosed,
+  checkmarkCircle,
+  copyOutline,
+  ellipsisHorizontalOutline,
+} from "ionicons/icons";
 import Header from "../components/Header.vue";
 import Sub from "../components/Sub.vue";
 import Footer from "../components/Footer.vue";
 import RefreshData from "../components/RefreshData.vue";
 import Skeleton from "../components/Skeletons/SkeletonOrder.vue";
+import ShowActions from "../components/ActionSheet";
 
 export default defineComponent({
   name: "Events",
@@ -193,19 +260,48 @@ export default defineComponent({
     return {
       lockClosed,
       checkmarkCircle,
+      copyOutline,
+      ellipsisHorizontalOutline,
     };
   },
   async ionViewWillEnter() {
-    this.selectedTypeEvent === "public"
-      ? await this.$store.dispatch("getPublicEvents")
-      : await this.$store.dispatch("getParticipateEvents");
-    this.loaded = true;
+    switch (this.selectedTypeEvent) {
+      case "public":
+        this.loaded = false;
+        await this.$store.dispatch("getPublicEvents");
+        this.loaded = true;
+        break;
+      case "participated":
+        this.loaded = false;
+        await this.$store.dispatch("getParticipateEvents");
+        this.loaded = true;
+        break;
+      case "myEvents":
+        this.loaded = false;
+        await this.$store.dispatch("getMyEvents");
+        this.loaded = true;
+        break;
+    }
   },
   watch: {
-    selectedTypeEvent() {
-      this.selectedTypeEvent === "public"
-        ? this.$store.dispatch("getPublicEvents")
-        : this.$store.dispatch("getParticipateEvents");
+    async selectedTypeEvent() {
+      switch (this.selectedTypeEvent) {
+        case "public":
+          this.loaded = false;
+          await this.$store.dispatch("getPublicEvents");
+          this.loaded = true;
+          break;
+        case "participated":
+          this.loaded = false;
+          await this.$store.dispatch("getParticipateEvents");
+          this.loaded = true;
+          break;
+        case "myEvents":
+          this.loaded = false;
+          await this.$store.dispatch("getMyEvents");
+          this.loaded = true;
+          break;
+      }
     },
 
     "$store.state.events.pagination.currentPage": function (currentPage) {
@@ -213,28 +309,75 @@ export default defineComponent({
     },
   },
   methods: {
+    async showActions(id) {
+      ShowActions.event(id);
+    },
     getEvent(id) {
       this.$router.push({ name: "Categories", params: { id: id } });
     },
     selectedValue(e) {
       this.selectedTypeEvent = e.target.value;
     },
-    pageChange(page) {
-      this.selectedTypeEvent === "public"
-        ? this.$store.dispatch("getPublicEvents", page)
-        : this.$store.dispatch("getParticipateEvents", page);
+    async pageChange(page) {
+      switch (this.selectedTypeEvent) {
+        case "public":
+          this.loaded = false;
+          await this.$store.dispatch("getPublicEvents", page);
+          this.loaded = true;
+
+          break;
+        case "participated":
+          this.loaded = false;
+          await this.$store.dispatch("getParticipateEvents", page);
+          this.loaded = true;
+
+          break;
+        case "myEvents":
+          this.loaded = false;
+          await this.$store.dispatch("getMyEvents");
+          this.loaded = true;
+          break;
+      }
     },
-    prevPage() {
+    async prevPage() {
       let prevPage = this.$store.state.events.pagination.currentPage - 1;
-      this.selectedTypeEvent === "public"
-        ? this.$store.dispatch("getPublicEvents", prevPage)
-        : this.$store.dispatch("getParticipateEvents", prevPage);
+      switch (this.selectedTypeEvent) {
+        case "public":
+          this.loaded = false;
+          await this.$store.dispatch("getPublicEvents", prevPage);
+          this.loaded = true;
+          break;
+        case "participated":
+          this.loaded = false;
+          await this.$store.dispatch("getParticipateEvents", prevPage);
+          this.loaded = true;
+          break;
+        case "myEvents":
+          this.loaded = false;
+          this.$store.dispatch("getMyEvents");
+          this.loaded = true;
+          break;
+      }
     },
-    nextPage() {
+    async nextPage() {
       let nextPage = this.$store.state.events.pagination.currentPage + 1;
-      this.selectedTypeEvent === "public"
-        ? this.$store.dispatch("getPublicEvents", nextPage)
-        : this.$store.dispatch("getParticipateEvents", nextPage);
+      switch (this.selectedTypeEvent) {
+        case "public":
+          this.loaded = false;
+          await this.$store.dispatch("getPublicEvents", nextPage);
+          this.loaded = true;
+          break;
+        case "participated":
+          this.loaded = false;
+          await this.$store.dispatch("getParticipateEvents", nextPage);
+          this.loaded = true;
+          break;
+        case "myEvents":
+          this.loaded = false;
+          await this.$store.dispatch("getMyEvents");
+          this.loaded = true;
+          break;
+      }
     },
   },
 });
