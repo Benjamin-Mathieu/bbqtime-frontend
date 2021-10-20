@@ -119,28 +119,26 @@ const modulEvents = {
                 .catch(httpErrorHandler)
         },
 
-        async duplicateEvent({ commit }, id) {
+        async duplicateEvent({ commit, state }, id) {
             await axios({
-                method: "get",
-                url: URL_API + 'events/' + id,
+                method: "post",
+                url: URL_API + 'events/duplicate',
+                data: {
+                    id: id
+                },
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
             })
                 .then(async resp => {
-                    console.log("resp =>", resp);
-                    const duplicate = {
-                        address: resp.data.event.address,
-                        city: resp.data.event.city,
-                        zipcode: resp.data.event.zipcode,
-                        name: resp.data.event.name,
-                        description: resp.data.event.description,
-                        private: resp.data.event.private,
-                    };
-                    await commit("setEventTmp", duplicate);
-                    await commit("setCategories", resp.data.event.categories);
+                    // URL TO OBJECT FILE
+                    const response = await fetch(resp.data.event.photo_url);
+                    const blob = await response.blob();
+                    const file = new File([blob], "image.jpg", { type: blob.type });
 
-                    router.push({ name: "AddEvent" });
+                    await commit("setEventTmp", resp.data.event);
+                    state.eventTmp.fileFromServer = file;
+                    state.eventTmp.date = new Date().toISOString();
                 })
                 .catch(httpErrorHandler)
         },
@@ -232,7 +230,9 @@ const modulEvents = {
             formData.append("description", event.description);
             formData.append("private", event.private);
             formData.append("password", event.password);
-            formData.append("image", event.file, event.file.name);
+            if (event.file) {
+                formData.append("image", event.file, event.file.name);
+            }
 
             await axios({
                 method: "put",

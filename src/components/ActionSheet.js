@@ -29,38 +29,20 @@ const showActions = {
         router.push({ name: 'MyEventDetails', params: { id: id } });
         break;
       case 1:
-        actions.duplicateEvent(id);
+        actions.duplicate(id);
         break;
       case 2:
-        actions.deleteEvent(id);
+        showAlert.validDelete(id, "Voulez-vous supprimez cet évènement", "event");
         break;
     }
   },
 }
 
 const actions = {
-  duplicateEvent(id) {
-    store.state.events.myEvents.forEach((event) => {
-      if (event.id === id) {
-        let convertedDate = event.date.slice(0, -5) + "+02:00";
-        const duplicate = {
-          address: event.address,
-          city: event.city,
-          zipcode: event.zipcode,
-          name: event.name,
-          description: event.description,
-          date: convertedDate,
-          private: event.private,
-        };
-        store.commit("setEventTmp", duplicate);
-        router.push({ name: "AddEvent" });
-      }
-    });
-  },
-
-  deleteEvent(id) {
-    showAlert.validDelete(id, "Voulez-vous supprimez cet évènement", "event");
-  },
+  async duplicate(id) {
+    await store.dispatch("duplicateEvent", id);
+    router.push({ name: "AddEvent" });
+  }
 }
 
 export default showActions;
