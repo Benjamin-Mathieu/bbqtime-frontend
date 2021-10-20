@@ -37,7 +37,7 @@
           <ion-segment-button value="categorie">
             <ion-label>Catégorie</ion-label>
           </ion-segment-button>
-          <ion-segment-button value="menu">
+          <ion-segment-button value="menu" disabled>
             <ion-label>Plats</ion-label>
           </ion-segment-button>
         </ion-segment>
@@ -155,6 +155,10 @@
             <FormMailing v-if="formMailing"></FormMailing>
           </ion-card-content>
         </ion-card>
+
+        <router-link :to="{ name: 'MyEvents' }">
+          <ion-button size="small">Retour aux évènements</ion-button>
+        </router-link>
       </div>
     </ion-content>
     <Footer></Footer>
@@ -245,6 +249,11 @@ export default defineComponent({
   },
   ionViewWillEnter() {
     this.$store.commit("setCurrentStep", 1);
+
+    if (Object.keys(this.$store.state.events.eventTmp).length > 0) {
+      this.disabledStep2 = false;
+      this.disabledStep3 = false;
+    }
   },
   ionViewDidLeave() {
     this.$store.commit("setEventTmp", {});
@@ -257,11 +266,8 @@ export default defineComponent({
     "$store.state.events.currentStep": function (step) {
       switch (step) {
         case 2:
+          this.$store.dispatch("getCategories");
           this.disabledStep2 = false;
-          break;
-        case 3:
-          this.disabledStep1 = true;
-          this.disabledStep2 = true;
           break;
       }
     },
