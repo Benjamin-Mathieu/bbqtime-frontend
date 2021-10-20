@@ -189,7 +189,7 @@ export default defineComponent({
       this.$store.dispatch("postEvent", event);
     },
 
-    updateEvent() {
+    async updateEvent() {
       //Convert date+hours in DATETIME
       this.date = this.date.slice(0, 10);
       this.hours = this.hours.slice(11, 19);
@@ -198,13 +198,21 @@ export default defineComponent({
       const event = {
         id: this.$store.state.events.eventTmp.id,
         name: this.name,
-        address: this.$store.getters.getAddress.name,
-        city: this.$store.getters.getAddress.city,
-        zipcode: this.$store.getters.getAddress.postcode,
+        address: this.$store.getters.getAddress.name
+          ? this.$store.getters.getAddress.name
+          : this.$store.state.events.eventTmp.address,
+        city: this.$store.getters.getAddress.city
+          ? this.$store.getters.getAddress.city
+          : this.$store.state.events.eventTmp.city,
+        zipcode: this.$store.getters.getAddress.postcode
+          ? this.$store.getters.getAddress.postcode
+          : this.$store.state.events.eventTmp.zipcode,
         date: datetime,
         description: this.description,
         private: this.isPrivate,
-        file: this.file,
+        file: this.file
+          ? this.file
+          : this.$store.state.events.eventTmp.fileFromServer,
         password: this.password,
       };
 
