@@ -103,17 +103,17 @@ const moduleAuth = {
                     "Accept": "application/json",
                     "Content-type": "application/json"
                 }
-            }).then(resp => {
-                if (resp.status === 200) {
-                    dispatch("getDevice");
-                    commit("setUserIsLoggedIn", true);
-                    commit("setToken", resp.data.token);
-                    commit("setUserInformation", JSON.stringify(resp.data.informations));
-                    dispatch("setExternalUserId");
-                    popup.success("Authentification réussie !");
-                    // router.push({
-                    //     name: "Home",
-                    // });
+            }).then(async (resp) => {
+
+                dispatch("getDevice");
+                commit("setUserIsLoggedIn", true);
+                commit("setToken", resp.data.token);
+                commit("setUserInformation", JSON.stringify(resp.data.informations));
+                dispatch("setExternalUserId");
+                await popup.success("Authentification réussie !");
+                if (resp.data.informations.name === "" || resp.data.informations.firstname === "") {
+                    popup.warning("Votre profil est incomplet !");
+                    router.push({ name: "Account" });
                 }
             })
                 .catch(httpErrorHandler);
@@ -128,12 +128,15 @@ const moduleAuth = {
                     "Content-type": "application/json",
                     "Authorization": `Bearer ${localStorage.getItem("token")}`
                 }
-            }).then(resp => {
-                dispatch("getDevice");
-                commit("setUserIsLoggedIn", true);
-                commit("setUserInformation", JSON.stringify(resp.data.informations));
-                dispatch("setExternalUserId");
-                popup.success("Authentification réussie !");
+            }).then(async resp => {
+
+                if (resp.data.userIsLogged) {
+                    dispatch("getDevice");
+                    commit("setUserIsLoggedIn", true);
+                    commit("setUserInformation", JSON.stringify(resp.data.informations));
+                    dispatch("setExternalUserId");
+                    popup.success(resp.data.message);
+                }
             })
                 .catch(httpErrorHandler);
         },
