@@ -135,9 +135,7 @@ const moduleAuth = {
                 dispatch("setExternalUserId");
                 popup.success("Authentification réussie !");
             })
-                .catch(err => {
-                    console.log(err);
-                });
+                .catch(httpErrorHandler);
         },
 
         async logoutUser({ commit }) {
@@ -159,20 +157,17 @@ const moduleAuth = {
                     password: state.userTmp.password,
                     name: state.userTmp.name,
                     firstname: state.userTmp.firstname,
-                    phone: state.userTmp.phone,
-                    zipcode: state.userTmp.zipcode,
+                    phone: state.userTmp.phone
                 },
                 headers: {
                     "Accept": "application/json",
                     "Content-type": "application/json"
                 }
-            }).then(resp => {
-                if (resp.status === 201) {
-                    popup.success("Compte crée, veuillez-vous connectez");
-                    router.push({
-                        name: "SignIn",
-                    });
-                }
+            }).then(async (resp) => {
+                await popup.success(resp.data.message);
+                router.push({
+                    name: "SignIn",
+                });
             })
                 .catch(httpErrorHandler);
         },

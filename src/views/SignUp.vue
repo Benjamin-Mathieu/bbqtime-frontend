@@ -25,18 +25,10 @@
               </ion-col>
             </ion-row>
             <ion-row>
-              <ion-col size="6">
-                <ion-item lines="none">
-                  <ion-label position="floating">Téléphone</ion-label>
-                  <ion-input v-model="phone" type="text" required></ion-input>
-                </ion-item>
-              </ion-col>
-              <ion-col size="6">
-                <ion-item lines="none">
-                  <ion-label position="floating">Code postal</ion-label>
-                  <ion-input v-model="zipcode" type="text" required></ion-input>
-                </ion-item>
-              </ion-col>
+              <ion-item lines="none">
+                <ion-label position="floating">Téléphone</ion-label>
+                <ion-input v-model="phone" type="text" required></ion-input>
+              </ion-item>
             </ion-row>
             <ion-row>
               <ion-item lines="none">
@@ -114,7 +106,6 @@ export default defineComponent({
       name: "Christopher",
       firstname: "Wallace",
       phone: "0325142365",
-      zipcode: "88200",
       isChecked: true,
       noMatch: true,
     };
@@ -144,7 +135,6 @@ export default defineComponent({
           name: this.name,
           firstname: this.firstname,
           phone: this.phone,
-          zipcode: this.zipcode,
         };
         this.$store.commit("setUserTmp", newUser);
         this.$store.dispatch("registerUser");

@@ -15,24 +15,14 @@
                 <ion-label position="floating">Nom</ion-label>
                 <ion-input type="text" v-model="name"></ion-input>
               </ion-item>
-              <div style="display: flex">
-                <ion-item>
-                  <ion-label position="floating">Téléphone</ion-label>
-                  <ion-input
-                    type="text"
-                    v-model="phone"
-                    inputmode="tel"
-                  ></ion-input>
-                </ion-item>
-                <ion-item>
-                  <ion-label position="floating">Code postale</ion-label>
-                  <ion-input
-                    type="text"
-                    v-model="zipcode"
-                    inputmode="decimal"
-                  ></ion-input>
-                </ion-item>
-              </div>
+              <ion-item>
+                <ion-label position="floating">Téléphone</ion-label>
+                <ion-input
+                  type="text"
+                  v-model="phone"
+                  inputmode="tel"
+                ></ion-input>
+              </ion-item>
               <ion-item>
                 <ion-label position="floating">Email</ion-label>
                 <ion-input
@@ -113,7 +103,6 @@ export default defineComponent({
       name: this.$store.getters.getUserInformation.name,
       firstname: this.$store.getters.getUserInformation.firstname,
       phone: this.$store.getters.getUserInformation.phone,
-      zipcode: this.$store.getters.getUserInformation.zipcode,
       email: this.$store.getters.getUserInformation.email,
     };
   },
@@ -123,7 +112,6 @@ export default defineComponent({
         name: this.name,
         firstname: this.firstname,
         phone: this.phone,
-        zipcode: this.zipcode,
         email: this.email,
       };
       console.log(data);
