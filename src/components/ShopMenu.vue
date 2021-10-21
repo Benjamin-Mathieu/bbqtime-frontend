@@ -167,6 +167,12 @@ p {
     display: flex;
     justify-content: space-around;
     align-items: center;
+
+    img {
+      height: 100px;
+      width: 100px;
+      border-radius: 5px;
+    }
   }
 
   div {
