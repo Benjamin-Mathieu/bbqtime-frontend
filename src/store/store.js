@@ -108,46 +108,36 @@ const store = createStore({
             commit("setOrderDetails", req.data);
         },
 
-        async postCategorie({ state }, data) {
-            let formData = new FormData();
-            formData.append("libelle", data.libelle);
-            formData.append("event_id", state.events.eventTmp.id);
-            formData.append("image", data.file, data.file.name);
-
+        async postCategorie({ state }, libelle) {
+            console.log("libelle in store ", libelle);
             await axios({
                 method: "post",
                 url: URL_API + 'categories',
-                data: formData,
+                data: {
+                    event_id: state.events.eventTmp.id,
+                    libelle: libelle
+                },
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token"),
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'application/json'
                 }
             })
                 .then(resp => {
-                    if (resp.status === 201) {
-                        popup.success("Catégorie ajouté");
-                    }
+                    popup.success(resp.data.message);
                 })
-                .catch(err => {
-                    if (err.toString().includes("400")) {
-                        popup.warning("Catégorie déjà existante");
-                    } else {
-                        popup.error("Une erreur est survenue");
-                    }
-                })
+                .catch(httpErrorHandler);
         },
 
         async putCategorie({ store }, categorie) {
             console.log(store);
-            let formData = new FormData();
-            formData.append("id", categorie.id);
-            formData.append("libelle", categorie.libelle);
-            formData.append("image", categorie.file, categorie.file.name);
 
             await axios({
                 method: "put",
                 url: URL_API + 'categories/update',
-                data: formData,
+                data: {
+                    id: categorie.id,
+                    libelle: categorie.libelle
+                },
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
