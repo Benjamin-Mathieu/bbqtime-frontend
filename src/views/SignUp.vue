@@ -38,23 +38,28 @@
             </ion-row>
             <ion-row :class="classObject">
               <ion-item>
-                <ion-label position="floating">Mot de passe</ion-label>
                 <ion-input
+                  :type="typeInputPassword"
+                  placeholder="Saisir mot de passe"
                   v-model="password"
-                  type="password"
-                  required
-                ></ion-input> </ion-item
-            ></ion-row>
-            <ion-row :class="classObject">
-              <ion-item>
-                <ion-label position="floating"
-                  >Vérifier le mot de passe</ion-label
-                >
-                <ion-input
-                  v-model="checkPassword"
-                  type="password"
                   required
                 ></ion-input>
+                <ion-button @click="show()" fill="clear" slot="end">
+                  <ion-icon :icon="icon"></ion-icon>
+                </ion-button>
+              </ion-item>
+            </ion-row>
+            <ion-row :class="classObject">
+              <ion-item>
+                <ion-input
+                  :type="typeInputPassword"
+                  placeholder="Saisir une 2ème fois"
+                  v-model="checkPassword"
+                  required
+                ></ion-input>
+                <ion-button @click="show()" fill="clear" slot="end">
+                  <ion-icon :icon="icon"></ion-icon>
+                </ion-button>
               </ion-item>
             </ion-row>
           </ion-grid>
@@ -81,6 +86,7 @@ import {
 } from "@ionic/vue";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
+import { eyeOutline, eyeOffOutline } from "ionicons/icons";
 
 export default defineComponent({
   name: "SignUp",
@@ -108,6 +114,9 @@ export default defineComponent({
       phone: "0325142365",
       isChecked: true,
       noMatch: true,
+      showPassword: false,
+      typeInputPassword: "password",
+      icon: eyeOutline,
     };
   },
   computed: {
@@ -124,6 +133,12 @@ export default defineComponent({
     },
   },
   methods: {
+    show() {
+      this.showPassword = !this.showPassword;
+      this.showPassword
+        ? ((this.typeInputPassword = "password"), (this.icon = eyeOutline))
+        : ((this.typeInputPassword = "text"), (this.icon = eyeOffOutline));
+    },
     registerUser() {
       if (this.password !== this.checkPassword) {
         this.isChecked = false;
@@ -145,6 +160,15 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+ion-card {
+  padding: 0.5em;
+  text-align: center;
+
+  ion-button {
+    margin-top: 1em;
+  }
+}
+
 .checkPassword {
   ion-item {
     --border-color: green;

@@ -79,8 +79,15 @@
       </ion-item>
 
       <ion-item>
-        <ion-label position="floating">Mot de passe</ion-label>
-        <ion-input type="password" v-model="password" required></ion-input>
+        <ion-input
+          :type="typeInputPassword"
+          placeholder="Saisir mot de passe"
+          v-model="password"
+          required
+        ></ion-input>
+        <ion-button @click="show()" fill="clear" slot="end">
+          <ion-icon :icon="icon"></ion-icon>
+        </ion-button>
       </ion-item>
 
       <ion-item>
@@ -114,9 +121,11 @@ import {
   IonThumbnail,
   IonImg,
   IonCard,
+  IonIcon,
   modalController,
 } from "@ionic/vue";
 import MapModal from "../MapModal.vue";
+import { eyeOutline, eyeOffOutline } from "ionicons/icons";
 
 export default defineComponent({
   name: "FormEvent",
@@ -131,6 +140,7 @@ export default defineComponent({
     IonImg,
     IonTextarea,
     IonCard,
+    IonIcon,
   },
   data() {
     return {
@@ -156,6 +166,9 @@ export default defineComponent({
       password: this.$store.state.events.eventTmp.password
         ? this.$store.state.events.eventTmp.password
         : "",
+      showPassword: false,
+      typeInputPassword: "password",
+      icon: eyeOutline,
     };
   },
   computed: {
@@ -164,6 +177,13 @@ export default defineComponent({
     },
   },
   methods: {
+    show() {
+      this.showPassword = !this.showPassword;
+      this.showPassword
+        ? ((this.typeInputPassword = "password"), (this.icon = eyeOutline))
+        : ((this.typeInputPassword = "text"), (this.icon = eyeOffOutline));
+    },
+
     pickImage(selected) {
       this.file = selected.target.files[0];
       this.img = URL.createObjectURL(this.file);
