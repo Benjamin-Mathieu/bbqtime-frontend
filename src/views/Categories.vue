@@ -22,9 +22,16 @@
                   '/event/' + categorie.event_id + '/categorie/' + categorie.id
                 "
               >
-                <img :src="categorie.photo_url" alt="img-categorie" />
+                <div v-for="plat in categorie.plats" :key="plat.id">
+                  <img
+                    v-if="plat.category_id === categorie.id"
+                    :src="plat.photo_url"
+                    alt="img-categorie"
+                    class="img"
+                  />
+                </div>
                 <ion-card-subtitle>
-                  {{ categorie.libelle }}
+                  <p>{{ categorie.libelle }}</p>
                 </ion-card-subtitle>
               </router-link>
             </ion-card>
@@ -71,14 +78,19 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 ion-card {
   padding: 1em;
   text-align: center;
 }
-
+p {
+  color: #7f2928;
+  font-weight: bold;
+}
 img {
-  margin-bottom: 1em;
+  border-radius: 5px;
+  height: 120px;
+  width: 120px;
 }
 .links {
   text-decoration: none;
