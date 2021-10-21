@@ -3,10 +3,16 @@
     <Header></Header>
     <Sub :showShopButton="true" title="Vos commandes"></Sub>
     <ion-content>
+      <div v-if="this.$store.state.orders.length === 0">
+        <ion-card>
+          <ion-card-title>
+            <h5 style="text-align: center">Pas de commande à afficher</h5>
+          </ion-card-title>
+        </ion-card>
+      </div>
       <RefreshData callApi="getOrders"></RefreshData>
       <ion-card v-for="order in this.$store.state.orders" :key="order.id">
         <Skeleton v-if="loaded === false"></Skeleton>
-
         <div v-if="loaded === true" class="event">
           <div class="img-container">
             <img alt="event-img" :src="order.event.photo_url" />
@@ -41,23 +47,26 @@
             </ion-card-content>
           </div>
         </div>
+
         <div v-for="showDetail in this.showDetails" :key="showDetail.id">
           <div v-if="showDetail.id == order.id && showDetail.show">
+            <ion-list-header lines="inset">
+              <ion-label>Plats commandés</ion-label>
+            </ion-list-header>
             <div class="list-plats">
               <ion-list
                 v-for="orderplat in order.orders_plats"
                 :key="orderplat.id"
                 lines="none"
               >
-                <ion-list-header lines="inset">
-                  <ion-label>Plats commandés</ion-label>
-                </ion-list-header>
                 <ion-item>
                   <ion-avatar slot="start">
                     <img :src="orderplat.plat.photo_url" alt="img-plat" />
                   </ion-avatar>
                   <ion-label>
-                    {{ orderplat.plat.libelle }}
+                    {{
+                      orderplat.plat.libelle + ": " + orderplat.plat.price + "€"
+                    }}
                   </ion-label>
                   <ion-badge slot="end">
                     {{ orderplat.quantity }}
