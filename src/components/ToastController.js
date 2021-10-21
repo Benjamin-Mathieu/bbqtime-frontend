@@ -17,8 +17,15 @@ const popups = {
             .create({
                 message: message,
                 duration: 3000,
+                position: "middle",
                 color: "warning",
-                header: "Attention"
+                header: "Attention",
+                buttons: [
+                    {
+                        icon: 'close',
+                        role: 'cancel'
+                    }
+                ]
             })
         return toast.present();
     },
