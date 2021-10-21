@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
+import store from "../store/store";
 
 const routes = [
   {
@@ -84,7 +85,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   let currentRoute = from;
-  if (currentRoute.name === "AddEvent") {
+  if (currentRoute.name === "AddEvent" && (store.state.events.currentStep < 3)) {
     if (confirm("Voulez-vous quitter la page ? Vous allez perdre les modifications en cours")) {
       next();
     } else {
