@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <Header></Header>
-    <Sub title="Détails"></Sub>
+    <Sub :title="'Détails / ' + nameEvent"></Sub>
     <ion-content>
       <RefreshData callApi="getMyEventOrders"></RefreshData>
       <ion-segment :value="tab">
@@ -12,16 +12,32 @@
           <ion-label>Budget</ion-label>
         </ion-segment-button>
       </ion-segment>
-      <div class="buttons">
-        <ion-button @click="saveQrcode()" size="small">
-          Télécharger Qrcode
-          <ion-icon slot="end" :icon="download"></ion-icon
-        ></ion-button>
-        <ion-button v-if="isCreator" @click="addAdmin()" size="small">
-          Ajouter administrateur
-          <ion-icon slot="end" :icon="personAddOutline"></ion-icon>
-        </ion-button>
-      </div>
+
+      <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+        <ion-fab-button>
+          <ion-icon :icon="settings"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-list side="end">
+          <ion-fab-button @click="openModalQrcode()" color="primary">
+            <ion-icon :icon="qrCode"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-button @click="addAdmin()" color="primary">
+            <ion-icon :icon="personAddOutline"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-button @click="duplicateEvent()" color="primary">
+            <ion-icon :icon="duplicate"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-button @click="modifyEvent()" color="primary">
+            <ion-icon :icon="pencil"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-button @click="shareEvent()" color="primary">
+            <ion-icon :icon="shareSocial"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-button @click="deleteEvent()" color="primary">
+            <ion-icon :icon="trash"></ion-icon>
+          </ion-fab-button>
+        </ion-fab-list>
+      </ion-fab>
 
       <ion-card v-if="this.tab === 'gestion'" class="details">
         <ion-card-header>
@@ -213,7 +229,6 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonCardContent,
-  IonButton,
   IonBadge,
   IonIcon,
   IonImg,
@@ -228,13 +243,27 @@ import {
   IonSelectOption,
   IonSegment,
   IonSegmentButton,
+  IonFab,
+  IonFabList,
+  IonFabButton,
 } from "@ionic/vue";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
-import { download, personAddOutline } from "ionicons/icons";
+import {
+  download,
+  personAddOutline,
+  settings,
+  qrCode,
+  shareSocial,
+  duplicate,
+  pencil,
+  trash,
+} from "ionicons/icons";
 import RefreshData from "../components/RefreshData.vue";
 import ShowModal from "../components/Modals/ModalController";
+import { Share } from "@capacitor/share";
+import AlertController from "../components/AlertController";
 
 export default defineComponent({
   name: "MyEventDetails",
@@ -245,7 +274,6 @@ export default defineComponent({
     IonCardHeader,
     IonCardTitle,
     IonCardContent,
-    IonButton,
     IonBadge,
     IonIcon,
     IonImg,
@@ -264,11 +292,20 @@ export default defineComponent({
     RefreshData,
     IonSegment,
     IonSegmentButton,
+    IonFab,
+    IonFabList,
+    IonFabButton,
   },
   setup() {
     return {
       download,
       personAddOutline,
+      settings,
+      qrCode,
+      shareSocial,
+      duplicate,
+      pencil,
+      trash,
     };
   },
   data() {
@@ -276,6 +313,7 @@ export default defineComponent({
       tab: "gestion",
       toggleStatusOrder: "pending",
       interval: null,
+      nameEvent: "",
     };
   },
   computed: {
@@ -293,9 +331,10 @@ export default defineComponent({
       return isCreator;
     },
   },
-  ionViewWillEnter() {
-    this.$store.dispatch("getMyEventDetails", this.$route.params.id);
+  async ionViewWillEnter() {
+    await this.$store.dispatch("getMyEventDetails", this.$route.params.id);
     this.$store.dispatch("getMyEventOrders");
+    this.nameEvent = this.$store.state.events.myEventDetails.event.name;
   },
   ionViewDidEnter() {
     this.interval = setInterval(
@@ -310,15 +349,50 @@ export default defineComponent({
     addAdmin() {
       ShowModal.addAssociate();
     },
-    saveQrcode() {
-      this.$store.dispatch("saveQrcode");
+
+    deleteEvent() {
+      AlertController.validDelete(
+        this.$store.state.events.myEventDetails.event.id,
+        "Confirmez-vous la suppression ?",
+        "event"
+      );
     },
+
+    async duplicateEvent() {
+      await this.$store.dispatch(
+        "duplicateEvent",
+        this.$store.state.events.myEventDetails.event.id
+      );
+      this.$router.push({ name: "AddEvent" });
+    },
+
+    async modifyEvent() {
+      await this.$store.dispatch(
+        "modifyEvent",
+        this.$store.state.events.myEventDetails.event.id
+      );
+      this.$router.push({ name: "AddEvent" });
+    },
+
+    openModalQrcode() {
+      ShowModal.qrCode();
+    },
+
     selectedValue(ev, orderId) {
       const order = {
         id: orderId,
         status: ev.target.value,
       };
       this.$store.dispatch("putOrderStatus", order);
+    },
+
+    async shareEvent() {
+      const event = this.$store.state.events.myEventDetails.event;
+      await Share.share({
+        title: "Invitation à un évènement",
+        text: `Je t'invite à rejoindre mon évènement sur l'application BBQ Time via le mot de passe: ${event.password}`,
+        dialogTitle: "Partagez votre évènement",
+      });
     },
   },
 });
