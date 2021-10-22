@@ -152,7 +152,7 @@
               <ion-label>Envoyer mail</ion-label>
             </ion-button>
 
-            <FormMailInvitation v-if="formMailing"></FormMailInvitation>
+            <FormMail callApi="sendInvitation" v-if="formMailing"></FormMail>
           </ion-card-content>
         </ion-card>
 
@@ -198,7 +198,7 @@ import {
   trashBinOutline,
   lockClosed,
 } from "ionicons/icons";
-import FormMailInvitation from "../components/Forms/FormMailInvitation.vue";
+import FormMail from "../components/Forms/FormMail.vue";
 import ShowAlert from "../components/AlertController";
 import ShowModal from "../components/Modals/ModalController";
 
@@ -223,7 +223,7 @@ export default defineComponent({
     IonCardHeader,
     IonIcon,
     FormEvent,
-    FormMailInvitation,
+    FormMail,
     Sub,
     Header,
     Footer,

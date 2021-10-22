@@ -37,7 +37,12 @@ import { IonButton, IonInput, IonIcon, IonItem } from "@ionic/vue";
 import { addCircleOutline, removeCircleOutline } from "ionicons/icons";
 
 export default defineComponent({
-  name: "FormMailing",
+  name: "FormMail",
+  props: {
+    callApi: {
+      type: String,
+    },
+  },
   components: {
     IonButton,
     IonInput,
@@ -69,7 +74,7 @@ export default defineComponent({
       const listMails = JSON.parse(JSON.stringify(this.emails));
       console.log(listMails, typeof listMails);
       listMails.forEach((objMail) => {
-        this.$store.dispatch("sendInvitation", objMail.email);
+        this.$store.dispatch(this.callApi, objMail.email);
       });
       this.emails = [{ email: "" }];
     },
