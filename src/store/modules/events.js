@@ -144,7 +144,6 @@ const modulEvents = {
         },
 
         async joinEvent({ commit, dispatch, state }, password) {
-            console.log("password rentré =>", password);
             await axios({
                 method: "get",
                 url: URL_API + 'events/join/' + password,
@@ -160,7 +159,7 @@ const modulEvents = {
                         name: "Categories",
                         params: { id: state.eventDetails.id },
                     });
-                    popup.success("Evènement rejoint");
+                    popup.success(resp.data.message);
                 })
                 .catch(httpErrorHandler).then(() => {
                     if (router.currentRoute.value.name == "Scan") dispatch("scan");
@@ -191,7 +190,7 @@ const modulEvents = {
             commit("setMyEventOrders", req.data)
         },
 
-        async postEvent({ commit }, event) {
+        async postEvent({ state, commit }, event) {
             let formData = new FormData();
             formData.append("name", event.name);
             formData.append("address", event.address);
@@ -210,16 +209,32 @@ const modulEvents = {
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
-            }).then(resp => {
-                if (resp.status === 201) {
-                    commit("setEventTmp", resp.data.event);
-                    popup.success("Evènement crée");
-                    commit("setCurrentStep", 2);
-                }
+            }).then(async (resp) => {
+                // URL TO OBJECT FILE
+                const response = await fetch(resp.data.event.photo_url);
+                const blob = await response.blob();
+                const file = new File([blob], "image.jpg", { type: blob.type });
+
+                await commit("setEventTmp", resp.data.event);
+                state.eventTmp.fileFromServer = file;
+                popup.success(resp.data.message);
+                commit("setCurrentStep", 2);
+
             }).catch((httpErrorHandler))
         },
 
-        async putEvent({ commit }, event) {
+        async modifyEvent({ commit }, id) {
+            let req = await axios({
+                method: "get",
+                url: URL_API + 'events/' + id,
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            });
+            commit("setEventTmp", req.data.event);
+        },
+
+        async putEvent({ state, commit }, event) {
             let formData = new FormData();
             formData.append("id", event.id);
             formData.append("name", event.name);
@@ -241,12 +256,16 @@ const modulEvents = {
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
-            }).then(resp => {
-                if (resp.status === 200) {
-                    commit("setEventTmp", resp.data.event);
-                    popup.success("Evènement mis à jour");
-                    commit("setCurrentStep", 2);
-                }
+            }).then(async (resp) => {
+                // URL TO OBJECT FILE
+                const response = await fetch(resp.data.event.photo_url);
+                const blob = await response.blob();
+                const file = new File([blob], "image.jpg", { type: blob.type });
+
+                await commit("setEventTmp", resp.data.event);
+                state.eventTmp.fileFromServer = file;
+                popup.success(resp.data.message);
+                commit("setCurrentStep", 2);
             }).catch((httpErrorHandler))
         },
 
