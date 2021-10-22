@@ -19,7 +19,7 @@
         ></ion-button>
         <ion-button v-if="isCreator" @click="addAdmin()" size="small">
           Ajouter administrateur
-          <ion-icon slot="end" :icon="download"></ion-icon>
+          <ion-icon slot="end" :icon="personAddOutline"></ion-icon>
         </ion-button>
       </div>
 
@@ -46,6 +46,7 @@
             </ion-segment-button>
           </ion-segment>
         </ion-card-header>
+
         <ion-card
           v-for="order in this.$store.state.events.myEventOrders.orders"
           :key="order.id"
@@ -231,9 +232,9 @@ import {
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
-import { download } from "ionicons/icons";
+import { download, personAddOutline } from "ionicons/icons";
 import RefreshData from "../components/RefreshData.vue";
-import ShowModal from "../components/ModalController";
+import ShowModal from "../components/Modals/ModalController";
 
 export default defineComponent({
   name: "MyEventDetails",
@@ -267,6 +268,7 @@ export default defineComponent({
   setup() {
     return {
       download,
+      personAddOutline,
     };
   },
   data() {
@@ -281,7 +283,6 @@ export default defineComponent({
       let isCreator = null;
       this.$store.state.events.myEvents.forEach((event) => {
         if (event.id == this.$route.params.id) {
-          console.log(event.user_id, this.$store.getters.getUserInformation.id);
           if (event.user_id == this.$store.getters.getUserInformation.id) {
             isCreator = true;
           } else {

@@ -1,5 +1,5 @@
 <template>
-  <form class="test" @submit.prevent="sendMail()" method="post">
+  <form @submit.prevent="sendMail()" method="post">
     <div
       class="inputs"
       v-for="(input, index) in emails"

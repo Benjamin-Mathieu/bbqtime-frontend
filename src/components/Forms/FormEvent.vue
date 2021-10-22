@@ -53,7 +53,7 @@
       </ion-item>
 
       <ion-item>
-        <ion-thumbnail slot="end">
+        <ion-thumbnail v-if="this.img !== null" slot="end">
           <ion-img :src="this.img" alt="img"></ion-img>
         </ion-thumbnail>
         <input
@@ -124,7 +124,7 @@ import {
   IonIcon,
   modalController,
 } from "@ionic/vue";
-import MapModal from "../MapModal.vue";
+import MapModal from "../Modals/MapModal.vue";
 import { eyeOutline, eyeOffOutline } from "ionicons/icons";
 
 export default defineComponent({

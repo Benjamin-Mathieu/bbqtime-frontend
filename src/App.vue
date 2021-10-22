@@ -9,8 +9,8 @@
 <script>
 import { IonApp, IonRouterOutlet } from "@ionic/vue";
 import { defineComponent } from "vue";
-import Navigation from "./components/Navigation.vue";
-import ShopMenu from "./components/ShopMenu.vue";
+import Navigation from "./components/Sidebars/Navigation.vue";
+import ShopMenu from "./components/Sidebars/ShopMenu.vue";
 import { SplashScreen } from "@capacitor/splash-screen";
 
 export default defineComponent({

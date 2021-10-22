@@ -3,7 +3,7 @@
     <ion-content @click="closeMenu()" class="menu">
       <ion-list-header>
         <router-link :to="{ name: 'Home' }">
-          <img src="../../public/assets/logo1.png" alt="logo-bbqtime" />
+          <img src="../../../public/assets/logo1.png" alt="logo-bbqtime" />
         </router-link>
       </ion-list-header>
       <ion-list v-if="!this.$store.state.auth.userIsLoggedIn" lines="none">

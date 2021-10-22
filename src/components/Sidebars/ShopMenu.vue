@@ -75,7 +75,7 @@ import {
   IonSelect,
   IonSelectOption,
 } from "@ionic/vue";
-import AlertController from "../components/AlertController";
+import AlertController from "../AlertController";
 
 export default defineComponent({
   name: "ShopMenu",
