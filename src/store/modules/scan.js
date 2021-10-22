@@ -47,13 +47,17 @@ const modulScan = {
 
         saveQrcode({ rootState }) {
             const params = router.currentRoute.value.params.id;
-            rootState.events.myEvents.forEach((event) => {
+            rootState.events.myEvents.forEach(async (event) => {
                 if (event.id == params) {
-                    Filesystem.appendFile({
+                    const file = await Filesystem.appendFile({
                         path: `${event.name}-${event.id}.png`,
                         data: event.qrcode,
                         directory: Directory.Documents,
                     });
+                    console.log("file =>", file);
+                    if (file) {
+                        popup.success("Qrcode télécharger sur votre appareil");
+                    }
                 }
             });
         }
