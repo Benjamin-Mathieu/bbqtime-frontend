@@ -55,30 +55,42 @@
               size="6"
               @click="addPlatToCategorie(categorie.id)"
             >
-              <ion-card>
-                <img :src="categorie.photo_url" alt="img-categorie" />
+              <ion-card class="categorie">
+                <img
+                  v-if="categorie.plats.length > 0"
+                  :src="categorie.plats[0].photo_url"
+                  alt="img-categorie"
+                />
+                <p v-else></p>
                 <ion-card-header>
                   <ion-card-title>
                     {{ categorie.libelle }}
                   </ion-card-title>
                 </ion-card-header>
                 <ion-card-content>
-                  <ion-button
-                    slot="end"
-                    size="small"
-                    @click.stop="
-                      openModalUpdateCategorie(categorie.id, categorie.libelle)
-                    "
-                  >
-                    <ion-icon :icon="pencilOutline"></ion-icon>
-                  </ion-button>
-                  <ion-button
-                    slot="end"
-                    size="small"
-                    @click.stop="deleteCategorie(categorie.id)"
-                  >
-                    <ion-icon :icon="trashBinOutline"></ion-icon>
-                  </ion-button>
+                  <div class="categorie-buttons">
+                    <ion-button
+                      slot="end"
+                      size="small"
+                      @click.stop="
+                        openModalUpdateCategorie(
+                          categorie.id,
+                          categorie.libelle
+                        )
+                      "
+                    >
+                      <ion-label>Éditer</ion-label>
+                      <ion-icon slot="end" :icon="pencilOutline"></ion-icon>
+                    </ion-button>
+                    <ion-button
+                      slot="end"
+                      size="small"
+                      @click.stop="deleteCategorie(categorie.id)"
+                    >
+                      <ion-label>Supprimer</ion-label>
+                      <ion-icon slot="end" :icon="trashBinOutline"></ion-icon>
+                    </ion-button>
+                  </div>
                 </ion-card-content>
               </ion-card>
             </ion-col>
@@ -93,7 +105,7 @@
               :key="plat.id"
               size="6"
             >
-              <ion-card>
+              <ion-card class="plat">
                 <img :src="plat.photo_url" alt="img-plat" />
                 <ion-card-header>
                   <ion-card-subtitle>
@@ -101,21 +113,26 @@
                   </ion-card-subtitle>
                 </ion-card-header>
                 <ion-card-content>
-                  Description: {{ plat.description }} Stock: {{ plat.stock }}
-                  <ion-button
-                    slot="end"
-                    size="small"
-                    @click.stop="openModalUpdatePlat(plat)"
-                  >
-                    <ion-icon :icon="pencilOutline"></ion-icon>
-                  </ion-button>
-                  <ion-button
-                    slot="end"
-                    size="small"
-                    @click.stop="deletePlat(plat.id)"
-                  >
-                    <ion-icon :icon="trashBinOutline"></ion-icon>
-                  </ion-button>
+                  <p>{{ plat.description }}</p>
+                  <p>Stock: {{ plat.stock }}</p>
+                  <div class="plat-buttons">
+                    <ion-button
+                      slot="end"
+                      size="small"
+                      @click.stop="openModalUpdatePlat(plat)"
+                    >
+                      <ion-label>Éditer</ion-label>
+                      <ion-icon slot="end" :icon="pencilOutline"></ion-icon>
+                    </ion-button>
+                    <ion-button
+                      slot="end"
+                      size="small"
+                      @click.stop="deletePlat(plat.id)"
+                    >
+                      <ion-label>Supprimer</ion-label>
+                      <ion-icon slot="end" :icon="trashBinOutline"></ion-icon>
+                    </ion-button>
+                  </div>
                 </ion-card-content>
               </ion-card>
             </ion-col>
@@ -336,8 +353,34 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+ion-card-content {
+  --padding-start: 0px;
+  --padding-end: 0px;
+  --padding-top: 0px;
+  --padding-bottom: 0px;
+}
 .isInactive {
   display: none;
+}
+
+.step2 {
+  .categorie,
+  .plat {
+    padding: 1em;
+    img {
+      height: 120px;
+      border-radius: 5px;
+      object-fit: fill;
+    }
+
+    .categorie-buttons,
+    .plat-buttons {
+      margin-top: 0.5em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
 }
 
 .step3 {
