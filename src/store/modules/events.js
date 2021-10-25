@@ -139,6 +139,7 @@ const modulEvents = {
                     await commit("setEventTmp", resp.data.event);
                     state.eventTmp.fileFromServer = file;
                     state.eventTmp.date = new Date().toISOString();
+                    popup.success(resp.data.message);
                 })
                 .catch(httpErrorHandler)
         },
@@ -223,7 +224,7 @@ const modulEvents = {
             }).catch((httpErrorHandler))
         },
 
-        async modifyEvent({ commit }, id) {
+        async modifyEvent({ commit, state }, id) {
             let req = await axios({
                 method: "get",
                 url: URL_API + 'events/' + id,
@@ -231,7 +232,13 @@ const modulEvents = {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
             });
+
             commit("setEventTmp", req.data.event);
+            // URL TO OBJECT FILE
+            const response = await fetch(req.data.event.photo_url);
+            const blob = await response.blob();
+            const file = new File([blob], "image.jpg", { type: blob.type });
+            state.eventTmp.fileFromServer = file;
         },
 
         async putEvent({ state, commit }, event) {
@@ -278,7 +285,7 @@ const modulEvents = {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 },
                 data: {
-                    event_id: state.eventTmp.id,
+                    event_id: state.eventTmp.id ? state.eventTmp.id : state.myEventDetails.event.id,
                     email: email
                 }
             }).then(() => {
