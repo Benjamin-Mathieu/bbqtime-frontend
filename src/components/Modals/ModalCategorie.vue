@@ -8,11 +8,7 @@
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
-    <form
-      @submit.prevent="addCategorie()"
-      enctype="multipart/form-data"
-      method="post"
-    >
+    <form @submit.prevent="addCategorie()" method="post">
       <ion-card>
         <ion-card-content>
           <ion-item>
@@ -20,8 +16,8 @@
             <ion-input type="text" v-model="libelle" required></ion-input>
           </ion-item>
         </ion-card-content>
-        <ion-item>
-          <ion-button type="submit" size="small">Ajouter</ion-button>
+        <ion-item lines="none">
+          <ion-button type="submit" slot="end" size="small">Ajouter</ion-button>
         </ion-item>
       </ion-card>
     </form>
@@ -41,6 +37,7 @@ import {
   IonHeader,
   IonToolbar,
   IonContent,
+  IonIcon,
   modalController,
 } from "@ionic/vue";
 
@@ -57,6 +54,7 @@ export default defineComponent({
     IonHeader,
     IonToolbar,
     IonContent,
+    IonIcon,
   },
 
   data() {
@@ -68,6 +66,7 @@ export default defineComponent({
     async addCategorie() {
       await this.$store.dispatch("postCategorie", this.libelle);
       this.libelle = "";
+      modalController.dismiss();
     },
     async closeModal() {
       await this.$store.dispatch("getCategories");

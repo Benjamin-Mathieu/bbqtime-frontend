@@ -5,6 +5,7 @@ import ModalUpdatePlat from "./ModalUpdatePlat.vue";
 import ModalPlat from "./ModalPlat.vue";
 import ModalAddAssociate from "./ModalAddAssociate.vue";
 import ModalQrCode from "./ModalQrCode";
+import ModalInvitationEvent from "./ModalInvitationEvent";
 
 const showModal = {
     async addCategorie() {
@@ -47,6 +48,13 @@ const showModal = {
     async qrCode() {
         const modal = await modalController.create({
             component: ModalQrCode,
+        });
+        return modal.present();
+    },
+
+    async invitationEvent() {
+        const modal = await modalController.create({
+            component: ModalInvitationEvent,
         });
         return modal.present();
     }

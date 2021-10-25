@@ -45,7 +45,7 @@
             ></ion-input>
           </ion-item>
           <ion-item lines="none">
-            <ion-thumbnail v-if="this.file" slot="end">
+            <ion-thumbnail v-if="this.img !== null" slot="end">
               <ion-img :src="this.img" alt="img"></ion-img>
             </ion-thumbnail>
             <input
@@ -65,7 +65,7 @@
             </ion-button>
           </ion-item>
         </ion-card-content>
-        <ion-item>
+        <ion-item lines="none">
           <ion-button type="submit" size="small">Ajouter</ion-button>
         </ion-item>
       </ion-card>
@@ -88,6 +88,8 @@ import {
   IonToolbar,
   IonHeader,
   IonContent,
+  IonImg,
+  IonThumbnail,
   modalController,
 } from "@ionic/vue";
 
@@ -106,6 +108,8 @@ export default defineComponent({
     IonHeader,
     IonContent,
     IonTextarea,
+    IonImg,
+    IonThumbnail,
   },
   data() {
     return {
@@ -137,6 +141,7 @@ export default defineComponent({
       this.price = "";
       this.description = "";
       this.stock = "";
+      modalController.dismiss();
     },
 
     async closeModal() {

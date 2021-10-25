@@ -61,10 +61,10 @@
               fill="clear"
               @click="$refs.fileInput.click()"
             >
-              Poster une image
+              Modifier image
             </ion-button>
           </ion-item>
-          <ion-item>
+          <ion-item lines="none">
             <ion-button type="submit" size="small">Mettre à jour</ion-button>
           </ion-item>
         </ion-card-content>
@@ -121,6 +121,7 @@ export default defineComponent({
   methods: {
     pickImage(selected) {
       this.file = selected.target.files[0];
+      this.img = URL.createObjectURL(this.file);
     },
     updatePlat() {
       const plat = {
@@ -137,10 +138,11 @@ export default defineComponent({
       this.price = "";
       this.description = "";
       this.stock = "";
+      this.img = null;
+      modalController.dismiss();
     },
 
-    async closeModal() {
-      await this.$store.dispatch("getPlats");
+    closeModal() {
       modalController.dismiss();
     },
   },

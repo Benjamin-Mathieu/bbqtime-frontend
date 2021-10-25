@@ -8,35 +8,18 @@
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
-    <form
-      @submit.prevent="updateCategorie()"
-      enctype="multipart/form-data"
-      method="post"
-    >
+    <form @submit.prevent="updateCategorie()" method="post">
       <ion-card>
         <ion-card-content>
           <ion-item>
             <ion-label position="floating">Nom de la catégorie</ion-label>
             <ion-input type="text" v-model="editLibelle" required></ion-input>
           </ion-item>
-          <input
-            style="display: none"
-            type="file"
-            name="image"
-            @change="pickImage"
-            ref="fileInput"
-          />
-
-          <ion-button
-            size="small"
-            fill="clear"
-            @click="$refs.fileInput.click()"
-          >
-            Poster une image
-          </ion-button>
         </ion-card-content>
-        <ion-item>
-          <ion-button type="submit" size="small">Mettre à jour</ion-button>
+        <ion-item lines="none">
+          <ion-button type="submit" slot="end" size="small"
+            >Mettre à jour</ion-button
+          >
         </ion-item>
       </ion-card>
     </form>
@@ -56,6 +39,7 @@ import {
   IonHeader,
   IonToolbar,
   IonContent,
+  IonIcon,
   modalController,
 } from "@ionic/vue";
 
@@ -73,30 +57,26 @@ export default defineComponent({
     IonHeader,
     IonToolbar,
     IonContent,
+    IonIcon,
   },
 
   data() {
     return {
-      file: null,
       editLibelle: this.libelle,
     };
   },
   methods: {
-    pickImage(selected) {
-      this.file = selected.target.files[0];
-    },
     updateCategorie() {
       const data = {
         id: this.id,
         libelle: this.editLibelle,
-        file: this.file,
       };
       this.$store.dispatch("putCategorie", data);
       this.editLibelle = "";
+      modalController.dismiss();
     },
 
-    async closeModal() {
-      await this.$store.dispatch("getCategories");
+    closeModal() {
       modalController.dismiss();
     },
   },
