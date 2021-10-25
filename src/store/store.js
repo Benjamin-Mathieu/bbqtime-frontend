@@ -108,7 +108,7 @@ const store = createStore({
             commit("setOrderDetails", req.data);
         },
 
-        async postCategorie({ state }, libelle) {
+        async postCategorie({ state, dispatch }, libelle) {
             console.log("libelle in store ", libelle);
             await axios({
                 method: "post",
@@ -124,11 +124,12 @@ const store = createStore({
             })
                 .then(resp => {
                     popup.success(resp.data.message);
+                    dispatch("getCategories");
                 })
                 .catch(httpErrorHandler);
         },
 
-        async putCategorie({ store }, categorie) {
+        async putCategorie({ store, dispatch }, categorie) {
             console.log(store);
 
             await axios({
@@ -142,9 +143,8 @@ const store = createStore({
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
             }).then(resp => {
-                if (resp.status === 200) {
-                    popup.success("Catégorie mis à jour");
-                }
+                popup.success(resp.data.message);
+                dispatch("getCategories");
             }).catch((httpErrorHandler))
         },
 
@@ -193,7 +193,7 @@ const store = createStore({
                 }).catch(httpErrorHandler)
         },
 
-        async putPlat({ state }, data) {
+        async putPlat({ state, dispatch }, data) {
             let formData = new FormData();
             formData.append("id", data.id);
             formData.append("libelle", data.libelle);
@@ -203,7 +203,6 @@ const store = createStore({
             formData.append("event_id", state.events.eventTmp.id);
             formData.append("category_id", state.categoryIdTmp);
             formData.append("image", data.file, data.file.name);
-
 
             await axios({
                 method: "put",
@@ -215,6 +214,7 @@ const store = createStore({
             })
                 .then(resp => {
                     popup.success(resp.data.message);
+                    dispatch("getPlats");
                 }).catch((httpErrorHandler))
         },
 
