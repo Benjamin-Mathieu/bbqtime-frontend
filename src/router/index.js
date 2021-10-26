@@ -34,7 +34,14 @@ const routes = [
   {
     path: '/sign-in',
     name: 'SignIn',
-    component: () => import('@/views/SignIn.vue')
+    component: () => import('@/views/SignIn.vue'),
+    beforeEnter: (to, from, next) => {
+      if (store.getters.getLoginStatus) {
+        next(false);
+      } else {
+        next();
+      }
+    }
   },
   {
     path: '/sign-up',
@@ -70,6 +77,11 @@ const routes = [
     path: '/my-events/:id',
     name: 'MyEventDetails',
     component: () => import('@/views/MyEventDetails.vue')
+  },
+  {
+    path: '/manage-event/:id',
+    name: 'ManageEvent',
+    component: () => import('@/views/ManageEvent.vue')
   },
   {
     path: '/reset-password',
