@@ -71,10 +71,10 @@ const store = createStore({
             });
         },
 
-        async getPlats({ commit, state }) {
+        async getPlats({ commit, rootState }) {
             await axios({
                 method: "get",
-                url: URL_API + 'plats/' + state.categoryIdTmp,
+                url: URL_API + 'plats/' + rootState.events.eventTmp.id,
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
@@ -109,7 +109,6 @@ const store = createStore({
         },
 
         async postCategorie({ state, dispatch }, libelle) {
-            console.log("libelle in store ", libelle);
             await axios({
                 method: "post",
                 url: URL_API + 'categories',
@@ -129,9 +128,7 @@ const store = createStore({
                 .catch(httpErrorHandler);
         },
 
-        async putCategorie({ store, dispatch }, categorie) {
-            console.log(store);
-
+        async putCategorie({ dispatch }, categorie) {
             await axios({
                 method: "put",
                 url: URL_API + 'categories/update',
@@ -166,16 +163,15 @@ const store = createStore({
             }).catch((httpErrorHandler))
         },
 
-        async postPlat({ state }, data) {
+        async postPlat({ state, dispatch }, data) {
             let formData = new FormData();
             formData.append("libelle", data.libelle);
             formData.append("price", data.price);
             formData.append("description", data.description);
             formData.append("stock", data.stock);
             formData.append("event_id", state.events.eventTmp.id);
-            formData.append("category_id", state.categoryIdTmp);
+            formData.append("category_id", data.category_id);
             formData.append("image", data.file, data.file.name);
-
 
             axios({
                 method: "post",
@@ -186,10 +182,8 @@ const store = createStore({
                 }
             })
                 .then(resp => {
-                    if (resp.status === 201) {
-                        popup.success(resp.data.message);
-                        state.plats.push(resp.data.plat);
-                    }
+                    popup.success(resp.data.message);
+                    dispatch("getCategories");
                 }).catch(httpErrorHandler)
         },
 
@@ -214,7 +208,7 @@ const store = createStore({
             })
                 .then(resp => {
                     popup.success(resp.data.message);
-                    dispatch("getPlats");
+                    dispatch("getCategories");
                 }).catch((httpErrorHandler))
         },
 
