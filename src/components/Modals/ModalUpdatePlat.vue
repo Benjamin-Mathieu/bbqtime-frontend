@@ -44,6 +44,23 @@
               required
             ></ion-input>
           </ion-item>
+          <ion-item>
+            <ion-label>Catégorie</ion-label>
+            <ion-select
+              ok-text="Valider"
+              cancel-text="Fermer"
+              @ionChange="selectedValue($event)"
+              :value="categoryId"
+            >
+              <ion-select-option
+                v-for="(categorie, index) in this.$store.state.categories"
+                :key="index"
+                :value="categorie.id"
+              >
+                {{ categorie.libelle }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
           <ion-item lines="none">
             <ion-thumbnail slot="end">
               <ion-img :src="img" alt="img"></ion-img>
@@ -90,6 +107,8 @@ import {
   IonContent,
   IonThumbnail,
   IonImg,
+  IonSelect,
+  IonSelectOption,
   modalController,
 } from "@ionic/vue";
 
@@ -111,6 +130,8 @@ export default defineComponent({
     IonThumbnail,
     IonImg,
     IonTextarea,
+    IonSelect,
+    IonSelectOption,
   },
   data() {
     return {
@@ -120,14 +141,35 @@ export default defineComponent({
       stock: this.plat.stock,
       file: null,
       img: this.plat.photo_url,
+      categoryId: this.plat.category_id,
     };
   },
   methods: {
+    selectedValue(ev) {
+      this.categoryId = ev.target.value;
+    },
+
     pickImage(selected) {
       this.file = selected.target.files[0];
       this.img = URL.createObjectURL(this.file);
     },
-    updatePlat() {
+
+    async fileUrlToFileObject() {
+      if (this.file === null) {
+        const response = await fetch(this.img);
+        const data = await response.blob();
+        const metadata = {
+          type: "image/jpeg",
+        };
+        this.file = new File([data], "test.jpg", metadata);
+      }
+    },
+
+    async updatePlat() {
+      await this.fileUrlToFileObject();
+
+      console.log("id catg => ", this.categoryId);
+
       const plat = {
         id: this.plat.id,
         libelle: this.name,
@@ -135,6 +177,7 @@ export default defineComponent({
         description: this.description,
         stock: this.stock,
         file: this.file,
+        categoryId: this.categoryId,
       };
       this.$store.dispatch("putPlat", plat);
 
