@@ -30,13 +30,23 @@
 
       <div v-if="this.selectedTypeEvent === 'public'">
         <RefreshData callApi="getPublicEvents"></RefreshData>
+
+        <EmptyCard
+          v-if="this.$store.state.events.publicEvents.length === 0"
+          text="Pas d'évènements publiques à afficher"
+        ></EmptyCard>
+
         <ion-card
           v-for="event in this.$store.state.events.publicEvents"
           :key="event.id"
         >
           <Skeleton v-if="loaded === false"></Skeleton>
 
-          <div v-if="loaded === true" class="event" @click="getEvent(event.id)">
+          <div
+            v-if="loaded === true"
+            class="event"
+            @click="redirectToManageEvent(event.id)"
+          >
             <div class="img-container">
               <img alt="event-img" :src="event.photo_url" />
             </div>
@@ -77,6 +87,12 @@
 
       <div v-if="this.selectedTypeEvent === 'participated'">
         <RefreshData callApi="getParticipateEvents"></RefreshData>
+
+        <EmptyCard
+          v-if="this.$store.state.events.participateEvents.length === 0"
+          text="Vous participez à aucun évènement"
+        ></EmptyCard>
+
         <ion-card
           v-for="event in this.$store.state.events.participateEvents"
           :key="event.id"
@@ -107,6 +123,12 @@
 
       <div v-if="this.selectedTypeEvent === 'myEvents'">
         <RefreshData callApi="getMyEvents"></RefreshData>
+
+        <EmptyCard
+          v-if="this.$store.state.events.myEvents.length === 0"
+          text="Vous n'avez pas crée d'évènement"
+        ></EmptyCard>
+
         <ion-card
           v-for="event in this.$store.state.events.myEvents"
           :key="event.id"
@@ -228,6 +250,7 @@ import Footer from "../components/Footer.vue";
 import RefreshData from "../components/RefreshData.vue";
 import Skeleton from "../components/Skeletons/SkeletonOrder.vue";
 import ShowActions from "../components/ActionSheet";
+import EmptyCard from "../components/EmptyCard";
 
 export default defineComponent({
   name: "Events",
@@ -249,6 +272,7 @@ export default defineComponent({
     Footer,
     Skeleton,
     RefreshData,
+    EmptyCard,
   },
   data() {
     return {
@@ -312,8 +336,8 @@ export default defineComponent({
     async showActions(id) {
       ShowActions.event(id);
     },
-    getEvent(id) {
-      this.$router.push({ name: "Categories", params: { id: id } });
+    redirectToManageEvent(id) {
+      this.$router.push({ name: "ManageEvent", params: { id: id } });
     },
     selectedValue(e) {
       this.selectedTypeEvent = e.target.value;
