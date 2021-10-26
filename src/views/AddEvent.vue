@@ -3,7 +3,7 @@
     <Header></Header>
     <Sub title="Création de votre évènement"></Sub>
     <ion-content>
-      <!-- ETAPES (1: Evènement, 2: Categorie + Menu, 3: Confirmation création évènement) -->
+      <!-- ETAPES (1: Evènement, 2: Categorie + plat, 3: Confirmation création évènement) -->
       <ion-segment :value="this.$store.state.events.currentStep">
         <ion-segment-button
           @click="this.$store.state.events.currentStep = 1"
@@ -37,7 +37,7 @@
           <ion-segment-button value="categorie">
             <ion-label>Catégorie</ion-label>
           </ion-segment-button>
-          <ion-segment-button value="menu" disabled>
+          <ion-segment-button value="plat" :disabled="noCategory">
             <ion-label>Plats</ion-label>
           </ion-segment-button>
         </ion-segment>
@@ -45,6 +45,7 @@
         <ion-grid v-if="toggleForm === 'categorie'">
           <ion-button
             @click="openModalCategorie()"
+            fill="outline"
             v-if="toggleForm === 'categorie'"
             >Ajouter une catégorie</ion-button
           >
@@ -53,7 +54,6 @@
               v-for="categorie in this.$store.state.categories"
               :key="categorie.id"
               size="6"
-              @click="addPlatToCategorie(categorie.id)"
             >
               <ion-card class="categorie">
                 <img
@@ -97,14 +97,10 @@
           </ion-row>
         </ion-grid>
 
-        <ion-grid v-if="toggleForm === 'menu'">
-          <ion-button @click="openModalMenu">Ajouter un plat</ion-button>
+        <ion-grid v-if="toggleForm === 'plat'">
+          <ion-button fill="outline" @click="openModalPlat()">Ajouter un plat</ion-button>
           <ion-row>
-            <ion-col
-              v-for="plat in this.$store.state.plats"
-              :key="plat.id"
-              size="6"
-            >
+            <ion-col v-for="plat in plats" :key="plat.id" size="6">
               <ion-card class="plat">
                 <img :src="plat.photo_url" alt="img-plat" />
                 <ion-card-header>
@@ -283,29 +279,46 @@ export default defineComponent({
     "$store.state.events.currentStep": function (step) {
       switch (step) {
         case 2:
-          this.$store.dispatch("getCategories");
+          this.$store.dispatch(
+            "getCategories",
+            this.$store.state.events.eventTmp.id
+          );
           this.disabledStep2 = false;
           break;
       }
     },
 
-    toggleForm() {
-      if (this.toggleForm === "categorie") {
-        this.$store.dispatch("getCategories");
+    async toggleForm() {
+      await this.$store.dispatch(
+        "getCategories",
+        this.$store.state.events.eventTmp.id
+      );
+    },
+  },
+  computed: {
+    noCategory() {
+      let noCategory;
+      if (this.$store.state.categories.length > 0) {
+        noCategory = false;
+      } else {
+        noCategory = true;
       }
-      if (this.toggleForm === "menu") {
-        this.$store.dispatch("getPlats");
-      }
+      return noCategory;
+    },
+
+    plats() {
+      let plats = [];
+      this.$store.state.categories.forEach((categorie) => {
+        categorie.plats.forEach((plat) => {
+          plats.push(plat);
+        });
+      });
+      return plats;
     },
   },
   methods: {
     selectedValue(e) {
       this.toggleForm = e.target.value;
-    },
-
-    addPlatToCategorie(idCategorie) {
-      this.toggleForm = "menu";
-      this.$store.commit("setCategoryIdTmp", idCategorie);
     },
 
     deleteCategorie(id) {
@@ -324,7 +337,7 @@ export default defineComponent({
       ShowModal.updateCategorie(id, libelle);
     },
 
-    openModalMenu() {
+    openModalPlat() {
       ShowModal.addPlat();
     },
 
