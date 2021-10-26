@@ -195,7 +195,7 @@ const store = createStore({
             formData.append("description", data.description);
             formData.append("stock", data.stock);
             formData.append("event_id", state.events.eventTmp.id);
-            formData.append("category_id", state.categoryIdTmp);
+            formData.append("category_id", data.categoryId);
             formData.append("image", data.file, data.file.name);
 
             await axios({
