@@ -1,7 +1,7 @@
 <template>
   <ion-header>
     <ion-toolbar>
-      <ion-title>Editer catégorie/plat</ion-title>
+      <ion-title>Éditer catégorie/plat</ion-title>
       <ion-button fill="clear" slot="end" @click="closeModal()">
         <ion-icon name="close"></ion-icon>
       </ion-button>
@@ -10,101 +10,100 @@
   <ion-content class="ion-padding">
     <ion-segment :value="toggleForm" @ionChange="selectedValue($event)">
       <ion-segment-button value="categorie">
-        <ion-label>Catégorie</ion-label>
+        <ion-label>Catégories</ion-label>
       </ion-segment-button>
       <ion-segment-button value="plats">
         <ion-label>Plats</ion-label>
       </ion-segment-button>
     </ion-segment>
 
-    <ion-grid v-if="toggleForm === 'categorie'">
-      <ion-button
-        @click="openModalCategorie()"
-        v-if="toggleForm === 'categorie'"
-        >Ajouter une catégorie</ion-button
-      >
-      <ion-row>
-        <ion-col
-          v-for="categorie in this.$store.state.categories"
-          :key="categorie.id"
-          size="6"
-        >
-          <ion-card class="categorie">
-            <img
-              v-if="categorie.plats.length > 0"
-              :src="categorie.plats[0].photo_url"
-              alt="img-categorie"
-            />
-            <p v-else></p>
-            <ion-card-header>
-              <ion-card-title>
-                {{ categorie.libelle }}
-              </ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <div class="categorie-buttons">
-                <ion-button
-                  slot="end"
-                  size="small"
-                  @click.stop="
-                    openModalUpdateCategorie(categorie.id, categorie.libelle)
-                  "
-                >
-                  <ion-label>Éditer</ion-label>
-                  <ion-icon slot="end" :icon="pencilOutline"></ion-icon>
-                </ion-button>
-                <ion-button
-                  slot="end"
-                  size="small"
-                  @click.stop="deleteCategorie(categorie.id)"
-                >
-                  <ion-label>Supprimer</ion-label>
-                  <ion-icon slot="end" :icon="trashBinOutline"></ion-icon>
-                </ion-button>
+    <div v-if="toggleForm === 'categorie'">
+      <ion-button size="small" @click="openModalCategorie()">
+        Ajouter catégorie
+      </ion-button>
+      <ion-grid>
+        <ion-row>
+          <ion-col
+            v-for="categorie in this.$store.state.categories"
+            :key="categorie.id"
+            size="6"
+          >
+            <ion-card class="categorie">
+              <div class="img-container">
+                <img
+                  v-if="categorie.plats.length > 0"
+                  :src="categorie.plats[0].photo_url"
+                  alt="img-categorie"
+                />
+                <p v-else></p>
               </div>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+              <div class="info">
+                <ion-card-title>{{ categorie.libelle }}</ion-card-title>
+                <ion-card-subtitle>{{
+                  "( " + categorie.plats.length + " plats )"
+                }}</ion-card-subtitle>
+                <div class="categorie-buttons">
+                  <ion-button
+                    slot="end"
+                    size="small"
+                    @click.stop="
+                      openModalUpdateCategorie(categorie.id, categorie.libelle)
+                    "
+                  >
+                    <ion-label>Éditer</ion-label>
+                    <ion-icon slot="end" :icon="pencilOutline"></ion-icon>
+                  </ion-button>
+                  <ion-button
+                    slot="end"
+                    size="small"
+                    @click.stop="deleteCategorie(categorie.id)"
+                  >
+                    <ion-label>Supprimer</ion-label>
+                    <ion-icon slot="end" :icon="trashBinOutline"></ion-icon>
+                  </ion-button>
+                </div>
+              </div>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
 
-    <ion-grid v-if="toggleForm === 'plats'">
-      <ion-button @click="openModalPlat()">Ajouter un plat</ion-button>
-      <ion-row>
-        <ion-col v-for="plat in plats" :key="plat.id" size="6">
-          <ion-card class="plat">
+    <div v-if="toggleForm === 'plats'">
+      <ion-button size="small" @click="openModalPlat()">
+        Ajouter plat
+      </ion-button>
+      <div v-for="plat in plats" :key="plat.id">
+        <ion-card class="plat">
+          <div class="img-container">
             <img :src="plat.photo_url" alt="img-plat" />
-            <ion-card-header>
-              <ion-card-subtitle>
-                {{ plat.libelle }} {{ plat.price + " €" }}
-              </ion-card-subtitle>
-            </ion-card-header>
-            <ion-card-content>
-              <p>{{ plat.description }}</p>
-              <p>Stock: {{ plat.stock }}</p>
-              <div class="plat-buttons">
-                <ion-button
-                  slot="end"
-                  size="small"
-                  @click.stop="openModalUpdatePlat(plat)"
-                >
-                  <ion-label>Éditer</ion-label>
-                  <ion-icon slot="end" :icon="pencilOutline"></ion-icon>
-                </ion-button>
-                <ion-button
-                  slot="end"
-                  size="small"
-                  @click.stop="deletePlat(plat.id)"
-                >
-                  <ion-label>Supprimer</ion-label>
-                  <ion-icon slot="end" :icon="trashBinOutline"></ion-icon>
-                </ion-button>
-              </div>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+          </div>
+          <div class="info">
+            <h6>{{ plat.libelle }}</h6>
+            <p>Prix : {{ plat.price + "€" }}</p>
+            <p>Stock : {{ plat.stock }}</p>
+            <div class="plat-buttons">
+              <ion-button
+                slot="end"
+                size="small"
+                @click.stop="openModalUpdatePlat(plat)"
+              >
+                <ion-label>Éditer</ion-label>
+                <ion-icon slot="end" :icon="pencilOutline"></ion-icon>
+              </ion-button>
+              <ion-button
+                slot="end"
+                size="small"
+                @click.stop="deletePlat(plat.id)"
+              >
+                <ion-label>Supprimer</ion-label>
+                <ion-icon slot="end" :icon="trashBinOutline"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        </ion-card>
+      </div>
+    </div>
   </ion-content>
 </template>
 
@@ -121,13 +120,11 @@ import {
   IonSegmentButton,
   IonLabel,
   IonCard,
-  IonCardContent,
-  IonCardSubtitle,
   IonCardTitle,
+  IonCardSubtitle,
   IonGrid,
   IonRow,
   IonCol,
-  IonCardHeader,
   modalController,
 } from "@ionic/vue";
 import { pencilOutline, trashBinOutline } from "ionicons/icons";
@@ -147,13 +144,11 @@ export default defineComponent({
     IonSegmentButton,
     IonLabel,
     IonCard,
-    IonCardContent,
-    IonCardSubtitle,
     IonCardTitle,
     IonGrid,
     IonRow,
     IonCol,
-    IonCardHeader,
+    IonCardSubtitle,
   },
   setup() {
     return {
@@ -225,16 +220,32 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-ion-card-content {
-  --padding-start: 0px;
-  --padding-end: 0px;
-  --padding-top: 0px;
-  --padding-bottom: 0px;
+.plat {
+  display: flex;
+  padding: 0.5em;
+  width: 100%;
+
+  .img-container {
+    width: 40%;
+    img {
+      border-radius: 5px;
+      height: 144px;
+      width: 100%;
+      object-fit: fill;
+    }
+  }
+
+  .info {
+    padding-left: 0.5em;
+
+    .plat-buttons {
+      display: flex;
+    }
+  }
 }
 
-.categorie,
-.plat {
-  padding: 1em;
+.categorie {
+  text-align: center;
   img {
     height: 120px;
     width: 100%;
@@ -242,8 +253,7 @@ ion-card-content {
     object-fit: fill;
   }
 
-  .categorie-buttons,
-  .plat-buttons {
+  .categorie-buttons {
     margin-top: 0.5em;
     display: flex;
     flex-direction: column;
