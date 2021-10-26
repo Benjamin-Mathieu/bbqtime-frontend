@@ -2,7 +2,7 @@
   <ion-header>
     <ion-toolbar>
       <ion-title><h2>Ajout catégorie</h2></ion-title>
-      <ion-button slot="end" @click="closeModal()">
+      <ion-button fill="clear" slot="end" @click="closeModal()">
         <ion-icon name="close"></ion-icon>
       </ion-button>
     </ion-toolbar>
@@ -66,10 +66,6 @@ export default defineComponent({
     async addCategorie() {
       await this.$store.dispatch("postCategorie", this.libelle);
       this.libelle = "";
-      modalController.dismiss();
-    },
-    async closeModal() {
-      await this.$store.dispatch("getCategories");
       modalController.dismiss();
     },
   },

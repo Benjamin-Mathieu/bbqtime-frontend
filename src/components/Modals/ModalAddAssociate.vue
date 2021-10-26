@@ -2,7 +2,7 @@
   <ion-header>
     <ion-toolbar>
       <ion-title>Ajouter administrateur</ion-title>
-      <ion-button slot="end" @click="closeModal()">
+      <ion-button fill="clear" slot="end" @click="closeModal()">
         <ion-icon name="close"></ion-icon>
       </ion-button>
     </ion-toolbar>

@@ -2,7 +2,7 @@
   <ion-header>
     <ion-toolbar>
       <ion-title><h2>Modifier plat</h2></ion-title>
-      <ion-button slot="end" @click="closeModal()">
+      <ion-button fill="clear" slot="end" @click="closeModal()">
         <ion-icon name="close"></ion-icon>
       </ion-button>
     </ion-toolbar>
@@ -88,6 +88,8 @@ import {
   IonToolbar,
   IonHeader,
   IonContent,
+  IonThumbnail,
+  IonImg,
   modalController,
 } from "@ionic/vue";
 
@@ -106,6 +108,8 @@ export default defineComponent({
     IonToolbar,
     IonHeader,
     IonContent,
+    IonThumbnail,
+    IonImg,
     IonTextarea,
   },
   data() {
