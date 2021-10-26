@@ -11,7 +11,7 @@ const modulEvents = {
         participateEvents: [],
         publicEvents: [],
         myEvents: [],
-        myEventOrders: [],
+        myEventOrders: {},
         myEventDetails: [],
         eventTmp: {},
         eventDetails: [],
@@ -175,7 +175,7 @@ const modulEvents = {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
             });
-            commit("setMyEventDetails", req.data)
+            commit("setMyEventDetails", req.data);
         },
 
         async getMyEventOrders({ commit }) {
@@ -188,7 +188,7 @@ const modulEvents = {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
             });
-            commit("setMyEventOrders", req.data)
+            commit("setMyEventOrders", req.data.orders)
         },
 
         async postEvent({ state, commit }, event) {
@@ -224,7 +224,7 @@ const modulEvents = {
             }).catch((httpErrorHandler))
         },
 
-        async modifyEvent({ commit, state }, id) {
+        async getEventToEdit({ commit, state }, id) {
             let req = await axios({
                 method: "get",
                 url: URL_API + 'events/' + id,
@@ -277,7 +277,6 @@ const modulEvents = {
         },
 
         async sendInvitation({ state }, email) {
-            console.log("store invit =>", email);
             await axios({
                 method: "post",
                 url: URL_API + 'events/mail/invitation',
@@ -285,11 +284,11 @@ const modulEvents = {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 },
                 data: {
-                    event_id: state.eventTmp.id ? state.eventTmp.id : state.myEventDetails.event.id,
+                    event_id: state.eventTmp.id,
                     email: email
                 }
-            }).then(() => {
-                popup.success(`Mail envoyé à l'adresse ${email}`);
+            }).then((res) => {
+                popup.success(res.data.message);
             }).catch((httpErrorHandler))
         },
 
@@ -301,7 +300,7 @@ const modulEvents = {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 },
                 data: {
-                    event_id: state.myEventDetails.id,
+                    event_id: state.eventTmp.id,
                     email: email
                 }
             }).then((res) => {
