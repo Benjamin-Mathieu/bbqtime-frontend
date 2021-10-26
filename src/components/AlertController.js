@@ -32,7 +32,7 @@ const showAlert = {
             }
             if (type === "plat") {
                 await store.dispatch("deletePlat", id);
-                store.dispatch("getPlats");
+                store.dispatch("getCategories");
             }
             if (type === "platInShop") {
                 await store.commit("removePlatInShop", id);
