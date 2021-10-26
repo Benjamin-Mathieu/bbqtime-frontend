@@ -9,7 +9,7 @@
   </ion-header>
   <ion-content>
     <form
-      @submit.prevent="addMenu()"
+      @submit.prevent="addPlat()"
       method="post"
       enctype="multipart/form-data"
     >
@@ -43,6 +43,23 @@
               v-model.number="stock"
               required
             ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Catégorie</ion-label>
+            <ion-select
+              ok-text="Valider"
+              cancel-text="Fermer"
+              @ionChange="selectedValue($event)"
+              value=""
+            >
+              <ion-select-option
+                v-for="(categorie, index) in this.$store.state.categories"
+                :key="index"
+                :value="categorie.id"
+              >
+                {{ categorie.libelle }}
+              </ion-select-option>
+            </ion-select>
           </ion-item>
           <ion-item lines="none">
             <ion-thumbnail v-if="this.img !== null" slot="end">
@@ -90,6 +107,8 @@ import {
   IonContent,
   IonImg,
   IonThumbnail,
+  IonSelect,
+  IonSelectOption,
   modalController,
 } from "@ionic/vue";
 
@@ -110,6 +129,8 @@ export default defineComponent({
     IonTextarea,
     IonImg,
     IonThumbnail,
+    IonSelect,
+    IonSelectOption,
   },
   data() {
     return {
@@ -119,21 +140,26 @@ export default defineComponent({
       stock: 10,
       file: null,
       img: null,
+      categorieId: "",
     };
   },
   methods: {
+    selectedValue(ev) {
+      this.categorieId = ev.target.value;
+    },
+
     pickImage(selected) {
       this.file = selected.target.files[0];
       this.img = URL.createObjectURL(this.file);
     },
-    addMenu() {
+    addPlat() {
       const plat = {
         libelle: this.name,
         price: this.price,
-        photo_url: this.photo_url,
         description: this.description,
         stock: this.stock,
         file: this.file,
+        category_id: this.categorieId,
       };
       this.$store.dispatch("postPlat", plat);
 
@@ -141,11 +167,12 @@ export default defineComponent({
       this.price = "";
       this.description = "";
       this.stock = "";
+      this.categorieId;
       modalController.dismiss();
     },
 
     async closeModal() {
-      await this.$store.dispatch("getPlats");
+      await this.$store.dispatch("getCategories");
       modalController.dismiss();
     },
   },
