@@ -3,7 +3,7 @@
     <ion-fab-button>
       <ion-icon :icon="settings"></ion-icon>
     </ion-fab-button>
-    <ion-fab-list side="top">
+    <ion-fab-list side="end">
       <ion-fab-button @click="openModalQrcode()" color="primary">
         <ion-icon :icon="qrCode"></ion-icon>
       </ion-fab-button>
@@ -12,9 +12,6 @@
       </ion-fab-button>
       <ion-fab-button @click="duplicateEvent()" color="primary">
         <ion-icon :icon="duplicate"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button @click="modifyEvent()" color="primary">
-        <ion-icon :icon="pencil"></ion-icon>
       </ion-fab-button>
       <ion-fab-button @click="shareEvent()" color="primary">
         <ion-icon :icon="shareSocial"></ion-icon>
@@ -76,7 +73,7 @@ export default defineComponent({
 
     deleteEvent() {
       AlertController.validDelete(
-        this.$store.state.events.myEventDetails.event.id,
+        this.$store.state.events.eventTmp.id,
         "Confirmez-vous la suppression ?",
         "event"
       );
@@ -85,17 +82,12 @@ export default defineComponent({
     async duplicateEvent() {
       await this.$store.dispatch(
         "duplicateEvent",
-        this.$store.state.events.myEventDetails.event.id
+        this.$store.state.events.eventTmp.id
       );
-      this.$router.push({ name: "AddEvent" });
-    },
-
-    async modifyEvent() {
-      await this.$store.dispatch(
-        "modifyEvent",
-        this.$store.state.events.myEventDetails.event.id
-      );
-      this.$router.push({ name: "AddEvent" });
+      this.$router.push({
+        name: "ManageEvent",
+        params: { id: this.$store.state.events.eventTmp.id },
+      });
     },
 
     openModalQrcode() {
@@ -107,10 +99,10 @@ export default defineComponent({
     },
 
     async shareEvent() {
-      const event = this.$store.state.events.myEventDetails.event;
+      const password = this.$store.state.events.eventTmp.password;
       await Share.share({
         title: "Invitation à un évènement",
-        text: `Je t'invite à rejoindre mon évènement sur l'application BBQ Time via le mot de passe: ${event.password}`,
+        text: `Je t'invite à rejoindre mon évènement sur l'application BBQ Time via le mot de passe: ${password}`,
         dialogTitle: "Partagez votre évènement",
       });
     },
