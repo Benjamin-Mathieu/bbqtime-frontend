@@ -50,7 +50,7 @@ export default defineComponent({
   },
   data() {
     return {
-      qrcode: this.$store.state.events.myEventDetails.event.qrcode,
+      qrcode: this.$store.state.events.eventTmp.qrcode,
     };
   },
   methods: {
