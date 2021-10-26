@@ -13,17 +13,9 @@
           <ion-button @click="editCategoriePlat()">
             <ion-label>Editer catégories/plats</ion-label>
           </ion-button>
-          <router-link
-            class="links"
-            :to="{
-              name: 'MyEventDetails',
-              params: { id: this.$route.params.id },
-            }"
-          >
-            <ion-button>
-              <ion-label>Voir commandes/budget</ion-label>
-            </ion-button>
-          </router-link>
+          <ion-button @click="redirectTo()">
+            <ion-label>Voir commandes/budget</ion-label>
+          </ion-button>
         </div>
       </div>
     </ion-content>
@@ -53,19 +45,26 @@ export default defineComponent({
     ActionsButton,
   },
   ionViewWillEnter() {
-    console.log("ionviewwillenter");
     this.$store.dispatch("getEventToEdit", this.$route.params.id);
+    console.log("param id => ", this.$route.params.id);
   },
   methods: {
     editEvent() {
       ShowModal.editInfoEvent();
     },
+
     async editCategoriePlat() {
       await this.$store.dispatch(
         "getCategories",
         this.$store.state.events.eventTmp.id
       );
       ShowModal.editCategoriePlat();
+    },
+
+    redirectTo() {
+      this.$router.push({
+        name: "MyEventDetails",
+      });
     },
   },
 });

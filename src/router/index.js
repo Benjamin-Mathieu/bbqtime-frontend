@@ -74,7 +74,7 @@ const routes = [
     component: () => import('@/views/MyEvents.vue')
   },
   {
-    path: '/my-events/:id',
+    path: '/manage-event/:id/budget',
     name: 'MyEventDetails',
     component: () => import('@/views/MyEventDetails.vue')
   },
