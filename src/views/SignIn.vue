@@ -25,7 +25,18 @@
             <router-link :to="{ name: 'ResetPassword' }">
               <ion-item>Mot de passe oublié ?</ion-item>
             </router-link>
-            <ion-button slot="end" type="submit">Connexion</ion-button>
+            <ion-button slot="end" :disabled="disabledButton" type="submit">
+              Connexion
+              <ion-spinner
+                v-if="showSpinner === true"
+                name="crescent"
+              ></ion-spinner>
+            </ion-button>
+            <!-- <SubmitButton
+              callApi="loginUser"
+              :payload="{ email: this.email, password: this.password }"
+              text="Connexion"
+            ></SubmitButton> -->
           </ion-card-content>
         </ion-card>
         <router-link :to="{ name: 'SignUp' }">
@@ -49,11 +60,13 @@ import {
   IonCardContent,
   IonButton,
   IonIcon,
+  IonSpinner,
 } from "@ionic/vue";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
 import { eyeOutline, eyeOffOutline } from "ionicons/icons";
+// import SubmitButton from "../components/Buttons/SubmitButton.vue";
 
 export default defineComponent({
   components: {
@@ -69,6 +82,8 @@ export default defineComponent({
     IonCardContent,
     IonButton,
     IonIcon,
+    IonSpinner,
+    // SubmitButton,
   },
   name: "SignIn",
 
@@ -79,12 +94,18 @@ export default defineComponent({
       showPassword: false,
       typeInputPassword: "password",
       icon: eyeOutline,
+      disabledButton: false,
+      showSpinner: false,
     };
   },
   methods: {
-    authUser() {
+    async authUser() {
+      this.disabledButton = true;
+      this.showSpinner = true;
       const user = { email: this.email, password: this.password };
-      this.$store.dispatch("loginUser", user);
+      await this.$store.dispatch("loginUser", user);
+      this.disabledButton = false;
+      this.showSpinner = false;
     },
     show() {
       this.showPassword = !this.showPassword;

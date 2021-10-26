@@ -15,12 +15,12 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-primary-tint: #4c8dff;
 
   /** secondary **/
-  --ion-color-secondary: #3dc2ff;
+  --ion-color-secondary: #D7B59D;
   --ion-color-secondary-rgb: 61, 194, 255;
   --ion-color-secondary-contrast: #ffffff;
   --ion-color-secondary-contrast-rgb: 255, 255, 255;
-  --ion-color-secondary-shade: #36abe0;
-  --ion-color-secondary-tint: #50c8ff;
+  --ion-color-secondary-shade: #d7b59de1;
+  --ion-color-secondary-tint: #fbcaa7;
 
   /** tertiary **/
   --ion-color-tertiary: #ffffff;
@@ -261,5 +261,10 @@ ion-item {
 ion-menu .shop,
 ion-menu .menu {
   --background: #E5E5E5;
+}
+
+ion-segment-button {
+  --background-checked: var(--ion-color-secondary);
+  --color-checked: var(--ion-color-primary);
 }
 

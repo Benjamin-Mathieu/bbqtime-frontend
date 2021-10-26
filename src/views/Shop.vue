@@ -103,6 +103,7 @@ export default defineComponent({
 
   .img {
     width: 35%;
+    height: 100%;
   }
   .info-plat {
     width: 65%;

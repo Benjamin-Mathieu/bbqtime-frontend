@@ -26,7 +26,8 @@
                     Rupture de stock !
                   </h3>
                   <ion-card-subtitle>
-                    {{ plat.libelle + plat.price + "€" }}
+                    {{ plat.libelle }}<br />
+                    {{ plat.price + "€" }}
                   </ion-card-subtitle>
                 </ion-card-header>
 
@@ -59,11 +60,6 @@
                       <ion-icon :icon="addCircleOutline"></ion-icon>
                     </ion-button>
                   </div>
-                  <div class="stock">
-                    <ion-progress-bar
-                      :value="1 - plat.qty / plat.stock"
-                    ></ion-progress-bar>
-                  </div>
                 </ion-card-content>
               </ion-card>
             </ion-col>
@@ -90,7 +86,6 @@ import {
   IonCardSubtitle,
   IonIcon,
   IonButton,
-  IonProgressBar,
   IonSelect,
   IonSelectOption,
 } from "@ionic/vue";
@@ -115,7 +110,6 @@ export default defineComponent({
     IonCardSubtitle,
     IonIcon,
     IonButton,
-    IonProgressBar,
     IonSelect,
     IonSelectOption,
     Sub,

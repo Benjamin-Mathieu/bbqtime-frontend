@@ -396,7 +396,7 @@ ion-item {
 
 ion-card-content {
   --padding-start: 0px;
-  --padding-end: 0px;
+  --padding-end: 0.5em;
 }
 
 .link {
@@ -407,7 +407,7 @@ ion-card-content {
   display: flex;
   min-height: 129px;
   .img-container {
-    width: 35%;
+    width: 40%;
     padding: 0.5em;
     img {
       border-radius: 5px;
@@ -417,7 +417,7 @@ ion-card-content {
   }
 
   .info {
-    width: 65%;
+    width: 60%;
   }
 }
 
