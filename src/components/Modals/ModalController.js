@@ -6,6 +6,8 @@ import ModalPlat from "./ModalPlat.vue";
 import ModalAddAssociate from "./ModalAddAssociate.vue";
 import ModalQrCode from "./ModalQrCode";
 import ModalInvitationEvent from "./ModalInvitationEvent";
+import ModalEditInfoEvent from "./ModalEditInfoEvent";
+import ModalEditCategoriePlat from "./ModalEditCategoriePlat";
 
 const showModal = {
     async addCategorie() {
@@ -41,6 +43,20 @@ const showModal = {
     async addAssociate() {
         const modal = await modalController.create({
             component: ModalAddAssociate,
+        });
+        return modal.present();
+    },
+
+    async editInfoEvent() {
+        const modal = await modalController.create({
+            component: ModalEditInfoEvent,
+        });
+        return modal.present();
+    },
+
+    async editCategoriePlat() {
+        const modal = await modalController.create({
+            component: ModalEditCategoriePlat,
         });
         return modal.present();
     },
