@@ -13,7 +13,7 @@
         <div
           @click="
             this.$router.push({
-              name: 'MyEventDetails',
+              name: 'ManageEvent',
               params: { id: event.id },
             })
           "
@@ -30,7 +30,8 @@
                   <b>{{ event.name }}</b>
                   <p
                     v-if="
-                      event.user_id !== this.$store.getters.getUserInformation.id
+                      event.user_id !==
+                      this.$store.getters.getUserInformation.id
                     "
                   >
                     Associé
