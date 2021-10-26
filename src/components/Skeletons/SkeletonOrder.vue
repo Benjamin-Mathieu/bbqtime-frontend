@@ -8,29 +8,38 @@
     </div>
 
     <div class="preview-container">
-      <ion-card-title>
-        <h5>
-          <ion-skeleton-text animated style="width: 80px"></ion-skeleton-text>
-        </h5>
-      </ion-card-title>
-      <ion-card-content class="preview">
-        <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
-        <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
-      </ion-card-content>
+      <ion-skeleton-text
+        animated
+        style="height: 16px; width: 100%"
+      ></ion-skeleton-text>
+      <ion-skeleton-text
+        animated
+        style="height: 16px; width: 100%"
+      ></ion-skeleton-text>
+      <ion-skeleton-text
+        animated
+        style="height: 16px; width: 100%"
+      ></ion-skeleton-text>
+      <ion-skeleton-text
+        animated
+        style="height: 16px; width: 100%"
+      ></ion-skeleton-text>
+      <ion-skeleton-text
+        animated
+        style="height: 16px; width: 100%"
+      ></ion-skeleton-text>
     </div>
   </div>
 </template>
 
 <script>
 import { defineComponent } from "vue";
-import { IonSkeletonText, IonCardTitle, IonCardContent } from "@ionic/vue";
+import { IonSkeletonText } from "@ionic/vue";
 
 export default defineComponent({
   name: "Skeleton",
   components: {
     IonSkeletonText,
-    IonCardTitle,
-    IonCardContent,
   },
 });
 </script>
@@ -40,7 +49,7 @@ export default defineComponent({
   display: flex;
   min-height: 129px;
   .img-container {
-    width: 30%;
+    width: 40%;
     padding: 0.5em;
     img {
       border-radius: 5px;
@@ -50,9 +59,8 @@ export default defineComponent({
   }
 
   .preview-container {
-    .preview {
-      padding: 0px;
-    }
+    width: 60%;
+    padding: 0.5em;
   }
 }
 </style>
