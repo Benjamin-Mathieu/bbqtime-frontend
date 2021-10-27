@@ -5,17 +5,16 @@
         <ion-label position="floating">Nom</ion-label>
         <ion-input type="text" v-model="name" required></ion-input>
       </ion-item>
-      <ion-item>
+      <ion-item lines="none">
         <ion-label>Choisir le lieu</ion-label>
         <ion-button @click="openMapModal()">Ouvrir carte</ion-button>
       </ion-item>
       <ion-item
         v-if="Object.keys(this.$store.state.events.eventTmp).length > 0"
       >
-        Adresse:
         {{
           this.$store.state.events.eventTmp.address +
-          " " +
+          ", " +
           this.$store.state.events.eventTmp.zipcode +
           " " +
           this.$store.state.events.eventTmp.city
@@ -41,6 +40,7 @@
         <ion-datetime
           v-model="hours"
           display-format="HH:mm"
+          display-timezone="utc"
           done-text="Valider"
           cancel-text="Fermer"
           minuteValues="0,15,30,45"
@@ -171,11 +171,13 @@ export default defineComponent({
       icon: eyeOutline,
     };
   },
+
   computed: {
     actualDate() {
-      return new Date().toISOString().slice(0, 10);
+      return new Date().toISOString();
     },
   },
+
   methods: {
     show() {
       this.showPassword = !this.showPassword;
@@ -188,18 +190,16 @@ export default defineComponent({
       this.file = selected.target.files[0];
       this.img = URL.createObjectURL(this.file);
     },
+
     addInfoEvent() {
-      //Convert date+hours in DATETIME
-      this.date = this.date.slice(0, 10);
-      this.hours = this.hours.slice(11, 19);
-      const datetime = this.date.concat("T", this.hours, "Z");
+      const date = this.convertDate(this.date, this.hours);
 
       const event = {
         name: this.name,
         address: this.$store.getters.getAddress.name,
         city: this.$store.getters.getAddress.city,
         zipcode: this.$store.getters.getAddress.postcode,
-        date: datetime,
+        date: date,
         description: this.description,
         private: this.isPrivate,
         file: this.file,
@@ -209,11 +209,20 @@ export default defineComponent({
       this.$store.dispatch("postEvent", event);
     },
 
-    async updateEvent() {
-      //Convert date+hours in DATETIME
-      this.date = this.date.slice(0, 10);
-      this.hours = this.hours.slice(11, 19);
-      const datetime = this.date.concat("T", this.hours, "Z");
+    convertDate(date, hours) {
+      const d = new Date(date);
+      const h = new Date(hours);
+      return new Date(
+        d.getFullYear(),
+        d.getMonth(),
+        d.getDate(),
+        h.getHours(),
+        h.getMinutes()
+      ).toISOString();
+    },
+
+    updateEvent() {
+      const date = this.convertDate(this.date, this.hours);
 
       const event = {
         id: this.$store.state.events.eventTmp.id,
@@ -227,7 +236,7 @@ export default defineComponent({
         zipcode: this.$store.getters.getAddress.postcode
           ? this.$store.getters.getAddress.postcode
           : this.$store.state.events.eventTmp.zipcode,
-        date: datetime,
+        date: date,
         description: this.description,
         private: this.isPrivate,
         file: this.file
