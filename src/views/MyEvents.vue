@@ -3,53 +3,65 @@
     <Header></Header>
     <Sub title="Mes évènements"></Sub>
     <ion-content>
-      <RefreshData callApi="getMyEvents"></RefreshData>
-      <ion-card
-        v-for="event in this.$store.state.events.myEvents"
-        :key="event.id"
+      <div
+        class="no-event"
+        v-if="this.$store.state.events.myEvents.length === 0"
       >
-        <Skeleton v-if="loaded === false"></Skeleton>
+        <EmptyCard text="Vous n'avez pas encore crée d'évènement"></EmptyCard>
+        <router-link :to="{ name: 'AddEvent' }">
+          <ion-button> Crée un évènement </ion-button>
+        </router-link>
+      </div>
 
-        <div
-          @click="redirectToManageEvent(event.id)"
-          v-if="loaded === true"
-          class="event"
+      <div v-else>
+        <RefreshData callApi="getMyEvents"></RefreshData>
+        <ion-card
+          v-for="event in this.$store.state.events.myEvents"
+          :key="event.id"
         >
-          <div class="img-container">
-            <img alt="event-img" :src="event.photo_url" />
-          </div>
-          <div class="info">
-            <ion-card-content>
-              <ion-item>
-                <ion-label>
-                  <b>{{ event.name }}</b>
-                  <p
-                    v-if="
-                      event.user_id !==
-                      this.$store.getters.getUserInformation.id
-                    "
+          <Skeleton v-if="loaded === false"></Skeleton>
+
+          <div
+            @click="redirectToManageEvent(event.id)"
+            v-if="loaded === true"
+            class="event"
+          >
+            <div class="img-container">
+              <img alt="event-img" :src="event.photo_url" />
+            </div>
+            <div class="info">
+              <ion-card-content>
+                <ion-item>
+                  <ion-label>
+                    <b>{{ event.name }}</b>
+                    <p
+                      v-if="
+                        event.user_id !==
+                        this.$store.getters.getUserInformation.id
+                      "
+                    >
+                      Associé
+                    </p>
+                  </ion-label>
+                  <ion-button
+                    @click.stop="showActions(event.id)"
+                    slot="end"
+                    size="small"
                   >
-                    Associé
-                  </p>
-                </ion-label>
-                <ion-button
-                  @click.stop="showActions(event.id)"
-                  slot="end"
-                  size="small"
-                >
-                  <ion-icon :icon="ellipsisHorizontalOutline"></ion-icon>
-                </ion-button>
-              </ion-item>
-              <p>
-                {{ event.description }}
-              </p>
-              <p>
-                {{ event.zipcode + " " + event.address + " " + event.city }}
-              </p>
-            </ion-card-content>
+                    <ion-icon :icon="ellipsisHorizontalOutline"></ion-icon>
+                  </ion-button>
+                </ion-item>
+                <p>
+                  {{ event.description }}
+                </p>
+                <p>
+                  {{ event.zipcode + " " + event.address + " " + event.city }}
+                </p>
+              </ion-card-content>
+            </div>
           </div>
-        </div>
-      </ion-card>
+        </ion-card>
+      </div>
     </ion-content>
     <Footer></Footer>
   </ion-page>
@@ -67,6 +79,7 @@ import {
   IonItem,
   IonButton,
 } from "@ionic/vue";
+import EmptyCard from "../components/EmptyCard.vue";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
@@ -86,6 +99,7 @@ export default defineComponent({
     IonCardContent,
     IonItem,
     IonButton,
+    EmptyCard,
     Sub,
     Header,
     Footer,
@@ -122,6 +136,10 @@ export default defineComponent({
 <style lang="scss" scoped>
 ion-item {
   --padding-start: 0px;
+}
+
+.no-event {
+  text-align: center;
 }
 
 .event {
