@@ -1,7 +1,7 @@
 import { ActionSheet, ActionSheetButtonStyle } from '@capacitor/action-sheet';
-import router from "../router/index";
 import store from "../store/store";
 import showAlert from './AlertController';
+import showModal from "./Modals/ModalController";
 
 const showActions = {
   async event(id) {
@@ -9,10 +9,13 @@ const showActions = {
       title: 'Choisissez une option',
       options: [
         {
-          title: 'Gérer',
+          title: 'Qrcode',
         },
         {
           title: 'Copier',
+        },
+        {
+          title: 'Inviter'
         },
         {
           title: 'Supprimer',
@@ -26,12 +29,15 @@ const showActions = {
     });
     switch (result.index) {
       case 0:
-        router.push({ name: 'MyEventDetails', params: { id: id } });
+        actions.qrcode(id);
         break;
       case 1:
         actions.duplicate(id);
         break;
       case 2:
+        actions.invite(id);
+        break;
+      case 3:
         showAlert.validDelete(id, "Voulez-vous supprimez cet évènement", "event");
         break;
     }
@@ -39,9 +45,18 @@ const showActions = {
 }
 
 const actions = {
-  async duplicate(id) {
-    await store.dispatch("duplicateEvent", id);
-    router.push({ name: "AddEvent" });
+  duplicate(id) {
+    store.dispatch("duplicateEvent", id);
+  },
+
+  async invite(id) {
+    await store.dispatch("getEvent", id);
+    showModal.invitationEvent();
+  },
+
+  async qrcode(id) {
+    await store.dispatch("getEvent", id);
+    showModal.qrCode();
   }
 }
 
