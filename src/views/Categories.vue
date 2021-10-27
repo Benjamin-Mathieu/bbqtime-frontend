@@ -22,14 +22,11 @@
                   '/event/' + categorie.event_id + '/categorie/' + categorie.id
                 "
               >
-                <div v-for="plat in categorie.plats" :key="plat.id">
-                  <img
-                    v-if="plat.category_id === categorie.id"
-                    :src="plat.photo_url"
-                    alt="img-categorie"
-                    class="img"
-                  />
-                </div>
+                <img
+                  :src="categorie.plats[0].photo_url"
+                  alt="img-categorie"
+                  class="img"
+                />
                 <ion-card-subtitle>
                   <p>{{ categorie.libelle }}</p>
                 </ion-card-subtitle>
