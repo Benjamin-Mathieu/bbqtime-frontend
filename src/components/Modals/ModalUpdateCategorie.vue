@@ -17,9 +17,14 @@
           </ion-item>
         </ion-card-content>
         <ion-item lines="none">
-          <ion-button type="submit" slot="end" size="small"
-            >Mettre à jour</ion-button
+          <ion-button
+            type="submit"
+            slot="end"
+            size="small"
+            :disabled="disabledButton"
           >
+            Mettre à jour
+          </ion-button>
         </ion-item>
       </ion-card>
     </form>
@@ -63,8 +68,21 @@ export default defineComponent({
   data() {
     return {
       editLibelle: this.libelle,
+      disabledButton: true,
     };
   },
+
+  watch: {
+    editLibelle() {
+      if (this.editLibelle !== this.libelle) {
+        this.disabledButton = false;
+      }
+      if (this.editLibelle === this.libelle) {
+        this.disabledButton = true;
+      }
+    },
+  },
+
   methods: {
     updateCategorie() {
       const data = {
