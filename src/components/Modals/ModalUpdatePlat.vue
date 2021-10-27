@@ -168,8 +168,6 @@ export default defineComponent({
     async updatePlat() {
       await this.fileUrlToFileObject();
 
-      console.log("id catg => ", this.categoryId);
-
       const plat = {
         id: this.plat.id,
         libelle: this.name,

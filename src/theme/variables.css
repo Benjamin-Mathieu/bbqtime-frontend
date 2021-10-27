@@ -243,20 +243,12 @@ ion-card {
 }
 
 ion-content {
-  /* --padding-bottom: 16px;
-  --padding-start: 16px;
-  --padding-end: 16px;
-  --padding-top: 16px; */
   --background: #D7B59D;
 }
 
 ion-item {
   --background: #FFFFFF;
 }
-
-/* ion-button {
-  --background: rgba(116, 15, 19, 0.8);
-} */
 
 ion-menu .shop,
 ion-menu .menu {

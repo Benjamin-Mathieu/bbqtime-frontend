@@ -167,7 +167,6 @@ export default defineComponent({
       this.price = "";
       this.description = "";
       this.stock = "";
-      this.categorieId;
       modalController.dismiss();
     },
 

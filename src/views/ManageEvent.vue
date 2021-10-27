@@ -45,8 +45,7 @@ export default defineComponent({
     ActionsButton,
   },
   ionViewWillEnter() {
-    this.$store.dispatch("getEventToEdit", this.$route.params.id);
-    console.log("param id => ", this.$route.params.id);
+    this.$store.dispatch("getEvent", this.$route.params.id);
   },
   methods: {
     editEvent() {
