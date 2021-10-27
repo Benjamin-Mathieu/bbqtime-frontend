@@ -99,7 +99,7 @@ router.beforeEach((to, from, next) => {
   let currentRoute = from;
   if (currentRoute.name === "AddEvent" && (store.state.events.currentStep < 3)) {
     if (confirm("Voulez-vous quitter la page ? Vous allez perdre les modifications en cours")) {
-      next();
+      return next();
     } else {
       next(false);
     }
