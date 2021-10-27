@@ -2,7 +2,7 @@
   <ion-header>
     <ion-toolbar>
       <ion-title><h2>Ajout plat</h2></ion-title>
-      <ion-button slot="end" @click="closeModal()">
+      <ion-button slot="end" fill="clear" @click="closeModal()">
         <ion-icon name="close"></ion-icon>
       </ion-button>
     </ion-toolbar>
@@ -33,7 +33,6 @@
               type="text"
               v-model="description"
               placeholder="Description, allergènes..."
-              required
             ></ion-textarea>
           </ion-item>
           <ion-item>
