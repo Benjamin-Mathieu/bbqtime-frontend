@@ -275,12 +275,14 @@ export default defineComponent({
     RefreshData,
     EmptyCard,
   },
+
   data() {
     return {
       selectedTypeEvent: "public",
       loaded: false,
     };
   },
+
   setup() {
     return {
       lockClosed,
@@ -289,6 +291,7 @@ export default defineComponent({
       ellipsisHorizontalOutline,
     };
   },
+
   async ionViewWillEnter() {
     switch (this.selectedTypeEvent) {
       case "public":
@@ -308,6 +311,7 @@ export default defineComponent({
         break;
     }
   },
+
   watch: {
     async selectedTypeEvent() {
       switch (this.selectedTypeEvent) {
@@ -328,11 +332,8 @@ export default defineComponent({
           break;
       }
     },
-
-    "$store.state.events.pagination.currentPage": function (currentPage) {
-      console.log("currentPage =>", currentPage);
-    },
   },
+
   methods: {
     async showActions(id) {
       ShowActions.event(id);
