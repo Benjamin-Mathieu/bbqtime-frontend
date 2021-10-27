@@ -3,69 +3,70 @@
     <Header></Header>
     <Sub
       :showShopButton="true"
-      :title="this.$store.getters.getCurrentEvent.name + ' / ' + this.categorie"
+      :title="
+        this.$store.getters.getCurrentEvent.name + ' / ' + libelleCategorie
+      "
     ></Sub>
     <ion-content>
-      <div
-        v-for="categorie in this.$store.state.events.eventDetails.categories"
-        :key="categorie.id"
-      >
-        <ion-grid>
-          <ion-row>
-            <ion-col v-for="plat in categorie.plats" :key="plat.id" size="6">
-              <ion-card
-                v-if="plat.category_id == this.$route.params.idCategorie"
-              >
-                <ion-card-header>
-                  <img
-                    style="border-radius: 4px; height: 122px"
-                    :src="plat.photo_url"
-                    alt="img-plat"
-                  />
-                  <h3 style="color: red" v-if="plat.stock === 0">
-                    Rupture de stock !
-                  </h3>
-                  <ion-card-subtitle>
-                    {{ plat.libelle }}<br />
-                    {{ plat.price + "€" }}
-                  </ion-card-subtitle>
-                </ion-card-header>
+      <ion-grid>
+        <ion-row>
+          <ion-col v-for="plat in plats" :key="plat.id" size="6">
+            <ion-card>
+              <ion-card-header>
+                <img
+                  :src="plat.photo_url"
+                  alt="img-plat"
+                  style="
+                    border-radius: 4px;
+                    width: 100%;
+                    height: 124px;
+                    object-fit: fill;
+                  "
+                />
+              </ion-card-header>
 
-                <ion-card-content>
-                  <p>{{ plat.description }}</p>
-                  <div class="quantity" v-if="plat.stock > 0">
-                    <ion-item lines="none">
-                      <ion-select
-                        :ref="'quantity' + plat.id"
-                        ok-text="Valider"
-                        cancel-text="Fermer"
-                        :value="1"
-                        @ionChange="selectedValue($event)"
-                      >
-                        <ion-select-option
-                          v-for="(selectQty, index) in plat.stock"
-                          :key="index"
-                          :value="selectQty"
-                          v-model="qty[index]"
-                        >
-                          {{ selectQty }}
-                        </ion-select-option>
-                      </ion-select>
-                    </ion-item>
-                    <ion-button
-                      slot="icon-only"
-                      @click="addToShop(plat)"
-                      size="small"
+              <ion-card-content>
+                <h3 style="color: red" v-if="plat.stock === 0">
+                  Rupture de stock !
+                </h3>
+                <ion-card-subtitle color="primary">
+                  {{ plat.libelle }}<br />
+                  {{ plat.price + "€" }}
+                </ion-card-subtitle>
+                <p>{{ plat.description }}</p>
+                <div class="quantity" v-if="plat.stock > 0">
+                  <ion-item lines="none">
+                    <ion-select
+                      :ref="'quantity' + plat.id"
+                      ok-text="Valider"
+                      cancel-text="Fermer"
+                      :value="1"
+                      @ionChange="selectedValue($event)"
                     >
-                      <ion-icon :icon="addCircleOutline"></ion-icon>
-                    </ion-button>
-                  </div>
-                </ion-card-content>
-              </ion-card>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </div>
+                      <ion-select-option
+                        v-for="(selectQty, index) in plat.stock"
+                        :key="index"
+                        :value="selectQty"
+                        v-model="qty[index]"
+                      >
+                        {{ selectQty }}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                  <ion-button
+                    slot="icon-only"
+                    fill="outline"
+                    @click="addToShop(plat)"
+                    size="small"
+                  >
+                    <ion-icon :icon="add"></ion-icon>
+                  </ion-button>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-content>
     <Footer :showDetails="true"></Footer>
   </ion-page>
@@ -89,7 +90,7 @@ import {
   IonSelect,
   IonSelectOption,
 } from "@ionic/vue";
-import { addCircleOutline } from "ionicons/icons";
+import { add } from "ionicons/icons";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
@@ -118,7 +119,7 @@ export default defineComponent({
   },
   setup() {
     return {
-      addCircleOutline,
+      add,
     };
   },
   data() {
@@ -128,14 +129,26 @@ export default defineComponent({
     };
   },
   computed: {
-    categorie() {
-      let value = "";
+    libelleCategorie() {
+      let libelle = "";
       this.$store.getters.getCurrentEvent.categories.forEach((categorie) => {
         if (this.$route.params.idCategorie == categorie.id) {
-          value = categorie.libelle;
+          libelle = categorie.libelle;
         }
       });
-      return value;
+      return libelle;
+    },
+
+    plats() {
+      let plats = [];
+      this.$store.state.events.eventDetails.categories.forEach((categorie) => {
+        categorie.plats.forEach((plat) => {
+          if (plat.category_id == this.$route.params.idCategorie) {
+            plats.push(plat);
+          }
+        });
+      });
+      return plats;
     },
   },
   methods: {
@@ -179,7 +192,6 @@ ion-select {
   border: 2px solid #7a1c1e;
   border-radius: 4px;
   background-color: white;
-  width: 2000px;
 }
 ion-select::part(icon) {
   color: #7a1c1e;
@@ -197,6 +209,7 @@ ion-card-content {
   .quantity {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     margin-bottom: 1em;
   }
 }

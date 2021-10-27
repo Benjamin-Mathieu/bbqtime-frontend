@@ -11,12 +11,7 @@
         <Skeleton v-if="loaded === false"></Skeleton>
 
         <div
-          @click="
-            this.$router.push({
-              name: 'ManageEvent',
-              params: { id: event.id },
-            })
-          "
+          @click="redirectToManageEvent(event.id)"
           v-if="loaded === true"
           class="event"
         >
@@ -112,6 +107,13 @@ export default defineComponent({
   methods: {
     async showActions(id) {
       ShowActions.event(id);
+    },
+
+    redirectToManageEvent(id) {
+      this.$router.push({
+        name: "ManageEvent",
+        params: { id: id },
+      });
     },
   },
 });

@@ -45,7 +45,7 @@
           <div
             v-if="loaded === true"
             class="event"
-            @click="redirectToManageEvent(event.id)"
+            @click="redirectToEvent(event.id)"
           >
             <div class="img-container">
               <img alt="event-img" :src="event.photo_url" />
@@ -99,7 +99,11 @@
         >
           <Skeleton v-if="loaded === false"></Skeleton>
 
-          <div v-if="loaded === true" class="event" @click="getEvent(event.id)">
+          <div
+            v-if="loaded === true"
+            class="event"
+            @click="redirectToEvent(event.id)"
+          >
             <div class="img-container">
               <img alt="event-img" :src="event.photo_url" />
             </div>
@@ -129,57 +133,54 @@
           text="Vous n'avez pas crée d'évènement"
         ></EmptyCard>
 
-        <ion-card
-          v-for="event in this.$store.state.events.myEvents"
-          :key="event.id"
-        >
-          <Skeleton v-if="loaded === false"></Skeleton>
-
-          <div
-            @click="
-              this.$router.push({
-                name: 'MyEventDetails',
-                params: { id: event.id },
-              })
-            "
-            v-if="loaded === true"
-            class="event"
+        <div v-else>
+          <ion-card
+            v-for="event in this.$store.state.events.myEvents"
+            :key="event.id"
           >
-            <div class="img-container">
-              <img alt="event-img" :src="event.photo_url" />
-            </div>
-            <div class="info">
-              <ion-card-content>
-                <ion-item>
-                  <ion-label>
-                    <b>{{ event.name }}</b>
-                    <p
-                      v-if="
-                        event.user_id !==
-                        this.$store.getters.getUserInformation.id
-                      "
+            <Skeleton v-if="loaded === false"></Skeleton>
+
+            <div
+              @click="redirectToManageEvent(event.id)"
+              v-if="loaded === true"
+              class="event"
+            >
+              <div class="img-container">
+                <img alt="event-img" :src="event.photo_url" />
+              </div>
+              <div class="info">
+                <ion-card-content>
+                  <ion-item>
+                    <ion-label>
+                      <b>{{ event.name }}</b>
+                      <p
+                        v-if="
+                          event.user_id !==
+                          this.$store.getters.getUserInformation.id
+                        "
+                      >
+                        Associé
+                      </p>
+                    </ion-label>
+                    <ion-button
+                      @click.stop="showActions(event.id)"
+                      slot="end"
+                      size="small"
                     >
-                      Associé
-                    </p>
-                  </ion-label>
-                  <ion-button
-                    @click.stop="showActions(event.id)"
-                    slot="end"
-                    size="small"
-                  >
-                    <ion-icon :icon="ellipsisHorizontalOutline"></ion-icon>
-                  </ion-button>
-                </ion-item>
-                <p>
-                  {{ event.description }}
-                </p>
-                <p>
-                  {{ event.zipcode + " " + event.address + " " + event.city }}
-                </p>
-              </ion-card-content>
+                      <ion-icon :icon="ellipsisHorizontalOutline"></ion-icon>
+                    </ion-button>
+                  </ion-item>
+                  <p>
+                    {{ event.description }}
+                  </p>
+                  <p>
+                    {{ event.zipcode + " " + event.address + " " + event.city }}
+                  </p>
+                </ion-card-content>
+              </div>
             </div>
-          </div>
-        </ion-card>
+          </ion-card>
+        </div>
       </div>
 
       <div class="pagination">
@@ -336,12 +337,19 @@ export default defineComponent({
     async showActions(id) {
       ShowActions.event(id);
     },
+
+    redirectToEvent(id) {
+      this.$router.push({ name: "Categories", params: { id: id } });
+    },
+
     redirectToManageEvent(id) {
       this.$router.push({ name: "ManageEvent", params: { id: id } });
     },
+
     selectedValue(e) {
       this.selectedTypeEvent = e.target.value;
     },
+
     async pageChange(page) {
       switch (this.selectedTypeEvent) {
         case "public":
@@ -363,6 +371,7 @@ export default defineComponent({
           break;
       }
     },
+
     async prevPage() {
       let prevPage = this.$store.state.events.pagination.currentPage - 1;
       switch (this.selectedTypeEvent) {
@@ -383,6 +392,7 @@ export default defineComponent({
           break;
       }
     },
+
     async nextPage() {
       let nextPage = this.$store.state.events.pagination.currentPage + 1;
       switch (this.selectedTypeEvent) {

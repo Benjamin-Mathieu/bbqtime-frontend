@@ -38,7 +38,7 @@
             <ion-label>Catégorie</ion-label>
           </ion-segment-button>
           <ion-segment-button value="plat" :disabled="noCategory">
-            <ion-label>Plats</ion-label>
+            <ion-label>Plat</ion-label>
           </ion-segment-button>
         </ion-segment>
 
@@ -47,7 +47,7 @@
             @click="openModalCategorie()"
             fill="outline"
             v-if="toggleForm === 'categorie'"
-            >Ajouter une catégorie</ion-button
+            >Ajouter catégorie</ion-button
           >
           <ion-row>
             <ion-col
@@ -98,7 +98,9 @@
         </ion-grid>
 
         <ion-grid v-if="toggleForm === 'plat'">
-          <ion-button fill="outline" @click="openModalPlat()">Ajouter un plat</ion-button>
+          <ion-button fill="outline" @click="openModalPlat()"
+            >Ajouter plat</ion-button
+          >
           <ion-row>
             <ion-col v-for="plat in plats" :key="plat.id" size="6">
               <ion-card class="plat">
@@ -155,7 +157,7 @@
 
             <ion-button size="small" @click="shareEvent()">
               <ion-icon slot="end" :icon="shareSocial"></ion-icon>
-              <ion-label>Partager le lien</ion-label>
+              <ion-label>Partager lien</ion-label>
             </ion-button>
             <ion-button
               size="small"
@@ -262,6 +264,7 @@ export default defineComponent({
   },
   ionViewWillEnter() {
     this.$store.commit("setCurrentStep", 1);
+    // this.$store.commit("setEventTmp", {});
 
     if (Object.keys(this.$store.state.events.eventTmp).length > 0) {
       this.disabledStep2 = false;
