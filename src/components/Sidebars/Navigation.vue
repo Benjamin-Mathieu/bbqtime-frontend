@@ -8,39 +8,57 @@
       </ion-list-header>
       <ion-list v-if="!this.$store.state.auth.userIsLoggedIn" lines="none">
         <router-link class="links" :to="{ name: 'Events' }">
-          <ion-item>Evènements</ion-item>
+          <ion-item>
+            <p>Evènements</p>
+          </ion-item>
         </router-link>
         <router-link class="links" :to="{ name: 'Shop' }">
-          <ion-item>Panier</ion-item>
+          <ion-item>
+            <p>Panier</p>
+          </ion-item>
         </router-link>
         <router-link class="links" :to="{ name: 'SignIn' }">
-          <ion-item>Connexion</ion-item>
+          <ion-item>
+            <p>Connexion</p>
+          </ion-item>
         </router-link>
       </ion-list>
       <ion-list v-else lines="none">
         <router-link class="links" :to="{ name: 'Events' }">
-          <ion-item>Evènements</ion-item>
+          <ion-item>
+            <p>Evènements</p>
+          </ion-item>
         </router-link>
         <router-link class="links" :to="{ name: 'Orders' }">
-          <ion-item>Commandes</ion-item>
+          <ion-item>
+            <p>Commandes</p>
+          </ion-item>
         </router-link>
         <router-link class="links" :to="{ name: 'Shop' }">
-          <ion-item>Panier</ion-item>
+          <ion-item>
+            <p>Panier</p>
+          </ion-item>
         </router-link>
         <router-link class="links" :to="{ name: 'AddEvent' }">
-          <ion-item>Créer un évènement</ion-item>
+          <ion-item>
+            <p>Créer un évènement</p>
+          </ion-item>
         </router-link>
         <router-link class="links" :to="{ name: 'Scan' }">
-          <ion-item>Scan</ion-item>
+          <ion-item>
+            <p>Scan</p>
+          </ion-item>
         </router-link>
         <router-link class="links" :to="{ name: 'Account' }">
-          <ion-item>Mon compte</ion-item>
+          <ion-item>
+            <p>Mon compte</p>
+          </ion-item>
         </router-link>
-        <ion-item slot="end">
+        <div class="logout-button">
           <ion-button size="medium" @click="logoutUser()">
             Déconnexion
           </ion-button>
-        </ion-item>
+        </div>
       </ion-list>
     </ion-content>
   </ion-menu>
@@ -88,6 +106,9 @@ export default defineComponent({
 <style lang="scss" scoped>
 ion-item {
   --background: #e5e5e5;
+  p {
+    color: #853538;
+  }
 }
 ion-list {
   padding-bottom: 0px;
@@ -95,6 +116,12 @@ ion-list {
 
   .links {
     text-decoration: none;
+  }
+
+  .logout-button {
+    padding-top: 1em;
+    text-align: center;
+    background-color: #e5e5e5;
   }
 }
 </style>
