@@ -68,6 +68,11 @@ export default defineComponent({
       this.libelle = "";
       modalController.dismiss();
     },
+
+    async closeModal() {
+      await this.$store.dispatch("getCategories");
+      modalController.dismiss();
+    },
   },
 });
 </script>
