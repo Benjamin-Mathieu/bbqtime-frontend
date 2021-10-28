@@ -79,28 +79,24 @@ export default defineComponent({
       );
     },
 
-    async duplicateEvent() {
-      await this.$store.dispatch(
+    duplicateEvent() {
+      this.$store.dispatch(
         "duplicateEvent",
         this.$store.state.events.eventTmp.id
       );
-      this.$router.push({
-        name: "ManageEvent",
-        params: { id: this.$store.state.events.eventTmp.id },
-      });
     },
 
     openModalQrcode() {
       ShowModal.qrCode();
     },
 
-    async sendMail() {
+    sendMail() {
       ShowModal.invitationEvent();
     },
 
-    async shareEvent() {
+    shareEvent() {
       const password = this.$store.state.events.eventTmp.password;
-      await Share.share({
+      Share.share({
         title: "Invitation à un évènement",
         text: `Je t'invite à rejoindre mon évènement sur l'application BBQ Time via le mot de passe: ${password}`,
         dialogTitle: "Partagez votre évènement",

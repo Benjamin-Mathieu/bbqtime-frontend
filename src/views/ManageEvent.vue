@@ -78,6 +78,7 @@ export default defineComponent({
 
   ionViewWillLeave() {
     this.$store.commit("setEventTmp", {});
+    this.$store.commit("setCategories", {});
   },
 
   methods: {
@@ -86,10 +87,7 @@ export default defineComponent({
     },
 
     async editCategoriePlat() {
-      await this.$store.dispatch(
-        "getCategories",
-        this.$store.state.events.eventTmp.id
-      );
+      await this.$store.dispatch("getCategories");
       ShowModal.editCategoriePlat();
     },
 

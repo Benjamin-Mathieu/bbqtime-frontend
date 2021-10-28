@@ -1,7 +1,7 @@
 <template>
   <ion-footer>
     <ion-toolbar color="primary">
-      <ion-grid v-if="showDetails" :showDetails="showDetails">
+      <ion-grid v-if="showDetails">
         <ion-row>
           <ion-col size="6">
             <b>Adresse :</b>

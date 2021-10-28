@@ -155,15 +155,15 @@ export default defineComponent({
     plats() {
       let plats = [];
       if (Object.keys(this.$store.state.events.eventDetails).length > 0) {
-        this.$store.state.events.eventDetails.categories.forEach((categorie) => {
-        categorie.plats.forEach((plat) => {
-          if (plat.category_id == this.$route.params.idCategorie) {
-            plats.push(plat);
+        this.$store.state.events.eventDetails.categories.forEach(
+          (categorie) => {
+            categorie.plats.forEach((plat) => {
+              if (plat.category_id == this.$route.params.idCategorie) {
+                plats.push(plat);
+              }
+            });
           }
-        });
-      });
-      } else {
-        return plats;
+        );
       }
       return plats;
     },
