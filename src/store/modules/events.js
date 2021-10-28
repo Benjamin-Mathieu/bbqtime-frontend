@@ -123,14 +123,17 @@ const modulEvents = {
         },
 
         async duplicateEvent({ commit, state }, id) {
+            let formData = new FormData();
+            formData.append("id", id);
+            formData.append("image", state.eventTmp.fileFromServer);
+
             await axios({
                 method: "post",
                 url: URL_API + 'events/duplicate',
-                data: {
-                    id: id
-                },
+                data: formData,
                 headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                    "Content-Type": "multipart/form-data"
                 }
             })
                 .then(async resp => {
@@ -143,6 +146,10 @@ const modulEvents = {
                     state.eventTmp.fileFromServer = file;
                     state.eventTmp.date = new Date().toISOString();
                     popup.success(resp.data.message);
+                    router.push({
+                        name: "ManageEvent",
+                        params: { id: state.eventTmp.id },
+                    });
                 })
                 .catch(httpErrorHandler)
         },
