@@ -5,56 +5,59 @@
         <p>Votre panier est vide</p>
       </div>
 
-      <!-- List of Plat in Shop -->
-      <ion-list lines="none" v-else>
-        <ion-item-sliding
-          v-for="plat in this.$store.state.shop.plats"
-          :key="plat.id"
-        >
-          <ion-item>
-            <div class="plat">
-              <img alt="plat-img" :src="plat.photo_url" />
-              <p>{{ plat.libelle }}</p>
-              <div>
-                <ion-icon name="close" @click="removePlat(plat)"></ion-icon>
-                <ion-item>
-                  <ion-select
-                    :id="plat.id"
-                    ok-text="Valider"
-                    cancel-text="Fermer"
-                    :value="plat.qty"
-                    @ionChange="selectedValue($event)"
-                  >
-                    <ion-select-option
-                      v-for="(selectQty, index) in plat.stock"
-                      :key="index"
-                      :value="selectQty"
-                      v-model="qty[index]"
+      <div v-else>
+        <!-- List of Plat in Shop -->
+        <ion-list lines="none">
+          <ion-item-sliding
+            v-for="plat in this.$store.state.shop.plats"
+            :key="plat.id"
+          >
+            <ion-item>
+              <div class="plat">
+                <img alt="plat-img" :src="plat.photo_url" />
+                <p>{{ plat.libelle }}</p>
+                <div class="info-plat">
+                  <ion-icon name="close" @click="removePlat(plat)"></ion-icon>
+                  <ion-item>
+                    <ion-select
+                      :id="plat.id"
+                      ok-text="Valider"
+                      cancel-text="Fermer"
+                      :value="plat.qty"
+                      @ionChange="selectedValue($event)"
                     >
-                      {{ selectQty }}
-                    </ion-select-option>
-                  </ion-select>
-                </ion-item>
-                <ion-item>{{ plat.price * plat.qty + "€" }} </ion-item>
+                      <ion-select-option
+                        v-for="(selectQty, index) in plat.stock"
+                        :key="index"
+                        :value="selectQty"
+                        v-model="qty[index]"
+                      >
+                        {{ selectQty }}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                  <ion-item>{{ plat.price * plat.qty + "€" }} </ion-item>
+                </div>
               </div>
-            </div>
-          </ion-item>
-          <ion-item-options>
-            <ion-item-option @click="removePlat(plat)" color="primary">
-              <ion-icon slot="end" name="close"></ion-icon>
-              Supprimer
-            </ion-item-option>
-          </ion-item-options>
-        </ion-item-sliding>
-        <ion-item>
-          <b>Montant total: {{ this.$store.getters.getTotalShop + "€" }}</b>
-        </ion-item>
-        <ion-item>
+            </ion-item>
+            <ion-item-options>
+              <ion-item-option @click="removePlat(plat)" color="primary">
+                <ion-icon slot="end" name="close"></ion-icon>
+                Supprimer
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ion-list>
+        <div class="total">
+          <span></span>
+          <p>Montant total: {{ this.$store.getters.getTotalShop + "€" }}</p>
+        </div>
+        <div class="order-button">
           <router-link :to="{ name: 'Shop' }">
             <ion-button size="medium">Commander</ion-button>
           </router-link>
-        </ion-item>
-      </ion-list>
+        </div>
+      </div>
     </ion-content>
   </ion-menu>
 </template>
@@ -152,6 +155,25 @@ p {
   font-weight: 600;
 }
 
+.total {
+  position: relative;
+  text-align: right;
+  margin: 0 auto;
+  width: 80%;
+  font-weight: bold;
+  color: #7a1c1e;
+  display: flex;
+  flex-direction: column;
+  span {
+    position: absolute;
+    right: 0;
+    height: 5px;
+    width: 30%;
+    border-radius: 1em;
+    background-color: #7a1c1e;
+  }
+}
+
 .shop {
   .empty {
     text-align: center;
@@ -168,6 +190,10 @@ p {
     justify-content: space-around;
     align-items: center;
 
+    .info-plat {
+      text-align: right;
+    }
+
     img {
       height: 100px;
       width: 100px;
@@ -175,8 +201,9 @@ p {
     }
   }
 
-  div {
-    text-align: right;
+  .order-button {
+    padding-top: 2em;
+    text-align: center;
   }
 }
 </style>
