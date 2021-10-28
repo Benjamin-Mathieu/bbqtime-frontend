@@ -78,25 +78,45 @@ export default defineComponent({
     Header,
     Footer,
   },
+
+  ionViewWillEnter() {
+    if (this.$store.state.shop.plats.length > 0) {
+      this.$store.dispatch(
+        "getEventDetails",
+        this.$store.state.shop.plats[0].event_id
+      );
+    }
+  },
+
   data() {
     return {
       totalOrder: 0,
     };
   },
+
   methods: {
-    removePlat(plat) {
-      AlertController.validDelete(
+    checkIfShopIsEmpty() {
+      if (this.$store.getters.getNumberItemInShop === 0) {
+        this.$store.commit("setEventDetails", {});
+      }
+    },
+
+    async removePlat(plat) {
+      await AlertController.validDelete(
         plat,
         "Confirmez-vous la suppression du plat de votre panier ?",
         "platInShop"
       );
+
+      this.checkIfShopIsEmpty();
     },
-    postOrder() {
+
+    async postOrder() {
       if (this.$store.getters.getLoginStatus) {
-        this.$store.dispatch("postOrder");
-        this.$router.push("/orders");
+        await this.$store.dispatch("postOrder");
+        this.$router.push({ name: "Orders" });
       } else {
-        this.$router.push("/sign-in");
+        this.$router.push({ name: "SignIn" });
       }
     },
   },
@@ -128,15 +148,6 @@ export default defineComponent({
 
 .total {
   position: relative;
-  span {
-    position: absolute;
-    right: 0;
-    height: 5px;
-    width: 30%;
-    background-color: #7a1c1e;
-    float: right;
-  }
-
   text-align: right;
   margin: 0 auto;
   width: 80%;
@@ -144,5 +155,12 @@ export default defineComponent({
   color: #7a1c1e;
   display: flex;
   flex-direction: column;
+  span {
+    position: absolute;
+    right: 0;
+    height: 5px;
+    width: 30%;
+    background-color: #7a1c1e;
+  }
 }
 </style>
