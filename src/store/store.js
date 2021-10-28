@@ -7,6 +7,7 @@ import modulApiGouv from "./modules/apigouv";
 import modulEvents from './modules/events';
 import modulScan from "./modules/scan";
 import modulShop from "./modules/shop";
+import router from '../router';
 
 const URL_API = "http://192.168.1.47:3000/";
 
@@ -25,7 +26,8 @@ const store = createStore({
             orderDetails: [],
             categories: [],
             categoryIdTmp: {},
-            plats: []
+            plats: [],
+            listAssociate: []
         };
     },
     mutations: {
@@ -43,7 +45,10 @@ const store = createStore({
         },
         setPlats(state, plat) {
             state.plats = plat;
-        }
+        },
+        setListAssociate(state, associates) {
+            state.listAssociate = associates;
+        },
     },
     actions: {
         async getOrders({ commit }) {
@@ -227,6 +232,17 @@ const store = createStore({
                 popup.success(resp.data.message);
             }).catch((httpErrorHandler))
         },
+
+        async getListAssociate({ commit }) {
+            const req = await axios({
+                method: "get",
+                url: URL_API + "events/" + router.currentRoute.value.params.id + "/associate",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+            });
+            commit("setListAssociate", req.data.associates);
+        }
     }
 });
 

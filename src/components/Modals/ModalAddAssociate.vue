@@ -9,6 +9,7 @@
   </ion-header>
   <ion-content class="ion-padding">
     <FormMail callApi="addAdmin"></FormMail>
+    <ListAssociate></ListAssociate>
   </ion-content>
 </template>
 
@@ -25,6 +26,7 @@ import {
 } from "@ionic/vue";
 import { addCircleOutline, removeCircleOutline } from "ionicons/icons";
 import FormMail from "../Forms/FormMail.vue";
+import ListAssociate from "../ListAssociate.vue";
 
 export default defineComponent({
   name: "ModalAddAssociate",
@@ -36,6 +38,7 @@ export default defineComponent({
     IonButton,
     IonIcon,
     FormMail,
+    ListAssociate,
   },
   setup() {
     return {
