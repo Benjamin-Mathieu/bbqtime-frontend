@@ -35,7 +35,7 @@ const showAlert = {
                 store.dispatch("getCategories");
             }
             if (type === "platInShop") {
-                await store.commit("removePlatInShop", id);
+                store.commit("removePlatInShop", id);
             }
             if (type === "event") {
                 await axios({
@@ -53,6 +53,9 @@ const showAlert = {
                         router.push({ name: "MyEvents" });
                     })
                     .catch(httpErrorHandler)
+            }
+            if (type === "associate") {
+                store.dispatch("deleteAssociate", id);
             }
         }
     },

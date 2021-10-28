@@ -8,8 +8,8 @@
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
-    <FormMail callApi="addAdmin"></FormMail>
     <ListAssociate></ListAssociate>
+    <FormMail callApi="addAdmin"></FormMail>
   </ion-content>
 </template>
 

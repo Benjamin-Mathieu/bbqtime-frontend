@@ -242,6 +242,25 @@ const store = createStore({
                 },
             });
             commit("setListAssociate", req.data.associates);
+        },
+
+        async deleteAssociate({ dispatch }, id) {
+            try {
+                const req = await axios({
+                    method: "delete",
+                    url: URL_API + "events/associate",
+                    data: {
+                        id: id
+                    },
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token"),
+                    },
+                });
+                popup.success(req.data.message);
+                dispatch("getListAssociate");
+            } catch (error) {
+                popup.error("Une erreur s'est produite pendant la suppression");
+            }
         }
     }
 });
