@@ -240,20 +240,23 @@ const moduleAuth = {
         },
 
         async updateProfil({ store }, data) {
-            await axios({
-                method: "put",
-                url: URL_API + 'users/update',
-                data: { data },
-                headers: {
-                    "Accept": "application/json",
-                    "Content-type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
-                }
-            }).then(resp => {
+            try {
+                const req = await axios({
+                    method: "put",
+                    url: URL_API + 'users/update',
+                    data: { data },
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-type": "application/json",
+                        "Authorization": `Bearer ${localStorage.getItem("token")}`
+                    }
+                });
                 console.log(store);
-                popup.success(resp.data.message);
-            })
-                .catch(httpErrorHandler);
+                popup.success(req.data.message);
+                return true;
+            } catch (error) {
+                return false;
+            }
         }
     }
 }

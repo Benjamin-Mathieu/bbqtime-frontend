@@ -31,14 +31,22 @@
                   inputmode="email"
                 ></ion-input>
               </ion-item>
-              <ion-item>
+              <ion-item :class="{ 'wrong-password': pwdIsWrong }">
                 <ion-input
                   type="password"
+                  v-model="password"
                   placeholder="Mot de passe"
-                ></ion-input> </ion-item
-            ></ion-card-content>
+                >
+                </ion-input>
+              </ion-item>
+            </ion-card-content>
             <ion-item>
-              <ion-button type="submit" slot="end">Modifier</ion-button>
+              <ion-button
+                :disabled="disabledUpdateButton"
+                type="submit"
+                slot="end"
+                >Modifier</ion-button
+              >
             </ion-item>
           </ion-card>
         </form>
@@ -46,14 +54,17 @@
         <div class="buttons">
           <router-link :to="{ name: 'MyEvents' }">
             <ion-button>
-              <ion-icon size="large" :icon="calendarOutline"> </ion-icon>
+              <ion-label>Mes évènements</ion-label>
+              <ion-icon slot="end" :icon="calendarOutline"></ion-icon>
             </ion-button>
           </router-link>
 
-          <router-link :to="{ name: 'Orders' }"
-            ><ion-button>
-              <ion-icon size="large" :icon="bagOutline"></ion-icon> </ion-button
-          ></router-link>
+          <router-link :to="{ name: 'Orders' }">
+            <ion-button>
+              <ion-label>Mes commandes</ion-label>
+              <ion-icon slot="end" :icon="bagOutline"></ion-icon>
+            </ion-button>
+          </router-link>
         </div>
       </div>
     </ion-content>
@@ -78,6 +89,7 @@ import { bagOutline, calendarOutline } from "ionicons/icons";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
+import popup from "../components/ToastController";
 
 export default defineComponent({
   name: "Account",
@@ -104,18 +116,39 @@ export default defineComponent({
       firstname: this.$store.getters.getUserInformation.firstname,
       phone: this.$store.getters.getUserInformation.phone,
       email: this.$store.getters.getUserInformation.email,
+      password: "",
+      disabledUpdateButton: true,
+      pwdIsWrong: false,
     };
   },
+
+  watch: {
+    password() {
+      if (this.password !== "") {
+        this.disabledUpdateButton = false;
+      }
+    },
+  },
+
   methods: {
-    updateProfil() {
+    async updateProfil() {
       const data = {
         name: this.name,
         firstname: this.firstname,
         phone: this.phone,
         email: this.email,
+        password: this.password,
       };
-      console.log(data);
-      this.$store.dispatch("updateProfil", data);
+      const isUpdated = await this.$store.dispatch("updateProfil", data);
+      if (isUpdated) {
+        this.pwdIsWrong = false;
+        this.password = "";
+      }
+
+      if (isUpdated === false) {
+        this.pwdIsWrong = true;
+        popup.error("Mauvais mot de passe !");
+      }
     },
   },
 });
@@ -133,7 +166,13 @@ export default defineComponent({
 
 .buttons {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.wrong-password {
+  --border-color: red;
+  --color: red;
 }
 </style>
