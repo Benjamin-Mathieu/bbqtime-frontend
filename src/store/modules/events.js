@@ -14,7 +14,7 @@ const modulEvents = {
         myEventOrders: {},
         myEventDetails: [],
         eventTmp: {},
-        eventDetails: [],
+        eventDetails: {},
         pagination: {}
     }),
 
@@ -59,7 +59,7 @@ const modulEvents = {
                 const hours = state.eventDetails.date.slice(11, 16);
                 return { date, hours }
             }
-            return {}
+            return ""
         }
     },
 
@@ -103,12 +103,15 @@ const modulEvents = {
             commit("setMyEvents", req.data.events)
         },
 
-        async getEventDetails({ commit }) {
-            const params = router.currentRoute.value.params.id;
+        async getEventDetails({ commit }, id) {
+            let params;
+            if (!id) {
+                params = router.currentRoute.value.params.id;
+            }
 
             await axios({
                 method: "get",
-                url: URL_API + 'events/' + params,
+                url: URL_API + 'events/' + (params !== undefined ? params : id),
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
@@ -224,7 +227,7 @@ const modulEvents = {
             }).catch((httpErrorHandler))
         },
 
-        async getEventToEdit({ commit, state }, id) {
+        async getEvent({ commit, state }, id) {
             let req = await axios({
                 method: "get",
                 url: URL_API + 'events/' + id,
