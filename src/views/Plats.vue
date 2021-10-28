@@ -95,6 +95,7 @@ import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
 import popup from "../components/ToastController";
+import AlertController from "../components/AlertController";
 
 export default defineComponent({
   name: "Categories",
@@ -117,45 +118,80 @@ export default defineComponent({
     Header,
     Footer,
   },
+
+  ionViewWillEnter() {
+    this.$store.dispatch("getEventDetails", this.$route.params.id);
+  },
+
   setup() {
     return {
       add,
     };
   },
+
   data() {
     return {
       qty: 1,
       selectedQty: 1,
     };
   },
+
   computed: {
     libelleCategorie() {
       let libelle = "";
-      this.$store.getters.getCurrentEvent.categories.forEach((categorie) => {
-        if (this.$route.params.idCategorie == categorie.id) {
-          libelle = categorie.libelle;
-        }
-      });
+      if (Object.keys(this.$store.getters.getCurrentEvent).length > 0) {
+        this.$store.getters.getCurrentEvent.categories.forEach((categorie) => {
+          if (this.$route.params.idCategorie == categorie.id) {
+            libelle = categorie.libelle;
+          }
+        });
+      } else {
+        libelle = "";
+      }
+
       return libelle;
     },
 
     plats() {
       let plats = [];
-      this.$store.state.events.eventDetails.categories.forEach((categorie) => {
+      if (Object.keys(this.$store.state.events.eventDetails).length > 0) {
+        this.$store.state.events.eventDetails.categories.forEach((categorie) => {
         categorie.plats.forEach((plat) => {
           if (plat.category_id == this.$route.params.idCategorie) {
             plats.push(plat);
           }
         });
       });
+      } else {
+        return plats;
+      }
       return plats;
     },
   },
+
   methods: {
     selectedValue(ev) {
       this.selectedQty = ev.target.value;
     },
-    addToShop(addedPlat) {
+
+    async checkIfPlatCanBeAddToShop(addedPlat) {
+      let check;
+      if (this.$store.state.shop.plats.length > 0) {
+        this.$store.state.shop.plats.forEach((plat) => {
+          if (plat.event_id !== addedPlat.event_id) {
+            check = false;
+          } else {
+            check = true;
+          }
+        });
+      } else {
+        check = true;
+      }
+
+      return check;
+    },
+
+    async addToShop(addedPlat) {
       if (addedPlat.qty !== undefined) {
         if (addedPlat.qty >= addedPlat.stock) {
           return popup.error("Plus de stock !");
@@ -171,12 +207,21 @@ export default defineComponent({
               this.selectedQty + " quantité, ajouté à " + addedPlat.libelle
             );
             addedPlat.qty = totalQty;
+
             this.$store.commit("setShop", addedPlat);
           }
         }
       } else {
-        addedPlat.qty = this.selectedQty;
-        this.$store.commit("setShop", addedPlat);
+        // CHECK PLAT
+        addedPlat.event_id = this.$store.state.events.eventDetails.id;
+        const canAddPlat = await this.checkIfPlatCanBeAddToShop(addedPlat);
+
+        if (canAddPlat) {
+          addedPlat.qty = this.selectedQty;
+          this.$store.commit("setShop", addedPlat);
+        } else {
+          AlertController.validClearShop();
+        }
       }
     },
   },

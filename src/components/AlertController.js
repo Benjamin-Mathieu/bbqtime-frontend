@@ -77,6 +77,28 @@ const showAlert = {
         if (role === "valid") {
             store.state.events.currentStep = 3;
         }
+    },
+
+    async validClearShop() {
+        const alert = await alertController.create({
+            subHeader: "Votre panier contient des plats qui ne font pas partie du même évènement, voulez-vous vider votre panier ?",
+            buttons: [
+                {
+                    text: "Non",
+                    role: "cancel"
+                },
+                {
+                    text: "Oui",
+                    role: "valid"
+                },
+            ],
+        });
+        await alert.present();
+
+        const { role } = await alert.onDidDismiss();
+        if (role === "valid") {
+            store.commit("clearShop");
+        }
     }
 }
 
