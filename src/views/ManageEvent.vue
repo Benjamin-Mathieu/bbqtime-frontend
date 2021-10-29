@@ -110,11 +110,9 @@ export default defineComponent({
   // transform: translateY(-50%);
 
   img {
-    padding: 0.5em;
-    border-radius: 1em;
     width: 100%;
     max-height: 160px;
-    object-fit: fill;
+    object-fit: cover;
   }
 
   .buttons {

@@ -32,7 +32,10 @@
         <RefreshData callApi="getPublicEvents"></RefreshData>
 
         <EmptyCard
-          v-if="this.$store.state.events.publicEvents.length === 0"
+          v-if="
+            this.$store.state.events.publicEvents.length === 0 &&
+            loaded === true
+          "
           text="Pas d'évènements publiques à afficher"
         ></EmptyCard>
 
@@ -89,7 +92,10 @@
         <RefreshData callApi="getParticipateEvents"></RefreshData>
 
         <EmptyCard
-          v-if="this.$store.state.events.participateEvents.length === 0"
+          v-if="
+            this.$store.state.events.participateEvents.length === 0 &&
+            loaded === true
+          "
           text="Vous participez à aucun évènement"
         ></EmptyCard>
 
@@ -129,7 +135,9 @@
         <RefreshData callApi="getMyEvents"></RefreshData>
 
         <EmptyCard
-          v-if="this.$store.state.events.myEvents.length === 0"
+          v-if="
+            this.$store.state.events.myEvents.length === 0 && loaded === true
+          "
           text="Vous n'avez pas crée d'évènement"
         ></EmptyCard>
 

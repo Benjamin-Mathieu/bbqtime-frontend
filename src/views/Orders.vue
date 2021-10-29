@@ -3,7 +3,7 @@
     <Header></Header>
     <Sub :showShopButton="true" title="Vos commandes"></Sub>
     <ion-content>
-      <div v-if="this.$store.state.orders.length === 0">
+      <div v-if="this.$store.state.orders.length === 0 && loaded === true">
         <ion-card>
           <ion-card-title>
             <h5 style="text-align: center">Pas de commande à afficher</h5>
@@ -25,23 +25,29 @@
             <ion-card-content class="preview">
               <p>
                 {{ order.description }}
-                <b>Localisation:</b>
-                {{
-                  order.event.zipcode +
-                  " " +
-                  order.event.address +
-                  " " +
-                  order.event.city
-                }}
               </p>
-              <p><b>Total</b> {{ order.cost + " €" }}</p>
+              <p>Localisation:</p>
+              <p>
+                {{ order.event.zipcode }}
+              </p>
+              <p>{{ order.event.address + " " + order.event.city }}</p>
               <ion-item lines="none">
-                <ion-button
-                  slot="end"
-                  size="small"
-                  @click="toggleDetails(order.id)"
-                >
-                  <ion-icon :icon="chevronDownOutline"></ion-icon>
+                <ion-button size="small" @click="toggleDetails(order.id)">
+                  <div
+                    v-for="showDetail in this.showDetails"
+                    :key="showDetail.id"
+                  >
+                    <ion-icon
+                      v-if="showDetail.id === order.id && showDetail.activeIcon"
+                      :icon="chevronDownOutline"
+                    ></ion-icon>
+                    <ion-icon
+                      v-if="
+                        showDetail.id === order.id && !showDetail.activeIcon
+                      "
+                      :icon="chevronForwardOutline"
+                    ></ion-icon>
+                  </div>
                 </ion-button>
               </ion-item>
             </ion-card-content>
@@ -49,35 +55,42 @@
         </div>
 
         <div v-for="showDetail in this.showDetails" :key="showDetail.id">
-          <div v-if="showDetail.id == order.id && showDetail.show">
-            <ion-list-header lines="inset">
-              <ion-label>Plats commandés</ion-label>
-            </ion-list-header>
-            <div class="list-plats">
-              <ion-list
-                v-for="orderplat in order.orders_plats"
-                :key="orderplat.id"
-                lines="none"
-              >
-                <ion-item>
-                  <ion-avatar slot="start">
-                    <img :src="orderplat.plat.photo_url" alt="img-plat" />
-                  </ion-avatar>
-                  <ion-label>
-                    {{
-                      orderplat.plat.libelle + ": " + orderplat.plat.price + "€"
-                    }}
-                  </ion-label>
-                  <ion-badge slot="end">
-                    {{ orderplat.quantity }}
-                  </ion-badge>
-                </ion-item>
-              </ion-list>
+          <transition name="fade">
+            <div v-if="showDetail.id == order.id && showDetail.show">
+              <ion-list-header lines="inset">
+                <ion-label color="primary">Plats commandés</ion-label>
+              </ion-list-header>
+              <div class="list-plats">
+                <ion-list
+                  v-for="orderplat in order.orders_plats"
+                  :key="orderplat.id"
+                  lines="none"
+                >
+                  <ion-item>
+                    <ion-avatar slot="start">
+                      <img :src="orderplat.plat.photo_url" alt="img-plat" />
+                    </ion-avatar>
+                    <ion-label color="primary">
+                      {{
+                        orderplat.plat.libelle +
+                        ": " +
+                        orderplat.plat.price +
+                        "€"
+                      }}
+                    </ion-label>
+                    <ion-badge slot="end">
+                      {{ orderplat.quantity }}
+                    </ion-badge>
+                  </ion-item>
+                </ion-list>
+              </div>
+              <ion-item lines="none">
+                <ion-label color="primary">{{
+                  "Total commande: " + order.cost + "€"
+                }}</ion-label>
+              </ion-item>
             </div>
-            <ion-item lines="none">
-              <ion-label>{{ "Total commande: " + order.cost + "€" }}</ion-label>
-            </ion-item>
-          </div>
+          </transition>
         </div>
       </ion-card>
     </ion-content>
@@ -103,7 +116,7 @@ import {
   IonLabel,
   IonButton,
 } from "@ionic/vue";
-import { chevronDownOutline } from "ionicons/icons";
+import { chevronForwardOutline, chevronDownOutline } from "ionicons/icons";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
@@ -132,39 +145,47 @@ export default defineComponent({
     RefreshData,
     Skeleton,
   },
-  setup() {
-    return {
-      chevronDownOutline,
-    };
-  },
+
   data() {
     return {
       showDetails: [],
       loaded: false,
     };
   },
+
+  setup() {
+    return {
+      chevronForwardOutline,
+      chevronDownOutline,
+    };
+  },
+
   async ionViewWillEnter() {
     await this.$store.dispatch("getOrders");
+    this.$store.state.orders.forEach((order) => {
+      this.showDetails.push({
+        id: order.id,
+        show: false,
+        activeIcon: false,
+      });
+    });
     this.loaded = true;
   },
-  ionViewDidEnter() {
-    this.$store.state.orders.forEach((order) => {
-      this.showDetails.push({ id: order.id, show: false });
-    });
-  },
+
   ionViewWillLeave() {
     this.showDetails = [];
   },
+
   methods: {
     getDetails(orderId) {
       this.$store.dispatch("getOrderDetails", { id: orderId });
     },
+
     toggleDetails(id) {
-      this.showDetails.forEach((element) => {
-        if (element.id === id) {
-          element.show = !element.show;
-        }
-      });
+      let showDetail = this.showDetails.find((detail) => detail.id === id);
+      showDetail.show = !showDetail.show;
+      showDetail.activeIcon = !showDetail.activeIcon;
+      console.log("showdetails => ", this.showDetails);
     },
   },
 });
@@ -190,6 +211,21 @@ export default defineComponent({
     .preview {
       padding: 0px;
     }
+    ion-button {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
