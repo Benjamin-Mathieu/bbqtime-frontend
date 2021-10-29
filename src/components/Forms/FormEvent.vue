@@ -5,7 +5,10 @@
         <ion-label position="floating">Nom</ion-label>
         <ion-input type="text" v-model="name" required></ion-input>
       </ion-item>
-      <ion-item lines="none">
+      <ion-item
+        :class="{ 'no-address-selected': noAddressSelected }"
+        lines="none"
+      >
         <ion-label>Choisir le lieu</ion-label>
         <ion-button @click="openMapModal()">Ouvrir carte</ion-button>
       </ion-item>
@@ -23,7 +26,7 @@
       <ion-item v-else>
         Adresse: {{ this.$store.getters.getAddress.label }}
       </ion-item>
-      <ion-item>
+      <ion-item :class="{ 'no-date-selected': noDateSelected }">
         <ion-label>Date</ion-label>
         <ion-datetime
           v-model="date"
@@ -35,7 +38,7 @@
           :min="actualDate"
         ></ion-datetime>
       </ion-item>
-      <ion-item>
+      <ion-item :class="{ 'no-hours-selected': noHoursSelected }">
         <ion-label>Heure</ion-label>
         <ion-datetime
           v-model="hours"
@@ -52,7 +55,7 @@
         <ion-textarea type="text" v-model="description" required></ion-textarea>
       </ion-item>
 
-      <ion-item>
+      <ion-item :class="{ 'no-file-selected': noFileSelected }">
         <ion-thumbnail v-if="this.img !== null" slot="end">
           <ion-img :src="this.img" alt="img"></ion-img>
         </ion-thumbnail>
@@ -169,6 +172,10 @@ export default defineComponent({
       showPassword: false,
       typeInputPassword: "password",
       icon: eyeOutline,
+      noFileSelected: false,
+      noAddressSelected: false,
+      noDateSelected: false,
+      noHoursSelected: false,
     };
   },
 
@@ -191,22 +198,86 @@ export default defineComponent({
       this.img = URL.createObjectURL(this.file);
     },
 
-    addInfoEvent() {
-      const date = this.convertDate(this.date, this.hours);
+    async checkIfUserSelectFile() {
+      try {
+        if (this.file === null) {
+          this.noFileSelected = true;
+          return false;
+        } else {
+          this.noFileSelected = false;
+          return true;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
 
-      const event = {
-        name: this.name,
-        address: this.$store.getters.getAddress.name,
-        city: this.$store.getters.getAddress.city,
-        zipcode: this.$store.getters.getAddress.postcode,
-        date: date,
-        description: this.description,
-        private: this.isPrivate,
-        file: this.file,
-        password: this.password,
-      };
+    async checkIfUserSelectAddress() {
+      try {
+        if (Object.keys(this.$store.getters.getAddress).length === 0) {
+          this.noAddressSelected = true;
+          return false;
+        } else {
+          this.noAddressSelected = false;
+          return true;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
 
-      this.$store.dispatch("postEvent", event);
+    async checkIfUserSelectDate() {
+      try {
+        if (this.date === "" && this.hours === "") {
+          this.noDateSelected = true;
+          this.noHoursSelected = true;
+          return false;
+        }
+
+        if (this.date === "") {
+          this.noDateSelected = true;
+          this.noHoursSelected = false;
+          return false;
+        }
+
+        if (this.hours === "") {
+          this.noHoursSelected = true;
+          this.noDateSelected = false;
+          return false;
+        }
+
+        if (this.hours !== "" && this.date !== "") {
+          this.noHoursSelected = false;
+          this.noDateSelected = false;
+          return true;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async addInfoEvent() {
+      const check1 = await this.checkIfUserSelectFile();
+      const check2 = await this.checkIfUserSelectAddress();
+      const check3 = await this.checkIfUserSelectDate();
+
+      if (check1 && check2 && check3) {
+        const date = this.convertDate(this.date, this.hours);
+
+        const event = {
+          name: this.name,
+          address: this.$store.getters.getAddress.name,
+          city: this.$store.getters.getAddress.city,
+          zipcode: this.$store.getters.getAddress.postcode,
+          date: date,
+          description: this.description,
+          private: this.isPrivate,
+          file: this.file,
+          password: this.password,
+        };
+
+        this.$store.dispatch("postEvent", event);
+      }
     },
 
     convertDate(date, hours) {
@@ -259,4 +330,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.no-file-selected,
+.no-address-selected,
+.no-date-selected,
+.no-hours-selected {
+  --background: red;
+}
 </style>
