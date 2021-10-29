@@ -27,7 +27,8 @@ const store = createStore({
             categories: [],
             categoryIdTmp: {},
             plats: [],
-            listAssociate: []
+            listAssociate: [],
+            showOnePage: true
         };
     },
     mutations: {
@@ -49,6 +50,9 @@ const store = createStore({
         setListAssociate(state, associates) {
             state.listAssociate = associates;
         },
+        setShowOnePage(state, boolean) {
+            state.showOnePage = boolean;
+        }
     },
     actions: {
         async getOrders({ commit }) {

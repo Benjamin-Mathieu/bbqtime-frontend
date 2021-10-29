@@ -1,5 +1,6 @@
 <template>
   <ion-app>
+    <OnePage></OnePage>
     <Navigation></Navigation>
     <ShopMenu></ShopMenu>
     <ion-router-outlet id="main" />
@@ -11,6 +12,7 @@ import { IonApp, IonRouterOutlet } from "@ionic/vue";
 import { defineComponent } from "vue";
 import Navigation from "./components/Sidebars/Navigation.vue";
 import ShopMenu from "./components/Sidebars/ShopMenu.vue";
+import OnePage from "./components/OnePage";
 import { SplashScreen } from "@capacitor/splash-screen";
 
 export default defineComponent({
@@ -20,6 +22,7 @@ export default defineComponent({
     IonRouterOutlet,
     Navigation,
     ShopMenu,
+    OnePage,
   },
   mounted() {
     SplashScreen.show({
