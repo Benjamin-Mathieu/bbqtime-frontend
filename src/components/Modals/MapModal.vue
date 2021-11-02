@@ -6,53 +6,14 @@
   </ion-header>
   <ion-content>
     <div id="mapid" v-if="this.$store.state.apiGouv.address"></div>
-
-    <form class="form" @submit.prevent="getAddress()">
-      <ion-item>
-        <ion-label position="floating">Tapez l'adresse:</ion-label>
-        <ion-button @click="validAddress()" slot="end">
-          <ion-icon :icon="checkmark"></ion-icon>
-        </ion-button>
-        <ion-input
-          type="text"
-          v-model="address"
-          @ionFocus="this.showList = true"
-        ></ion-input>
-      </ion-item>
-      <ion-list v-if="this.showList">
-        <ion-item
-          v-for="selectAddress in this.$store.state.apiGouv.respApiAddress"
-          :key="selectAddress.id"
-        >
-          <ion-label
-            @click="
-              this.address = selectAddress.properties.label;
-              this.showList = false;
-            "
-            >{{ selectAddress.properties.label }}</ion-label
-          >
-        </ion-item>
-      </ion-list>
-    </form>
+    <FormAddAddress></FormAddAddress>
   </ion-content>
 </template>
 
 <script>
 import { defineComponent } from "vue";
-import {
-  IonHeader,
-  IonToolbar,
-  IonContent,
-  IonInput,
-  IonItem,
-  IonLabel,
-  IonIcon,
-  IonTitle,
-  IonButton,
-  IonList,
-  modalController,
-} from "@ionic/vue";
-import { checkmark } from "ionicons/icons";
+import { IonHeader, IonToolbar, IonContent, IonTitle } from "@ionic/vue";
+import FormAddAddress from "../Forms/FormAddAddress.vue";
 
 export default defineComponent({
   name: "MapModal",
@@ -60,35 +21,8 @@ export default defineComponent({
     IonHeader,
     IonToolbar,
     IonContent,
-    IonInput,
-    IonItem,
-    IonLabel,
-    IonIcon,
     IonTitle,
-    IonButton,
-    IonList,
-  },
-  setup() {
-    return {
-      checkmark,
-    };
-  },
-  data() {
-    return {
-      address: "",
-      showList: true,
-    };
-  },
-  watch: {
-    address() {
-      this.$store.commit("setAddress", this.address.replaceAll(" ", "+"));
-      this.$store.dispatch("getAddress");
-    },
-  },
-  methods: {
-    validAddress() {
-      modalController.dismiss();
-    },
+    FormAddAddress,
   },
 });
 </script>
@@ -98,12 +32,5 @@ export default defineComponent({
   height: 100%;
   width: 100%;
   margin: auto;
-}
-
-.form {
-  position: absolute;
-  z-index: 1000;
-  width: 100%;
-  bottom: 0;
 }
 </style>

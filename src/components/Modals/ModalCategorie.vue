@@ -8,31 +8,14 @@
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
-    <form @submit.prevent="addCategorie()" method="post">
-      <ion-card>
-        <ion-card-content>
-          <ion-item>
-            <ion-label position="floating">Nom de la catégorie</ion-label>
-            <ion-input type="text" v-model="libelle" required></ion-input>
-          </ion-item>
-        </ion-card-content>
-        <ion-item lines="none">
-          <ion-button type="submit" slot="end" size="small">Ajouter</ion-button>
-        </ion-item>
-      </ion-card>
-    </form>
+    <FormAddCategorie></FormAddCategorie>
   </ion-content>
 </template>
 
 <script>
 import { defineComponent } from "vue";
 import {
-  IonLabel,
-  IonItem,
   IonButton,
-  IonInput,
-  IonCard,
-  IonCardContent,
   IonTitle,
   IonHeader,
   IonToolbar,
@@ -40,21 +23,18 @@ import {
   IonIcon,
   modalController,
 } from "@ionic/vue";
+import FormAddCategorie from "../Forms/FormAddCategorie.vue";
 
 export default defineComponent({
   name: "FormCategorie",
   components: {
-    IonLabel,
-    IonItem,
     IonButton,
-    IonInput,
-    IonCard,
-    IonCardContent,
     IonTitle,
     IonHeader,
     IonToolbar,
     IonContent,
     IonIcon,
+    FormAddCategorie,
   },
 
   data() {

@@ -236,19 +236,15 @@ export default defineComponent({
 
         if (this.date === "") {
           this.noDateSelected = true;
-          this.noHoursSelected = false;
           return false;
         }
 
         if (this.hours === "") {
           this.noHoursSelected = true;
-          this.noDateSelected = false;
           return false;
         }
 
         if (this.hours !== "" && this.date !== "") {
-          this.noHoursSelected = false;
-          this.noDateSelected = false;
           return true;
         }
       } catch (error) {

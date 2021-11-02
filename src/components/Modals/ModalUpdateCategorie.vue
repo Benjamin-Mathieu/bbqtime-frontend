@@ -7,39 +7,18 @@
       </ion-button>
     </ion-toolbar>
   </ion-header>
-  <ion-content class="ion-padding">
-    <form @submit.prevent="updateCategorie()" method="post">
-      <ion-card>
-        <ion-card-content>
-          <ion-item>
-            <ion-label position="floating">Nom de la catégorie</ion-label>
-            <ion-input type="text" v-model="editLibelle" required></ion-input>
-          </ion-item>
-        </ion-card-content>
-        <ion-item lines="none">
-          <ion-button
-            type="submit"
-            slot="end"
-            size="small"
-            :disabled="disabledButton"
-          >
-            Mettre à jour
-          </ion-button>
-        </ion-item>
-      </ion-card>
-    </form>
+  <ion-content>
+    <FormEditCategorie
+      :id="this.id"
+      :libelle="this.libelle"
+    ></FormEditCategorie>
   </ion-content>
 </template>
 
 <script>
 import { defineComponent } from "vue";
 import {
-  IonLabel,
-  IonItem,
   IonButton,
-  IonInput,
-  IonCard,
-  IonCardContent,
   IonTitle,
   IonHeader,
   IonToolbar,
@@ -47,53 +26,22 @@ import {
   IonIcon,
   modalController,
 } from "@ionic/vue";
+import FormEditCategorie from "../Forms/FormEditCategorie.vue";
 
 export default defineComponent({
-  name: "FormUpdateCategorie",
+  name: "ModalUpdateCategorie",
   props: ["id", "libelle"],
   components: {
-    IonLabel,
-    IonItem,
     IonButton,
-    IonInput,
-    IonCard,
-    IonCardContent,
     IonTitle,
     IonHeader,
     IonToolbar,
     IonContent,
     IonIcon,
-  },
-
-  data() {
-    return {
-      editLibelle: this.libelle,
-      disabledButton: true,
-    };
-  },
-
-  watch: {
-    editLibelle() {
-      if (this.editLibelle !== this.libelle) {
-        this.disabledButton = false;
-      }
-      if (this.editLibelle === this.libelle) {
-        this.disabledButton = true;
-      }
-    },
+    FormEditCategorie,
   },
 
   methods: {
-    updateCategorie() {
-      const data = {
-        id: this.id,
-        libelle: this.editLibelle,
-      };
-      this.$store.dispatch("putCategorie", data);
-      this.editLibelle = "";
-      modalController.dismiss();
-    },
-
     closeModal() {
       modalController.dismiss();
     },
