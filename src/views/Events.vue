@@ -257,7 +257,7 @@ import Header from "../components/Header.vue";
 import Sub from "../components/Sub.vue";
 import Footer from "../components/Footer.vue";
 import RefreshData from "../components/RefreshData.vue";
-import Skeleton from "../components/Skeletons/SkeletonOrder.vue";
+import Skeleton from "../components/Skeletons/SkeletonEvent.vue";
 import ShowActions from "../components/ActionSheet";
 import EmptyCard from "../components/EmptyCard";
 

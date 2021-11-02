@@ -1,65 +1,66 @@
 <template>
-  <ion-grid>
-    <ion-row>
-      <ion-col size="2">
-        <ion-skeleton-text
-          animated
-          style="width: 100%; height: 100%"
-        ></ion-skeleton-text>
-      </ion-col>
-      <ion-col size="10">
-        <ion-item>
-          <ion-label>
-            <ion-skeleton-text animated style="width: 80px"></ion-skeleton-text>
-          </ion-label>
-        </ion-item>
+  <div class="event">
+    <div class="img-container">
+      <ion-skeleton-text
+        animated
+        style="width: 100%; height: 100%"
+      ></ion-skeleton-text>
+    </div>
 
-        <ion-card-content>
-          <ion-item lines="none">
-            <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
-          </ion-item>
-          <ion-item lines="none">
-            <ion-skeleton-text animated style="width: 100%">
-            </ion-skeleton-text>
-          </ion-item>
-          <ion-item lines="none">
-            <ion-label>
-              <ion-skeleton-text
-                animated
-                style="width: 100%"
-              ></ion-skeleton-text>
-            </ion-label>
-          </ion-item>
-        </ion-card-content>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+    <div class="preview-container">
+      <ion-skeleton-text
+        animated
+        style="height: 16px; width: 100%"
+      ></ion-skeleton-text>
+      <ion-skeleton-text
+        animated
+        style="height: 16px; width: 100%"
+      ></ion-skeleton-text>
+      <ion-skeleton-text
+        animated
+        style="height: 16px; width: 100%"
+      ></ion-skeleton-text>
+      <ion-skeleton-text
+        animated
+        style="height: 16px; width: 100%"
+      ></ion-skeleton-text>
+      <ion-skeleton-text
+        animated
+        style="height: 16px; width: 100%"
+      ></ion-skeleton-text>
+    </div>
+  </div>
 </template>
 
 <script>
 import { defineComponent } from "vue";
-import {
-  IonCardContent,
-  IonItem,
-  IonLabel,
-  IonGrid,
-  IonRow,
-  IonCol,
-  IonSkeletonText,
-} from "@ionic/vue";
+import { IonSkeletonText } from "@ionic/vue";
 
 export default defineComponent({
   name: "Skeleton",
   components: {
-    IonCardContent,
-    IonItem,
-    IonLabel,
-    IonGrid,
-    IonRow,
-    IonCol,
     IonSkeletonText,
   },
 });
 </script>
-<style>
+
+<style lang="scss" scoped>
+.event {
+  display: flex;
+  min-height: 129px;
+  .img-container {
+    width: 40%;
+    padding: 0.5em;
+    img {
+      border-radius: 5px;
+      height: 100%;
+      object-fit: fill;
+    }
+  }
+
+  .preview-container {
+    width: 60%;
+    padding: 0.5em;
+  }
+}
 </style>

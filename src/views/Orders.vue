@@ -121,7 +121,7 @@ import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
 import RefreshData from "../components/RefreshData.vue";
-import Skeleton from "../components/Skeletons/SkeletonOrder.vue";
+import Skeleton from "../components/Skeletons/SkeletonEvent.vue";
 
 export default defineComponent({
   name: "Orders",
