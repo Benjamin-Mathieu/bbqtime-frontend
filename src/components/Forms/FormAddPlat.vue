@@ -10,6 +10,7 @@
           <ion-label position="floating">Prix</ion-label>
           <ion-input
             type="number"
+            inputmode="decimal"
             v-model.number="price"
             placeholder=" €"
             required
@@ -25,7 +26,12 @@
         </ion-item>
         <ion-item>
           <ion-label position="floating">Stock</ion-label>
-          <ion-input type="number" v-model.number="stock" required></ion-input>
+          <ion-input
+            type="number"
+            inputmode="numeric"
+            v-model.number="stock"
+            required
+          ></ion-input>
         </ion-item>
         <ion-item :class="{ 'no-category-selected': noCategorySelected }">
           <ion-label>Catégorie</ion-label>
@@ -33,7 +39,7 @@
             ok-text="Valider"
             cancel-text="Fermer"
             @ionChange="selectedValue($event)"
-            value=""
+            :value="categorieId"
           >
             <ion-select-option
               v-for="(categorie, index) in this.$store.state.categories"
@@ -117,6 +123,7 @@ export default defineComponent({
       noCategorySelected: false,
     };
   },
+
   methods: {
     selectedValue(ev) {
       this.categorieId = ev.target.value;
@@ -168,7 +175,7 @@ export default defineComponent({
           file: this.file,
           category_id: this.categorieId,
         };
-        this.$store.dispatch("postPlat", plat);
+        await this.$store.dispatch("postPlat", plat);
 
         this.name = "";
         this.price = "";
