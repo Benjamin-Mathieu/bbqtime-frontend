@@ -151,7 +151,7 @@ const moduleAuth = {
             router.push({ name: "Home" });
         },
 
-        async registerUser({ state }) {
+        async registerUser({ state, dispatch }) {
             await axios({
                 method: "post",
                 url: URL_API + 'users',
@@ -168,9 +168,10 @@ const moduleAuth = {
                 }
             }).then(async (resp) => {
                 await popup.success(resp.data.message);
-                router.push({
-                    name: "SignIn",
-                });
+
+                const user = { "email": state.userTmp.email, "password": state.userTmp.password };
+                dispatch("loginUser", user);
+                router.push({ name: "Account" });
             })
                 .catch(httpErrorHandler);
         },
