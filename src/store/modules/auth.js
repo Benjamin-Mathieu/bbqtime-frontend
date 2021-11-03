@@ -239,7 +239,7 @@ const moduleAuth = {
                 .catch(httpErrorHandler);
         },
 
-        async updateProfil({ store }, data) {
+        async updateProfil({ commit }, data) {
             try {
                 const req = await axios({
                     method: "put",
@@ -251,11 +251,10 @@ const moduleAuth = {
                         "Authorization": `Bearer ${localStorage.getItem("token")}`
                     }
                 });
-                console.log(store);
                 popup.success(req.data.message);
-                return true;
+                commit("setUserInformation", JSON.stringify(req.data.informations));
             } catch (error) {
-                return false;
+                popup.warning("Mot de passe incorrect !");
             }
         }
     }
