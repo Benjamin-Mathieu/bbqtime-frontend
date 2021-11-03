@@ -133,6 +133,7 @@ const moduleAuth = {
                 if (resp.data.userIsLogged) {
                     dispatch("getDevice");
                     commit("setUserIsLoggedIn", true);
+                    commit("setToken", localStorage.getItem("token"));
                     commit("setUserInformation", JSON.stringify(resp.data.informations));
                     dispatch("setExternalUserId");
                     popup.success(resp.data.message);
