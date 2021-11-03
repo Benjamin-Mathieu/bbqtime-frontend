@@ -1,6 +1,6 @@
 <template>
   <ion-menu side="end" menu-id="shop" content-id="main">
-    <ion-content @click="closeShop()" class="shop">
+    <ion-content class="shop">
       <div v-if="this.$store.state.shop.plats.length === 0" class="empty">
         <p>Votre panier est vide</p>
       </div>
@@ -95,6 +95,7 @@ export default defineComponent({
     IonSelect,
     IonSelectOption,
   },
+
   data() {
     return {
       totalOrder: 0,
@@ -102,19 +103,19 @@ export default defineComponent({
       selectedQty: 1,
     };
   },
+
   methods: {
     selectedValue(ev) {
       this.selectedQty = ev.target.value;
       const plat = { id: ev.target.id, qty: this.selectedQty };
       this.$store.commit("updateShop", plat);
     },
+
     openShop() {
       menuController.enable(true, "shop");
       menuController.open("shop");
     },
-    closeShop() {
-      menuController.close();
-    },
+
     removePlat(plat) {
       AlertController.validDelete(
         plat,
@@ -158,7 +159,7 @@ p {
 .total {
   position: relative;
   text-align: right;
-  margin: 0 auto;
+  margin: 0.7em auto;
   width: 80%;
   font-weight: bold;
   color: #7a1c1e;
@@ -184,25 +185,28 @@ p {
 
   .plat {
     width: 100%;
-    margin: 1em 0;
     color: #7f2928;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
 
     .info-plat {
       text-align: right;
     }
 
+    p {
+      padding-left: 0.7em;
+    }
+
     img {
-      height: 100px;
-      width: 100px;
+      height: 80px;
+      width: 100%;
+      max-width: 80px;
       border-radius: 5px;
     }
   }
 
   .order-button {
-    padding-top: 2em;
     text-align: center;
   }
 }
