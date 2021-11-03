@@ -9,13 +9,7 @@
     >
       <ion-item>
         <ion-label>
-          {{
-            associate.user.name +
-            " " +
-            associate.user.firstname +
-            " | " +
-            associate.user.email
-          }}
+          {{ associate.user.firstname + " | " + associate.user.email }}
         </ion-label>
       </ion-item>
       <ion-item-options>
