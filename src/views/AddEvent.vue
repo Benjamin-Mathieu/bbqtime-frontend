@@ -63,9 +63,9 @@
                 />
                 <p v-else></p>
                 <ion-card-header>
-                  <ion-card-title>
+                  <ion-card-subtitle>
                     {{ categorie.libelle }}
-                  </ion-card-title>
+                  </ion-card-subtitle>
                 </ion-card-header>
                 <ion-card-content>
                   <div class="categorie-buttons">
@@ -192,7 +192,6 @@ import {
   IonInput,
   IonButton,
   IonCard,
-  IonCardTitle,
   IonCardContent,
   IonCardSubtitle,
   IonGrid,
@@ -231,7 +230,6 @@ export default defineComponent({
     IonCard,
     IonCardContent,
     IonCardSubtitle,
-    IonCardTitle,
     IonGrid,
     IonRow,
     IonCol,
@@ -383,8 +381,11 @@ ion-card-content {
   .categorie,
   .plat {
     padding: 1em;
+    text-align: center;
+
     img {
       height: 120px;
+      width: 100%;
       border-radius: 5px;
       object-fit: fill;
     }

@@ -455,6 +455,8 @@ ion-card-content {
     img {
       border-radius: 5px;
       height: 100%;
+      max-height: 130px;
+      width: 100%;
       object-fit: fill;
     }
   }

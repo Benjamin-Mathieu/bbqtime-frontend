@@ -5,7 +5,7 @@
     <ion-content>
       <div
         class="no-event"
-        v-if="this.$store.state.events.myEvents.length === 0"
+        v-if="this.$store.state.events.myEvents.length === 0 && loaded === true"
       >
         <EmptyCard text="Vous n'avez pas encore crée d'évènement"></EmptyCard>
         <router-link :to="{ name: 'AddEvent' }">
@@ -145,17 +145,19 @@ ion-item {
 .event {
   display: flex;
   .img-container {
-    width: 35%;
+    width: 40%;
     padding: 0.5em;
     img {
       border-radius: 5px;
       height: 100%;
+      max-height: 130px;
+      width: 100%;
       object-fit: fill;
     }
   }
 
   .info {
-    width: 65%;
+    width: 60%;
   }
 }
 </style>
