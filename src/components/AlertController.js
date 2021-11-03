@@ -3,7 +3,6 @@ import store from "../store/store";
 import axios from "axios";
 import httpErrorHandler from '../store/httpErrorHandler';
 import popup from './ToastController';
-import router from "../router/index";
 
 const URL_API = "http://192.168.1.47:3000/";
 
@@ -50,7 +49,7 @@ const showAlert = {
                 })
                     .then(res => {
                         popup.success(res.data.message);
-                        router.push({ name: "MyEvents" });
+                        store.dispatch("getMyEvents");
                     })
                     .catch(httpErrorHandler)
             }
