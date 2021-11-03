@@ -16,7 +16,6 @@ const popups = {
         const toast = await toastController
             .create({
                 message: message,
-                duration: 3000,
                 position: "middle",
                 color: "warning",
                 header: "Attention",

@@ -138,7 +138,6 @@ const moduleAuth = {
                     popup.success(resp.data.message);
                 }
             })
-                .catch(httpErrorHandler);
         },
 
         async logoutUser({ commit }) {

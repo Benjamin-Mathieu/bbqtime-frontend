@@ -5,7 +5,7 @@
         <ion-icon :icon="chevronBackOutline"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title :title="title">{{ title }}</ion-title>
+    <p>{{ title }}</p>
     <ion-buttons
       v-if="showShopButton"
       :showShopButton="showShopButton"
@@ -27,7 +27,6 @@ import {
   IonButtons,
   IonButton,
   IonMenuButton,
-  IonTitle,
   IonIcon,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
@@ -49,7 +48,6 @@ export default defineComponent({
     IonButtons,
     IonButton,
     IonMenuButton,
-    IonTitle,
     IonIcon,
   },
   setup() {
@@ -63,7 +61,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 ion-icon,
-ion-title {
+p {
   color: #d7b59d;
 }
 .numberItemsInShop {
