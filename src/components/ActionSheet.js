@@ -45,7 +45,8 @@ const showActions = {
 }
 
 const actions = {
-  duplicate(id) {
+  async duplicate(id) {
+    await store.dispatch("getEvent", id);
     store.dispatch("duplicateEvent", id);
   },
 
