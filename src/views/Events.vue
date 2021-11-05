@@ -484,6 +484,7 @@ ion-card-content-ios {
     p {
       color: #7e2727;
       margin: 0px;
+      padding-right: 1em;
     }
 
     .participate {

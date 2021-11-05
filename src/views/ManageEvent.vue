@@ -76,7 +76,7 @@ export default defineComponent({
     this.$store.dispatch("getEvent", this.$route.params.id);
   },
 
-  ionViewWillLeave() {
+  async ionViewWillLeave() {
     this.$store.commit("setEventTmp", {});
     this.$store.commit("setCategories", {});
   },

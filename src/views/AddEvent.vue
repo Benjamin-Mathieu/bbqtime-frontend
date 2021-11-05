@@ -10,21 +10,21 @@
           :disabled="disabledStep1"
           value="1"
         >
-          <ion-label>1</ion-label>
+          <ion-label>Informations</ion-label>
         </ion-segment-button>
         <ion-segment-button
           @click="this.$store.state.events.currentStep = 2"
           value="2"
           :disabled="disabledStep2"
         >
-          <ion-label>2</ion-label>
+          <ion-label>Plats/Catégories</ion-label>
         </ion-segment-button>
         <ion-segment-button
           @click="this.$store.state.events.currentStep = 3"
           value="3"
           :disabled="disabledStep3"
         >
-          <ion-label>3</ion-label>
+          <ion-label>Finalisation</ion-label>
         </ion-segment-button>
       </ion-segment>
 
@@ -111,7 +111,6 @@
                   </ion-card-subtitle>
                 </ion-card-header>
                 <ion-card-content>
-                  <p>{{ plat.description }}</p>
                   <p>Stock: {{ plat.stock }}</p>
                   <div class="plat-buttons">
                     <ion-button
@@ -136,15 +135,17 @@
             </ion-col>
           </ion-row>
         </ion-grid>
-        <ion-button @click="validEvent()">Terminer</ion-button>
+        <div class="valid-event-button">
+          <ion-button @click="validEvent()">Valider</ion-button>
+        </div>
       </div>
 
       <!-- STEP 3 -->
       <div v-if="this.$store.state.events.currentStep === 3" class="step3">
         <ion-card>
-          <ion-card-subtitle>
+          <ion-card-title color="primary">
             Inviter des personnes à votre évènement
-          </ion-card-subtitle>
+          </ion-card-title>
           <ion-card-content>
             <ion-item>
               <ion-icon :icon="lockClosed"></ion-icon>
@@ -155,17 +156,19 @@
               ></ion-input>
             </ion-item>
 
-            <ion-button size="small" @click="shareEvent()">
-              <ion-icon slot="end" :icon="shareSocial"></ion-icon>
-              <ion-label>Partager lien</ion-label>
-            </ion-button>
-            <ion-button
-              size="small"
-              @click="this.formMailing = !this.formMailing"
-            >
-              <ion-icon slot="end" :icon="mailOutline"></ion-icon>
-              <ion-label>Envoyer mail</ion-label>
-            </ion-button>
+            <div class="invit-buttons">
+              <ion-button size="small" @click="shareEvent()">
+                <ion-icon slot="end" :icon="shareSocial"></ion-icon>
+                <ion-label>Partager lien</ion-label>
+              </ion-button>
+              <ion-button
+                size="small"
+                @click="this.formMailing = !this.formMailing"
+              >
+                <ion-icon slot="end" :icon="mailOutline"></ion-icon>
+                <ion-label>Envoyer mail</ion-label>
+              </ion-button>
+            </div>
 
             <FormMail callApi="sendInvitation" v-if="formMailing"></FormMail>
           </ion-card-content>
@@ -192,6 +195,7 @@ import {
   IonInput,
   IonButton,
   IonCard,
+  IonCardTitle,
   IonCardContent,
   IonCardSubtitle,
   IonGrid,
@@ -228,6 +232,7 @@ export default defineComponent({
     IonInput,
     IonButton,
     IonCard,
+    IonCardTitle,
     IonCardContent,
     IonCardSubtitle,
     IonGrid,
@@ -251,6 +256,7 @@ export default defineComponent({
       lockClosed,
     };
   },
+
   data() {
     return {
       toggleForm: "categorie",
@@ -260,15 +266,17 @@ export default defineComponent({
       formMailing: false,
     };
   },
-  ionViewWillEnter() {
-    this.$store.commit("setCurrentStep", 1);
-    // this.$store.commit("setEventTmp", {});
 
-    if (Object.keys(this.$store.state.events.eventTmp).length > 0) {
-      this.disabledStep2 = false;
-      this.disabledStep3 = false;
-    }
+  async ionViewWillEnter() {
+    await this.$store.commit("setEventTmp", {});
+    this.$store.commit("setCurrentStep", 1);
+
+    // if (Object.keys(this.$store.state.events.eventTmp).length > 0) {
+    //   this.disabledStep2 = false;
+    //   this.disabledStep3 = false;
+    // }
   },
+
   ionViewDidLeave() {
     this.$store.commit("setEventTmp", {});
     this.$store.commit("setCategories", []);
@@ -276,6 +284,7 @@ export default defineComponent({
     this.$store.commit("setAddress", "");
     this.$store.commit("setApiAddress", {});
   },
+
   watch: {
     "$store.state.events.currentStep": function (step) {
       switch (step) {
@@ -286,6 +295,8 @@ export default defineComponent({
           );
           this.disabledStep2 = false;
           break;
+        case 3:
+          this.disabledStep3 = false;
       }
     },
 
@@ -296,6 +307,7 @@ export default defineComponent({
       );
     },
   },
+
   computed: {
     noCategory() {
       let noCategory;
@@ -317,6 +329,7 @@ export default defineComponent({
       return plats;
     },
   },
+
   methods: {
     selectedValue(e) {
       this.toggleForm = e.target.value;
@@ -367,6 +380,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+ion-card-title {
+  padding: 1em;
+}
 ion-card-content {
   --padding-start: 0px;
   --padding-end: 0px;
@@ -398,9 +414,22 @@ ion-card-content {
       align-items: center;
     }
   }
+
+  .valid-event-button {
+    text-align: right;
+    padding-right: 1em;
+  }
 }
 
 .step3 {
   text-align: center;
+
+  .invit-buttons {
+    margin-top: 1em;
+  }
+}
+
+ion-segment-button {
+  --padding-top: 1em;
 }
 </style>

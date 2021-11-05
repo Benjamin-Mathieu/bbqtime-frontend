@@ -163,6 +163,7 @@ ion-card-content-ios {
     p {
       color: #7f2928;
       margin: 0px;
+      padding-right: 1em;
     }
 
     .actions-button {
