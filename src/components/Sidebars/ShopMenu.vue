@@ -53,9 +53,7 @@
           <p>Montant total: {{ this.$store.getters.getTotalShop + "€" }}</p>
         </div>
         <div class="order-button">
-          <router-link :to="{ name: 'Shop' }">
-            <ion-button size="medium">Commander</ion-button>
-          </router-link>
+          <ion-button @click="goToShop()" size="medium">Commander</ion-button>
         </div>
       </div>
     </ion-content>
@@ -114,6 +112,11 @@ export default defineComponent({
     openShop() {
       menuController.enable(true, "shop");
       menuController.open("shop");
+    },
+
+    goToShop() {
+      menuController.close();
+      this.$router.push({ name: "Shop" });
     },
 
     removePlat(plat) {

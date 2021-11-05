@@ -13,7 +13,10 @@
         <ion-button @click="openMapModal()">Ouvrir carte</ion-button>
       </ion-item>
       <ion-item
-        v-if="Object.keys(this.$store.state.events.eventTmp).length > 0"
+        v-if="
+          Object.keys(this.$store.state.events.eventTmp).length > 0 &&
+          Object.keys(this.$store.getters.getAddress).length === 0
+        "
       >
         {{
           this.$store.state.events.eventTmp.address +
@@ -51,8 +54,8 @@
       </ion-item>
 
       <ion-item>
-        <ion-label position="floating">Description</ion-label>
-        <ion-textarea type="text" v-model="description" required></ion-textarea>
+        <ion-label position="floating">Description (optionnel)</ion-label>
+        <ion-textarea type="text" v-model="description"></ion-textarea>
       </ion-item>
 
       <ion-item :class="{ 'no-file-selected': noFileSelected }">
@@ -88,24 +91,37 @@
           v-model="password"
           required
         ></ion-input>
-        <ion-button @click="show()" fill="clear" slot="end">
+        <ion-button
+          :disabled="disabledButton"
+          @click="show()"
+          fill="clear"
+          slot="end"
+        >
           <ion-icon :icon="icon"></ion-icon>
         </ion-button>
       </ion-item>
 
       <ion-item>
         <ion-button
-          v-if="
-            Object.keys(this.$store.state.events.eventTmp).length === 0 ||
-            this.$store.state.events.eventTmp.id == undefined
-          "
+          v-if="Object.keys(this.$store.state.events.eventTmp).length === 0"
           type="submit"
           size="small"
           slot="end"
         >
           Valider
+          <ion-spinner
+            v-if="showSpinner === true"
+            name="crescent"
+          ></ion-spinner>
         </ion-button>
-        <ion-button v-else @click="updateEvent()">Modifier</ion-button>
+
+        <ion-button :disabled="disabledButton" v-else @click="updateEvent()">
+          Modifier
+          <ion-spinner
+            v-if="showSpinner === true"
+            name="crescent"
+          ></ion-spinner>
+        </ion-button>
       </ion-item>
     </ion-card>
   </form>
@@ -124,6 +140,7 @@ import {
   IonThumbnail,
   IonImg,
   IonCard,
+  IonSpinner,
   IonIcon,
   modalController,
 } from "@ionic/vue";
@@ -143,6 +160,7 @@ export default defineComponent({
     IonImg,
     IonTextarea,
     IonCard,
+    IonSpinner,
     IonIcon,
   },
   data() {
@@ -176,6 +194,8 @@ export default defineComponent({
       noAddressSelected: false,
       noDateSelected: false,
       noHoursSelected: false,
+      disabledButton: false,
+      showSpinner: false,
     };
   },
 
@@ -253,6 +273,9 @@ export default defineComponent({
     },
 
     async addInfoEvent() {
+      this.disabledButton = true;
+      this.showSpinner = true;
+
       const check1 = await this.checkIfUserSelectFile();
       const check2 = await this.checkIfUserSelectAddress();
       const check3 = await this.checkIfUserSelectDate();
@@ -272,7 +295,9 @@ export default defineComponent({
           password: this.password,
         };
 
-        this.$store.dispatch("postEvent", event);
+        await this.$store.dispatch("postEvent", event);
+        this.disabledButton = false;
+        this.showSpinner = false;
       }
     },
 
@@ -288,7 +313,9 @@ export default defineComponent({
       ).toISOString();
     },
 
-    updateEvent() {
+    async updateEvent() {
+      this.disabledButton = true;
+      this.showSpinner = true;
       const date = this.convertDate(this.date, this.hours);
 
       const event = {
@@ -312,7 +339,9 @@ export default defineComponent({
         password: this.password,
       };
 
-      this.$store.dispatch("putEvent", event);
+      await this.$store.dispatch("putEvent", event);
+      this.disabledButton = false;
+      this.showSpinner = false;
     },
 
     async openMapModal() {
