@@ -12,7 +12,12 @@
         </ion-item>
         <ion-item>
           <ion-label position="floating">Prix</ion-label>
-          <ion-input type="number" v-model.number="price" required></ion-input>
+          <ion-input
+            type="decimal"
+            inputmode="decimal"
+            v-model.number="price"
+            required
+          ></ion-input>
         </ion-item>
         <ion-item>
           <ion-label position="floating">Description (optionnel)</ion-label>

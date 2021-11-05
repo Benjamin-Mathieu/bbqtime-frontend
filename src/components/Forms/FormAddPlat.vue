@@ -9,7 +9,7 @@
         <ion-item>
           <ion-label position="floating">Prix</ion-label>
           <ion-input
-            type="number"
+            type="decimal"
             inputmode="decimal"
             v-model.number="price"
             placeholder=" €"
