@@ -21,14 +21,8 @@
           </ion-segment>
         </ion-toolbar>
       </ion-header>
-      <router-link
-        v-if="this.$store.getters.getLoginStatus"
-        :to="{ name: 'AddEvent' }"
-      >
-        <ion-button size="small">Ajouter un évènement</ion-button>
-      </router-link>
 
-      <div v-if="this.selectedTypeEvent === 'public'">
+      <div class="public-events" v-if="this.selectedTypeEvent === 'public'">
         <RefreshData callApi="getPublicEvents"></RefreshData>
 
         <EmptyCard
@@ -54,41 +48,40 @@
               <img alt="event-img" :src="event.photo_url" />
             </div>
             <div class="info">
-              <ion-card-content>
-                <ion-item>
-                  <ion-label>
-                    <b>{{ event.name }}</b>
-                  </ion-label>
-                  <ion-icon v-if="event.private" :icon="lockClosed"></ion-icon>
+              <b>{{ event.name }}</b>
+              <p>
+                {{ event.description }}
+              </p>
+              <p>
+                {{ event.address + ", " + event.zipcode + " " + event.city }}
+              </p>
+              <div
+                class="participate"
+                v-for="(eventId, index) in arrayOfIdsEventOrder"
+                :key="eventId.id"
+              >
+                <ion-item
+                  v-if="
+                    this.$store.getters.getLoginStatus &&
+                    event.id === eventId &&
+                    index === 0
+                  "
+                  detail
+                  :detail-icon="checkmarkCircle"
+                  lines="none"
+                >
+                  <p>Vous participez</p>
                 </ion-item>
-                <p>
-                  {{ event.description }}
-                </p>
-                <p>
-                  {{ event.zipcode + " " + event.address + " " + event.city }}
-                </p>
-                <div v-for="(order, index) in event.orders" :key="order.id">
-                  <ion-item
-                    v-if="
-                      this.$store.getters.getLoginStatus &&
-                      order.user_id ==
-                        this.$store.getters.getUserInformation.id &&
-                      index === 0
-                    "
-                    detail
-                    :detail-icon="checkmarkCircle"
-                    lines="none"
-                  >
-                    <p>Vous participez</p>
-                  </ion-item>
-                </div>
-              </ion-card-content>
+              </div>
             </div>
           </div>
         </ion-card>
       </div>
 
-      <div v-if="this.selectedTypeEvent === 'participated'">
+      <div
+        class="participate-events"
+        v-if="this.selectedTypeEvent === 'participated'"
+      >
         <RefreshData callApi="getParticipateEvents"></RefreshData>
 
         <EmptyCard
@@ -114,24 +107,18 @@
               <img alt="event-img" :src="event.photo_url" />
             </div>
             <div class="info">
-              <ion-card-content>
-                <ion-item>
-                  <ion-label>
-                    <b>{{ event.name }}</b>
-                  </ion-label>
-                  <ion-icon v-if="event.private" :icon="lockClosed"></ion-icon>
-                </ion-item>
-                <p>{{ event.description }}</p>
-                <p>
-                  {{ event.zipcode + " " + event.address + ", " + event.city }}
-                </p>
-              </ion-card-content>
+              <b>{{ event.name }}</b>
+              <ion-icon v-if="event.private" :icon="lockClosed"></ion-icon>
+              <p>{{ event.description }}</p>
+              <p>
+                {{ event.address + ", " + event.zipcode + " " + event.city }}
+              </p>
             </div>
           </div>
         </ion-card>
       </div>
 
-      <div v-if="this.selectedTypeEvent === 'myEvents'">
+      <div class="my-events" v-if="this.selectedTypeEvent === 'myEvents'">
         <RefreshData callApi="getMyEvents"></RefreshData>
 
         <EmptyCard
@@ -157,38 +144,42 @@
                 <img alt="event-img" :src="event.photo_url" />
               </div>
               <div class="info">
-                <ion-card-content>
-                  <ion-item>
-                    <ion-label>
-                      <b>{{ event.name }}</b>
-                      <p
-                        v-if="
-                          event.user_id !==
-                          this.$store.getters.getUserInformation.id
-                        "
-                      >
-                        Associé
-                      </p>
-                    </ion-label>
-                    <ion-button
-                      @click.stop="showActions(event.id)"
-                      slot="end"
-                      size="small"
-                    >
-                      <ion-icon :icon="ellipsisHorizontalOutline"></ion-icon>
-                    </ion-button>
-                  </ion-item>
-                  <p>
-                    {{ event.description }}
-                  </p>
-                  <p>
-                    {{ event.zipcode + " " + event.address + " " + event.city }}
-                  </p>
-                </ion-card-content>
+                <div class="actions-button">
+                  <ion-button
+                    @click.stop="showActions(event.id)"
+                    fill="clear"
+                    size="small"
+                  >
+                    <ion-icon :icon="ellipsisVertical"></ion-icon>
+                  </ion-button>
+                </div>
+                <b>{{ event.name }}</b>
+                <p
+                  v-if="
+                    event.user_id !== this.$store.getters.getUserInformation.id
+                  "
+                >
+                  Associé
+                </p>
+                <p>
+                  {{ event.description }}
+                </p>
+                <p>
+                  {{ event.address + ", " + event.zipcode + " " + event.city }}
+                </p>
               </div>
             </div>
           </ion-card>
         </div>
+      </div>
+
+      <div class="add-event-button">
+        <router-link
+          v-if="this.$store.getters.getLoginStatus"
+          :to="{ name: 'AddEvent' }"
+        >
+          <ion-button size="small">Ajouter un évènement</ion-button>
+        </router-link>
       </div>
 
       <div class="pagination">
@@ -237,7 +228,6 @@ import {
   IonPage,
   IonContent,
   IonCard,
-  IonCardContent,
   IonIcon,
   IonItem,
   IonLabel,
@@ -251,7 +241,7 @@ import {
   lockClosed,
   checkmarkCircle,
   copyOutline,
-  ellipsisHorizontalOutline,
+  ellipsisVertical,
 } from "ionicons/icons";
 import Header from "../components/Header.vue";
 import Sub from "../components/Sub.vue";
@@ -267,7 +257,6 @@ export default defineComponent({
     IonPage,
     IonContent,
     IonCard,
-    IonCardContent,
     IonIcon,
     IonItem,
     IonLabel,
@@ -296,11 +285,12 @@ export default defineComponent({
       lockClosed,
       checkmarkCircle,
       copyOutline,
-      ellipsisHorizontalOutline,
+      ellipsisVertical,
     };
   },
 
   async ionViewWillEnter() {
+    this.$store.dispatch("getOrders");
     switch (this.selectedTypeEvent) {
       case "public":
         this.loaded = false;
@@ -339,6 +329,17 @@ export default defineComponent({
           this.loaded = true;
           break;
       }
+    },
+  },
+
+  computed: {
+    arrayOfIdsEventOrder() {
+      let value = [];
+      this.$store.state.orders.forEach((order) => {
+        value.push(order.event_id);
+      });
+      console.log(value);
+      return value;
     },
   },
 
@@ -427,19 +428,27 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-ion-card {
-  margin: 1em auto;
-}
-
 ion-item {
   --detail-icon-color: green;
   --detail-icon-opacity: 0.7;
   --padding-start: 0px;
 }
 
-ion-card-content {
+ion-card-content,
+ion-card-content-ios {
   --padding-start: 0px;
   --padding-end: 0.5em;
+  height: 130px;
+}
+
+.my-events {
+  .info {
+    .actions-button {
+      position: absolute;
+      right: -10px;
+      top: 0px;
+    }
+  }
 }
 
 .link {
@@ -448,14 +457,14 @@ ion-card-content {
 
 .event {
   display: flex;
-  min-height: 129px;
+  height: 130px;
+
   .img-container {
     width: 40%;
     padding: 0.5em;
     img {
       border-radius: 5px;
       height: 100%;
-      max-height: 130px;
       width: 100%;
       object-fit: fill;
     }
@@ -463,7 +472,33 @@ ion-card-content {
 
   .info {
     width: 60%;
+    padding: 1em 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    b {
+      color: #7e2727;
+    }
+    p {
+      color: #7e2727;
+      margin: 0px;
+    }
+
+    .participate {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      p {
+        font-size: 12px;
+      }
+    }
   }
+}
+
+.add-event-button {
+  text-align: center;
 }
 
 div .pagination {

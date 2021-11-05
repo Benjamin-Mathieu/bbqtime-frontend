@@ -40,13 +40,15 @@
                     <ion-icon
                       v-if="showDetail.id === order.id && showDetail.activeIcon"
                       :icon="chevronDownOutline"
-                    ></ion-icon>
+                    >
+                    </ion-icon>
                     <ion-icon
                       v-if="
                         showDetail.id === order.id && !showDetail.activeIcon
                       "
                       :icon="chevronForwardOutline"
-                    ></ion-icon>
+                    >
+                    </ion-icon>
                   </div>
                 </ion-button>
               </ion-item>
@@ -84,11 +86,9 @@
                   </ion-item>
                 </ion-list>
               </div>
-              <ion-item lines="none">
-                <ion-label color="primary">{{
-                  "Total commande: " + order.cost + "€"
-                }}</ion-label>
-              </ion-item>
+              <div class="total">
+                <p>Total commande: {{ order.cost }} €</p>
+              </div>
             </div>
           </transition>
         </div>
@@ -216,6 +216,16 @@ export default defineComponent({
       bottom: 0;
       right: 0;
     }
+  }
+}
+
+.total {
+  text-align: right;
+  padding-right: 1em;
+  p {
+    color: #751417;
+    font-weight: bold;
+    font-size: 1.2em;
   }
 }
 
