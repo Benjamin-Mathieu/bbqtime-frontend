@@ -1,6 +1,10 @@
 <template>
   <transition name="fade">
-    <div v-if="this.$store.state.showOnePage === true" class="one-page">
+    <div
+      @click="closeOnePage()"
+      v-if="this.$store.state.showOnePage === true"
+      class="one-page"
+    >
       <div class="header">
         <div class="header-content">
           <img src="../../public/assets/logo1.png" alt="bg-bbqtime" />
@@ -21,6 +25,10 @@ export default defineComponent({
   components: { IonButton },
   methods: {
     go() {
+      this.$store.commit("setShowOnePage", false);
+    },
+
+    closeOnePage() {
       this.$store.commit("setShowOnePage", false);
     },
   },
