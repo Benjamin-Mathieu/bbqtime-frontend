@@ -110,7 +110,9 @@ const moduleAuth = {
                 commit("setToken", resp.data.token);
                 commit("setUserInformation", JSON.stringify(resp.data.informations));
                 dispatch("setExternalUserId");
-                await popup.success("Authentification réussie !");
+                await popup.success(resp.data.message);
+                router.push({ name: "Home" });
+
                 if (resp.data.informations.name === "" || resp.data.informations.firstname === "") {
                     popup.warning("Votre profil est incomplet !");
                     router.push({ name: "Account" });
