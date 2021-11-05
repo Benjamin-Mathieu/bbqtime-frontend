@@ -1,6 +1,8 @@
 <template>
-  <ion-card>
-    <ion-card-header> {{ text }} </ion-card-header>
+  <ion-card id="empty-card">
+    <ion-card-header>
+      <b> {{ text }}</b>
+    </ion-card-header>
   </ion-card>
 </template>
 
@@ -21,3 +23,13 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+#empty-card {
+  height: 100%;
+  text-align: center;
+  b {
+    color: #7e2727;
+  }
+}
+</style>
