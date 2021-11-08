@@ -1,8 +1,8 @@
-import httpErrorHandler from '../httpErrorHandler';
-import axios from "axios";
+// import httpErrorHandler from '../httpErrorHandler';
 import popup from '../../components/ToastController';
 import router from "../../router/index";
 import OneSignal from 'onesignal-cordova-plugin';
+import { Http } from '@capacitor-community/http';
 
 const URL_API = "http://192.168.1.47:3000/";
 
@@ -92,45 +92,46 @@ const moduleAuth = {
         },
 
         async loginUser({ dispatch, commit }, user) {
-            await axios({
-                method: "post",
-                url: URL_API + 'users/login',
-                data: {
-                    email: user.email,
-                    password: user.password
-                },
-                headers: {
-                    "Accept": "application/json",
-                    "Content-type": "application/json"
-                }
-            }).then(async (resp) => {
+            try {
+                const resp = await Http.post({
+                    url: URL_API + 'users/login',
+                    data: {
+                        email: user.email,
+                        password: user.password
+                    },
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-type": "application/json"
+                    }
+                });
 
                 dispatch("getDevice");
                 commit("setUserIsLoggedIn", true);
                 commit("setToken", resp.data.token);
                 commit("setUserInformation", JSON.stringify(resp.data.informations));
                 dispatch("setExternalUserId");
-                await popup.success(resp.data.message);
+                popup.success(resp.data.message);
                 router.push({ name: "Home" });
 
                 if (resp.data.informations.name === "" || resp.data.informations.firstname === "") {
                     popup.warning("Votre profil est incomplet !");
                     router.push({ name: "Account" });
                 }
-            })
-                .catch(httpErrorHandler);
+            } catch (error) {
+                popup.error(error);
+            }
         },
 
         async userIsLogged({ dispatch, commit }) {
-            await axios({
-                method: "get",
-                url: URL_API + 'users/isLogged',
-                headers: {
-                    "Accept": "application/json",
-                    "Content-type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
-                }
-            }).then(async resp => {
+            try {
+                const resp = await Http.get({
+                    url: URL_API + 'users/isLogged',
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-type": "application/json",
+                        "Authorization": `Bearer ${localStorage.getItem("token")}`
+                    }
+                });
 
                 if (resp.data.userIsLogged) {
                     dispatch("getDevice");
@@ -140,7 +141,9 @@ const moduleAuth = {
                     dispatch("setExternalUserId");
                     popup.success(resp.data.message);
                 }
-            })
+            } catch (error) {
+                popup.error(error);
+            }
         },
 
         async logoutUser({ commit }) {
@@ -154,34 +157,35 @@ const moduleAuth = {
         },
 
         async registerUser({ state, dispatch }) {
-            await axios({
-                method: "post",
-                url: URL_API + 'users',
-                data: {
-                    email: state.userTmp.email,
-                    password: state.userTmp.password,
-                    name: state.userTmp.name,
-                    firstname: state.userTmp.firstname,
-                    phone: state.userTmp.phone
-                },
-                headers: {
-                    "Accept": "application/json",
-                    "Content-type": "application/json"
-                }
-            }).then(async (resp) => {
-                await popup.success(resp.data.message);
+            try {
+                const resp = await Http.post({
+                    url: URL_API + 'users',
+                    data: {
+                        email: state.userTmp.email,
+                        password: state.userTmp.password,
+                        name: state.userTmp.name,
+                        firstname: state.userTmp.firstname,
+                        phone: state.userTmp.phone
+                    },
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-type": "application/json"
+                    }
+                });
 
+                await popup.success(resp.data.message);
                 const user = { "email": state.userTmp.email, "password": state.userTmp.password };
                 dispatch("loginUser", user);
                 router.push({ name: "Account" });
-            })
-                .catch(httpErrorHandler);
+            } catch (error) {
+                popup.error(error);
+            }
+
         },
 
         async sendCode({ state }) {
             try {
-                const req = await axios({
-                    method: "post",
+                const req = await Http.post({
                     url: URL_API + 'users/send-code',
                     data: {
                         email: state.resetPassword.email,
@@ -190,18 +194,21 @@ const moduleAuth = {
                         "Accept": "application/json",
                         "Content-type": "application/json"
                     }
-                })
-                popup.success(req.data.message);
-                return true;
+                });
+
+                if (req.status === 200) {
+                    popup.success(req.data.message);
+                    return true;
+                }
+
             } catch (error) {
-                console.error(error);
+                popup.error(error);
             }
         },
 
         async verifCode({ state, commit }, code) {
             try {
-                const req = await axios({
-                    method: "post",
+                const req = await Http.post({
                     url: URL_API + 'users/check-code',
                     data: {
                         email: state.resetPassword.email,
@@ -212,9 +219,16 @@ const moduleAuth = {
                         "Content-type": "application/json"
                     }
                 });
-                popup.success(req.data.message);
-                commit("setResetPassword", req.data.token);
-                return true;
+
+                if (req.status === 200) {
+                    popup.success(req.data.message);
+                    commit("setResetPassword", req.data.token);
+                    return true;
+                } else {
+                    popup.warning(req.data.message);
+                    return false;
+                }
+
             } catch (error) {
                 console.error(error);
             }
@@ -222,30 +236,32 @@ const moduleAuth = {
         },
 
         async resetPassword({ state }, password) {
-            await axios({
-                method: "post",
-                url: URL_API + 'users/reset-password',
-                data: {
-                    new_password: password
-                },
-                headers: {
-                    "Accept": "application/json",
-                    "Content-type": "application/json",
-                    "Authorization": `Bearer ${state.resetPassword}`
-                }
-            }).then(resp => {
-                popup.success(resp.data.message);
+            try {
+                const req = await Http.post({
+                    url: URL_API + 'users/reset-password',
+                    data: {
+                        new_password: password
+                    },
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-type": "application/json",
+                        "Authorization": `Bearer ${state.resetPassword}`
+                    }
+                });
+
+                popup.success(req.data.message);
                 router.push({
                     name: "SignIn",
                 });
-            })
-                .catch(httpErrorHandler);
+
+            } catch (error) {
+                popup.error(error);
+            }
         },
 
         async updateProfil({ commit }, data) {
             try {
-                const req = await axios({
-                    method: "put",
+                const req = await Http.put({
                     url: URL_API + 'users/update',
                     data: { data },
                     headers: {
@@ -254,10 +270,17 @@ const moduleAuth = {
                         "Authorization": `Bearer ${localStorage.getItem("token")}`
                     }
                 });
-                popup.success(req.data.message);
-                commit("setUserInformation", JSON.stringify(req.data.informations));
+
+                if (req.status === 200) {
+                    popup.success(req.data.message);
+                    commit("setUserInformation", JSON.stringify(req.data.informations));
+                    return true;
+                } else {
+                    popup.warning(req.data.message);
+                    return false;
+                }
             } catch (error) {
-                popup.warning("Mot de passe incorrect !");
+                console.log("error => ", error);
             }
         }
     }

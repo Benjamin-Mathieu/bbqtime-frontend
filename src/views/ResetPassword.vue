@@ -150,16 +150,15 @@ export default defineComponent({
         this.showFormVerifCode = false;
         this.showFormResetPassword = true;
       } else {
-        popup.warning("Code incorrect");
         this.code = "";
       }
     },
 
-    async resetPassword() {
+    resetPassword() {
       if (this.password !== this.checkpwd) {
         popup.warning("Les mots de passes saisies ne correspondent pas");
       } else {
-        await this.$store.dispatch("resetPassword", this.checkpwd);
+        this.$store.dispatch("resetPassword", this.checkpwd);
       }
     },
   },
