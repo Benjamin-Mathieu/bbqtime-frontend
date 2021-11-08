@@ -24,11 +24,23 @@
         </router-link>
       </ion-list>
       <ion-list v-else lines="none">
-        <router-link class="links" :to="{ name: 'Events' }">
-          <ion-item>
-            <p>Evènements</p>
-          </ion-item>
-        </router-link>
+        <ion-item>
+          <p @click.stop="show()">Evènements</p>
+        </ion-item>
+        <ion-item v-if="isClicked">
+          <ul>
+            <li>
+              <router-link class="links" :to="{ name: 'Events' }">
+                Publiques
+              </router-link>
+            </li>
+            <li>
+              <router-link class="links" :to="{ name: 'MyEvents' }">
+                Mes évènements
+              </router-link>
+            </li>
+          </ul>
+        </ion-item>
         <router-link class="links" :to="{ name: 'Orders' }">
           <ion-item>
             <p>Commandes</p>
@@ -86,6 +98,13 @@ export default defineComponent({
     IonListHeader,
     IonContent,
   },
+
+  data() {
+    return {
+      isClicked: false,
+    };
+  },
+
   methods: {
     openMenu() {
       menuController.enable(true, "nav");
@@ -98,6 +117,10 @@ export default defineComponent({
 
     logoutUser() {
       this.$store.dispatch("logoutUser");
+    },
+
+    show() {
+      this.isClicked = !this.isClicked;
     },
   },
 });
