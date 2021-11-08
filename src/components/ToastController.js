@@ -32,14 +32,9 @@ const popups = {
     async error(message) {
         const toast = await toastController
             .create({
+                duration: 3000,
                 message: message,
                 header: "Erreur",
-                buttons: [
-                    {
-                        icon: 'close',
-                        role: 'cancel'
-                    }
-                ]
             })
         return toast.present();
     }
