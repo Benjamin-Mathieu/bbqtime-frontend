@@ -7,6 +7,7 @@ const URL_API = "http://192.168.1.47:3000/";
 
 const modulEvents = {
     state: () => ({
+        archivedEvents: [],
         currentStep: 1,
         participateEvents: [],
         publicEvents: [],
@@ -19,30 +20,42 @@ const modulEvents = {
     }),
 
     mutations: {
+        setArchivedEvents(state, archivedEvents) {
+            state.archivedEvents = archivedEvents;
+        },
+
         setCurrentStep(state, currentStep) {
             state.currentStep = currentStep;
         },
+
         setParticipateEvents(state, participateEvents) {
             state.participateEvents = participateEvents;
         },
+
         setPublicEvents(state, publicEvents) {
             state.publicEvents = publicEvents;
         },
+
         setMyEvents(state, myEvents) {
             state.myEvents = myEvents;
         },
+
         setMyEventOrders(state, orders) {
             state.myEventOrders = orders;
         },
+
         setMyEventDetails(state, details) {
             state.myEventDetails = details;
         },
+
         setEventTmp(state, eventTmp) {
             state.eventTmp = eventTmp;
         },
+
         setEventDetails(state, eventDetails) {
             state.eventDetails = eventDetails;
         },
+
         setPagination(state, pagination) {
             state.pagination = pagination;
         }
@@ -52,6 +65,7 @@ const modulEvents = {
         getCurrentEvent(state) {
             return state.eventDetails;
         },
+
         getDateEvent(state) {
             if (Object.keys(state.eventDetails).length > 0) {
                 //Convert date+hours in DATETIME
@@ -64,6 +78,18 @@ const modulEvents = {
     },
 
     actions: {
+
+        async getArchivedEvents({ commit }) {
+            let req = await axios({
+                method: "get",
+                url: URL_API + 'events/archive',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            });
+            commit("setArchivedEvents", req.data.events);
+        },
+
         async getParticipateEvents({ commit }, page) {
             if (page === undefined) page = "1";
             let req = await axios({

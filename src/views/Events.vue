@@ -15,9 +15,6 @@
             <ion-segment-button value="participated">
               <ion-label>Participés</ion-label>
             </ion-segment-button>
-            <ion-segment-button value="myEvents">
-              <ion-label>Mes évènements</ion-label>
-            </ion-segment-button>
           </ion-segment>
         </ion-toolbar>
       </ion-header>
@@ -57,14 +54,12 @@
               </p>
               <div
                 class="participate"
-                v-for="(eventId, index) in arrayOfIdsEventOrder"
+                v-for="eventId in arrayOfIdsEventOrder"
                 :key="eventId.id"
               >
                 <ion-item
                   v-if="
-                    this.$store.getters.getLoginStatus &&
-                    event.id === eventId &&
-                    index === 0
+                    this.$store.getters.getLoginStatus && event.id === eventId
                   "
                   detail
                   :detail-icon="checkmarkCircle"
@@ -116,61 +111,6 @@
             </div>
           </div>
         </ion-card>
-      </div>
-
-      <div class="my-events" v-if="this.selectedTypeEvent === 'myEvents'">
-        <RefreshData callApi="getMyEvents"></RefreshData>
-
-        <EmptyCard
-          v-if="
-            this.$store.state.events.myEvents.length === 0 && loaded === true
-          "
-          text="Vous n'avez pas crée d'évènement"
-        ></EmptyCard>
-
-        <div v-else>
-          <ion-card
-            v-for="event in this.$store.state.events.myEvents"
-            :key="event.id"
-          >
-            <Skeleton v-if="loaded === false"></Skeleton>
-
-            <div
-              @click="redirectToManageEvent(event.id)"
-              v-if="loaded === true"
-              class="event"
-            >
-              <div class="img-container">
-                <img alt="event-img" :src="event.photo_url" />
-              </div>
-              <div class="info">
-                <div class="actions-button">
-                  <ion-button
-                    @click.stop="showActions(event.id)"
-                    fill="clear"
-                    size="small"
-                  >
-                    <ion-icon :icon="ellipsisVertical"></ion-icon>
-                  </ion-button>
-                </div>
-                <b>{{ event.name }}</b>
-                <p
-                  v-if="
-                    event.user_id !== this.$store.getters.getUserInformation.id
-                  "
-                >
-                  Associé
-                </p>
-                <p>
-                  {{ event.description }}
-                </p>
-                <p>
-                  {{ event.address + ", " + event.zipcode + " " + event.city }}
-                </p>
-              </div>
-            </div>
-          </ion-card>
-        </div>
       </div>
 
       <div class="add-event-button">
@@ -302,11 +242,6 @@ export default defineComponent({
         await this.$store.dispatch("getParticipateEvents");
         this.loaded = true;
         break;
-      case "myEvents":
-        this.loaded = false;
-        await this.$store.dispatch("getMyEvents");
-        this.loaded = true;
-        break;
     }
   },
 
@@ -323,11 +258,6 @@ export default defineComponent({
           await this.$store.dispatch("getParticipateEvents");
           this.loaded = true;
           break;
-        case "myEvents":
-          this.loaded = false;
-          await this.$store.dispatch("getMyEvents");
-          this.loaded = true;
-          break;
       }
     },
   },
@@ -338,8 +268,9 @@ export default defineComponent({
       this.$store.state.orders.forEach((order) => {
         value.push(order.event_id);
       });
-      console.log(value);
-      return value;
+      let filtered_array = [...new Set(value.map((item) => item))];
+
+      return filtered_array;
     },
   },
 
@@ -350,10 +281,6 @@ export default defineComponent({
 
     redirectToEvent(id) {
       this.$router.push({ name: "Categories", params: { id: id } });
-    },
-
-    redirectToManageEvent(id) {
-      this.$router.push({ name: "ManageEvent", params: { id: id } });
     },
 
     selectedValue(e) {
@@ -374,11 +301,6 @@ export default defineComponent({
           this.loaded = true;
 
           break;
-        case "myEvents":
-          this.loaded = false;
-          await this.$store.dispatch("getMyEvents");
-          this.loaded = true;
-          break;
       }
     },
 
@@ -395,11 +317,6 @@ export default defineComponent({
           await this.$store.dispatch("getParticipateEvents", prevPage);
           this.loaded = true;
           break;
-        case "myEvents":
-          this.loaded = false;
-          this.$store.dispatch("getMyEvents");
-          this.loaded = true;
-          break;
       }
     },
 
@@ -414,11 +331,6 @@ export default defineComponent({
         case "participated":
           this.loaded = false;
           await this.$store.dispatch("getParticipateEvents", nextPage);
-          this.loaded = true;
-          break;
-        case "myEvents":
-          this.loaded = false;
-          await this.$store.dispatch("getMyEvents");
           this.loaded = true;
           break;
       }
@@ -439,16 +351,6 @@ ion-card-content-ios {
   --padding-start: 0px;
   --padding-end: 0.5em;
   height: 130px;
-}
-
-.my-events {
-  .info {
-    .actions-button {
-      position: absolute;
-      right: -10px;
-      top: 0px;
-    }
-  }
 }
 
 .link {
