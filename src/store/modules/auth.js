@@ -2,7 +2,7 @@
 import popup from '../../components/ToastController';
 import router from "../../router/index";
 import OneSignal from 'onesignal-cordova-plugin';
-import { Http } from '@capacitor-community/http';
+import { http } from '@ionic-native/http';
 
 const URL_API = "http://192.168.1.47:3000/";
 
@@ -93,17 +93,18 @@ const moduleAuth = {
 
         async loginUser({ dispatch, commit }, user) {
             try {
-                const resp = await Http.post({
-                    url: URL_API + 'users/login',
-                    data: {
+                const resp = await http.get(
+                    URL_API + 'users/login',
+                    {
                         email: user.email,
                         password: user.password
                     },
-                    headers: {
+                    {
                         "Accept": "application/json",
                         "Content-type": "application/json"
                     }
-                });
+                );
+                console.log("resp login => ", resp);
 
                 dispatch("getDevice");
                 commit("setUserIsLoggedIn", true);
