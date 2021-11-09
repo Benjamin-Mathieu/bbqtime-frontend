@@ -2,7 +2,7 @@
 import popup from '../../components/ToastController';
 import router from "../../router/index";
 import OneSignal from 'onesignal-cordova-plugin';
-import { http } from '@ionic-native/http';
+import { HTTP as Http } from '@ionic-native/http';
 
 const URL_API = "http://192.168.1.47:3000/";
 
@@ -92,19 +92,17 @@ const moduleAuth = {
         },
 
         async loginUser({ dispatch, commit }, user) {
-            try {
-                const resp = await http.get(
-                    URL_API + 'users/login',
-                    {
-                        email: user.email,
-                        password: user.password
-                    },
-                    {
-                        "Accept": "application/json",
-                        "Content-type": "application/json"
-                    }
-                );
-                console.log("resp login => ", resp);
+            console.log("in action");
+            Http.post(URL_API + 'users/login', {
+                email: user.email,
+                password: user.password
+            }, {
+                "Accept": "application/json",
+                "Content-type": "application/json"
+            }, function (resp) {
+                resp.data = JSON.parse(resp.data);
+                console.log("resp => ", resp);
+                console.log("resp.data => ", resp.data);
 
                 dispatch("getDevice");
                 commit("setUserIsLoggedIn", true);
@@ -118,33 +116,81 @@ const moduleAuth = {
                     popup.warning("Votre profil est incomplet !");
                     router.push({ name: "Account" });
                 }
-            } catch (error) {
-                popup.error(error);
-            }
+            }, function (resp) {
+                resp.error = JSON.parse(resp.error);
+                popup.error(resp.error.message);
+            });
+            // try {
+            //     const resp = await Http.get(
+            //         URL_API + 'users/login',
+            //         {
+            //             email: user.email,
+            //             password: user.password
+            //         },
+            //         {
+            //             "Accept": "application/json",
+            //             "Content-type": "application/json"
+            //         }
+            //     );
+            //     console.log("resp login => ", resp);
+
+            //     dispatch("getDevice");
+            //     commit("setUserIsLoggedIn", true);
+            //     commit("setToken", resp.data.token);
+            //     commit("setUserInformation", JSON.stringify(resp.data.informations));
+            //     dispatch("setExternalUserId");
+            //     popup.success(resp.data.message);
+            //     router.push({ name: "Home" });
+
+            //     if (resp.data.informations.name === "" || resp.data.informations.firstname === "") {
+            //         popup.warning("Votre profil est incomplet !");
+            //         router.push({ name: "Account" });
+            //     }
+            // } catch (error) {
+            //     popup.error(error);
+            // }
         },
 
-        async userIsLogged({ dispatch, commit }) {
-            try {
-                const resp = await Http.get({
-                    url: URL_API + 'users/isLogged',
-                    headers: {
-                        "Accept": "application/json",
-                        "Content-type": "application/json",
-                        "Authorization": `Bearer ${localStorage.getItem("token")}`
-                    }
-                });
+        async userIsLogged({ commit, dispatch }) {
+            Http.get(
+                URL_API + 'users/isLogged', {},
+                {
+                    "Accept": "application/json",
+                    "Content-type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                },
+                function (resp) {
+                    resp.data = JSON.parse(resp.data);
 
-                if (resp.data.userIsLogged) {
-                    dispatch("getDevice");
-                    commit("setUserIsLoggedIn", true);
-                    commit("setToken", localStorage.getItem("token"));
-                    commit("setUserInformation", JSON.stringify(resp.data.informations));
-                    dispatch("setExternalUserId");
-                    popup.success(resp.data.message);
-                }
-            } catch (error) {
-                popup.error(error);
-            }
+                    if (resp.data.userIsLogged) {
+                        dispatch("getDevice");
+                        commit("setUserIsLoggedIn", true);
+                        commit("setToken", localStorage.getItem("token"));
+                        commit("setUserInformation", JSON.stringify(resp.data.informations));
+                        dispatch("setExternalUserId");
+                        popup.success(resp.data.message);
+                    }
+                }, function (response) {
+                    console.error(response.error);
+                });
+            // const resp = await Http.get({
+            //     url: URL_API + 'users/isLogged',
+            //     headers: {
+            //         "Accept": "application/json",
+            //         "Content-type": "application/json",
+            //         "Authorization": `Bearer ${localStorage.getItem("token")}`
+            //     }
+            // });
+
+            // if (resp.data.userIsLogged) {
+            //     dispatch("getDevice");
+            //     commit("setUserIsLoggedIn", true);
+            //     commit("setToken", localStorage.getItem("token"));
+            //     commit("setUserInformation", JSON.stringify(resp.data.informations));
+            //     dispatch("setExternalUserId");
+            //     popup.success(resp.data.message);
+            // }
+
         },
 
         async logoutUser({ commit }) {
