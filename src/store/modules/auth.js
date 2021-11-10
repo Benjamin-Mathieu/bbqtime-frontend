@@ -2,7 +2,7 @@
 import popup from '../../components/ToastController';
 import router from "../../router/index";
 import OneSignal from 'onesignal-cordova-plugin';
-import { HTTP as Http } from '@ionic-native/http';
+import { request } from '../httpRequest';
 
 const URL_API = "http://192.168.1.47:3000/";
 
@@ -92,105 +92,43 @@ const moduleAuth = {
         },
 
         async loginUser({ dispatch, commit }, user) {
-            console.log("in action");
-            Http.post(URL_API + 'users/login', {
+
+            request.post(`${URL_API}users/login`, {
                 email: user.email,
                 password: user.password
-            }, {
-                "Accept": "application/json",
-                "Content-type": "application/json"
-            }, function (resp) {
-                resp.data = JSON.parse(resp.data);
-                console.log("resp => ", resp);
-                console.log("resp.data => ", resp.data);
-
+            }).then(resp => {
+                console.log("test result => ", resp);
                 dispatch("getDevice");
                 commit("setUserIsLoggedIn", true);
-                commit("setToken", resp.data.token);
-                commit("setUserInformation", JSON.stringify(resp.data.informations));
+                commit("setToken", resp.token);
+                commit("setUserInformation", JSON.stringify(resp.informations));
                 dispatch("setExternalUserId");
-                popup.success(resp.data.message);
+                popup.success(resp.message);
                 router.push({ name: "Home" });
 
-                if (resp.data.informations.name === "" || resp.data.informations.firstname === "") {
+                if (resp.informations.name === "" || resp.informations.firstname === "") {
                     popup.warning("Votre profil est incomplet !");
                     router.push({ name: "Account" });
                 }
-            }, function (resp) {
-                resp.error = JSON.parse(resp.error);
-                popup.error(resp.error.message);
-            });
-            // try {
-            //     const resp = await Http.get(
-            //         URL_API + 'users/login',
-            //         {
-            //             email: user.email,
-            //             password: user.password
-            //         },
-            //         {
-            //             "Accept": "application/json",
-            //             "Content-type": "application/json"
-            //         }
-            //     );
-            //     console.log("resp login => ", resp);
-
-            //     dispatch("getDevice");
-            //     commit("setUserIsLoggedIn", true);
-            //     commit("setToken", resp.data.token);
-            //     commit("setUserInformation", JSON.stringify(resp.data.informations));
-            //     dispatch("setExternalUserId");
-            //     popup.success(resp.data.message);
-            //     router.push({ name: "Home" });
-
-            //     if (resp.data.informations.name === "" || resp.data.informations.firstname === "") {
-            //         popup.warning("Votre profil est incomplet !");
-            //         router.push({ name: "Account" });
-            //     }
-            // } catch (error) {
-            //     popup.error(error);
-            // }
+            })
+                .catch(err => {
+                    err.error = JSON.parse(err.error);
+                    popup.warning(err.error.message);
+                });
         },
 
         async userIsLogged({ commit, dispatch }) {
-            Http.get(
-                URL_API + 'users/isLogged', {},
-                {
-                    "Accept": "application/json",
-                    "Content-type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
-                },
-                function (resp) {
-                    resp.data = JSON.parse(resp.data);
-
-                    if (resp.data.userIsLogged) {
+            request.getWithAuth(`${URL_API}users/isLogged`, {})
+                .then(resp => {
+                    if (resp.userIsLogged) {
                         dispatch("getDevice");
                         commit("setUserIsLoggedIn", true);
                         commit("setToken", localStorage.getItem("token"));
-                        commit("setUserInformation", JSON.stringify(resp.data.informations));
+                        commit("setUserInformation", JSON.stringify(resp.informations));
                         dispatch("setExternalUserId");
-                        popup.success(resp.data.message);
+                        popup.success(resp.message);
                     }
-                }, function (response) {
-                    console.error(response.error);
                 });
-            // const resp = await Http.get({
-            //     url: URL_API + 'users/isLogged',
-            //     headers: {
-            //         "Accept": "application/json",
-            //         "Content-type": "application/json",
-            //         "Authorization": `Bearer ${localStorage.getItem("token")}`
-            //     }
-            // });
-
-            // if (resp.data.userIsLogged) {
-            //     dispatch("getDevice");
-            //     commit("setUserIsLoggedIn", true);
-            //     commit("setToken", localStorage.getItem("token"));
-            //     commit("setUserInformation", JSON.stringify(resp.data.informations));
-            //     dispatch("setExternalUserId");
-            //     popup.success(resp.data.message);
-            // }
-
         },
 
         async logoutUser({ commit }) {
@@ -204,131 +142,106 @@ const moduleAuth = {
         },
 
         async registerUser({ state, dispatch }) {
-            try {
-                const resp = await Http.post({
-                    url: URL_API + 'users',
-                    data: {
-                        email: state.userTmp.email,
-                        password: state.userTmp.password,
-                        name: state.userTmp.name,
-                        firstname: state.userTmp.firstname,
-                        phone: state.userTmp.phone
-                    },
-                    headers: {
-                        "Accept": "application/json",
-                        "Content-type": "application/json"
-                    }
-                });
 
-                await popup.success(resp.data.message);
+            request.post(`${URL_API}users`, {
+                email: state.userTmp.email,
+                password: state.userTmp.password,
+                name: state.userTmp.name,
+                firstname: state.userTmp.firstname,
+                phone: state.userTmp.phone
+            }).then(async resp => {
+                popup.success(resp.message);
                 const user = { "email": state.userTmp.email, "password": state.userTmp.password };
-                dispatch("loginUser", user);
+                await dispatch("loginUser", user);
                 router.push({ name: "Account" });
-            } catch (error) {
-                popup.error(error);
-            }
-
+            })
+                .catch(err => {
+                    err.error = JSON.parse(err.error);
+                    popup.warning(err.error.message);
+                })
         },
 
         async sendCode({ state }) {
-            try {
-                const req = await Http.post({
-                    url: URL_API + 'users/send-code',
-                    data: {
-                        email: state.resetPassword.email,
-                    },
-                    headers: {
-                        "Accept": "application/json",
-                        "Content-type": "application/json"
-                    }
-                });
+            let isSend;
 
-                if (req.status === 200) {
-                    popup.success(req.data.message);
-                    return true;
-                }
+            await request.post(URL_API + 'users/send-code', {
+                email: state.resetPassword.email,
+            })
+                .then(resp => {
+                    console.log("resp => ", resp);
+                    popup.success(resp.message);
+                    isSend = true;
+                })
+                .catch(err => {
+                    err.error = JSON.parse(err.error);
+                    popup.warning(err.error.message);
+                    isSend = false;
+                })
 
-            } catch (error) {
-                popup.error(error);
-            }
+            return isSend;
         },
 
         async verifCode({ state, commit }, code) {
-            try {
-                const req = await Http.post({
-                    url: URL_API + 'users/check-code',
-                    data: {
-                        email: state.resetPassword.email,
-                        code: code
-                    },
-                    headers: {
-                        "Accept": "application/json",
-                        "Content-type": "application/json"
-                    }
-                });
+            let codeIsOk;
 
-                if (req.status === 200) {
-                    popup.success(req.data.message);
-                    commit("setResetPassword", req.data.token);
-                    return true;
-                } else {
-                    popup.warning(req.data.message);
-                    return false;
+            await request.post(URL_API + 'users/check-code',
+                {
+                    email: state.resetPassword.email,
+                    code: code
                 }
+            )
+                .then(resp => {
+                    popup.success(resp.message);
+                    commit("setResetPassword", resp.token);
+                    codeIsOk = true;
+                })
+                .catch(err => {
+                    err.error = JSON.parse(err.error);
+                    popup.warning(err.error.message);
+                    codeIsOk = false;
+                })
 
-            } catch (error) {
-                console.error(error);
-            }
-
+            return codeIsOk;
         },
 
         async resetPassword({ state }, password) {
-            try {
-                const req = await Http.post({
-                    url: URL_API + 'users/reset-password',
-                    data: {
-                        new_password: password
-                    },
-                    headers: {
-                        "Accept": "application/json",
-                        "Content-type": "application/json",
-                        "Authorization": `Bearer ${state.resetPassword}`
-                    }
+            request.postResetPwd(URL_API + 'users/reset-password',
+                {
+                    new_password: password
+                },
+                {
+                    "Accept": "application/json",
+                    "Content-type": "application/json",
+                    "Authorization": `Bearer ${state.resetPassword}`
+                })
+                .then(resp => {
+                    popup.success(resp.message);
+                    router.push({
+                        name: "SignIn",
+                    });
+                })
+                .catch(err => {
+                    err.error = JSON.parse(err.error);
+                    popup.warning(err.error.message);
                 });
-
-                popup.success(req.data.message);
-                router.push({
-                    name: "SignIn",
-                });
-
-            } catch (error) {
-                popup.error(error);
-            }
         },
 
         async updateProfil({ commit }, data) {
-            try {
-                const req = await Http.put({
-                    url: URL_API + 'users/update',
-                    data: { data },
-                    headers: {
-                        "Accept": "application/json",
-                        "Content-type": "application/json",
-                        "Authorization": `Bearer ${localStorage.getItem("token")}`
-                    }
-                });
+            let isUpdate;
 
-                if (req.status === 200) {
-                    popup.success(req.data.message);
-                    commit("setUserInformation", JSON.stringify(req.data.informations));
-                    return true;
-                } else {
-                    popup.warning(req.data.message);
-                    return false;
-                }
-            } catch (error) {
-                console.log("error => ", error);
-            }
+            await request.putWithAuth(URL_API + 'users/update', data)
+                .then(resp => {
+                    popup.success(resp.message);
+                    commit("setUserInformation", JSON.stringify(resp.informations));
+                    isUpdate = true;
+                })
+                .catch(err => {
+                    isUpdate = false;
+                    err.error = JSON.parse(err.error);
+                    popup.warning(err.error.message);
+                })
+
+            return isUpdate;
         }
     }
 }

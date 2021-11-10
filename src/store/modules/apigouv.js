@@ -1,6 +1,6 @@
-import axios from "axios";
 import Map from "../../services/map";
 import httpErrorHandler from "../httpErrorHandler";
+import { request } from '../httpRequest';
 
 const moduleApiGouv = {
     state: () => ({
@@ -29,17 +29,15 @@ const moduleApiGouv = {
 
     actions: {
         async getAddress({ commit, state }) {
-            await axios({
-                method: "get",
-                url: 'https://api-adresse.data.gouv.fr/search/?q=' + state.address,
-            })
+
+            request.getApiGouv('https://api-adresse.data.gouv.fr/search/?q=' + state.address, {}, {})
                 .then(async resp => {
-                    await commit("setApiAddress", resp.data.features);
+                    await commit("setApiAddress", resp.features);
                     const latitude = state.respApiAddress[0].geometry.coordinates[1];
                     const longitude = state.respApiAddress[0].geometry.coordinates[0];
                     Map.getMap(latitude, longitude);
-                }
-                ).catch(httpErrorHandler);
+                })
+                .catch(httpErrorHandler)
         }
     }
 }

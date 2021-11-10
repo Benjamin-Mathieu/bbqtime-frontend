@@ -1,6 +1,6 @@
 import popup from '../../components/ToastController';
-import axios from "axios";
-import httpErrorHandler from '../httpErrorHandler';
+import { request } from '../httpRequest';
+// import httpErrorHandler from '../httpErrorHandler';
 
 const URL_API = "http://192.168.1.47:3000/";
 
@@ -64,22 +64,18 @@ const modulShop = {
 
     actions: {
         async postOrder({ commit, state, rootState }) {
-            await axios({
-                method: "post",
-                url: URL_API + 'orders',
-                data: {
-                    event_id: rootState.events.eventDetails.id,
-                    plats: state.plats,
-                },
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token")
-                }
+            request.postWithAuth(URL_API + 'orders', {
+                event_id: rootState.events.eventDetails.id,
+                plats: state.plats
             })
                 .then(resp => {
-                    popup.success(resp.data.message);
+                    popup.success(resp.message);
                     commit("clearShop");
-                }
-                ).catch(httpErrorHandler);
+                })
+                .catch(err => {
+                    err.error = JSON.parse(err.error);
+                    popup.warning(err.error.message);
+                });
         }
     }
 }
