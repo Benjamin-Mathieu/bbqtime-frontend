@@ -1,7 +1,6 @@
 import { createStore } from 'vuex';
-import axios from "axios";
+import { request } from "../store/httpRequest";
 import popup from '../components/ToastController';
-import httpErrorHandler from './httpErrorHandler';
 import modulAuth from "./modules/auth";
 import modulApiGouv from "./modules/apigouv";
 import modulEvents from './modules/events';
@@ -56,120 +55,89 @@ const store = createStore({
     },
     actions: {
         async getOrders({ commit }) {
-            let req = await axios({
-                method: "get",
-                url: URL_API + 'orders',
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token")
-                }
-            });
-            commit("setOrders", req.data.orders);
+            request.getWithAuth(URL_API + 'orders')
+                .then(resp => {
+                    commit("setOrders", resp.orders);
+                });
         },
 
         async putOrderStatus({ state }, data) {
             console.log(state.userIsLoggedIn);
-            await axios({
-                method: "put",
-                url: URL_API + 'orders/' + data.id,
-                data: {
-                    status: data.status
-                },
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token")
-                }
-            });
+
+            request.putWithAuth(URL_API + 'orders/' + data.id, { status: data.status })
+                .then(resp => {
+                    popup.success(resp.message);
+                }).catch(err => {
+                    err.error = JSON.parse(err.error);
+                    popup.warning(err.error.message);
+                });
         },
 
         async getPlats({ commit, rootState }) {
-            await axios({
-                method: "get",
-                url: URL_API + 'plats/' + rootState.events.eventTmp.id,
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token")
-                }
-            }).then(resp => {
-                commit("setPlats", resp.data.plats);
-            })
+            request.getWithAuth(URL_API + 'categories/' + rootState.events.eventTmp.id)
+                .then(resp => {
+                    commit("setPlats", resp.plats);
+                });
         },
 
         async getCategories({ commit, rootState }) {
-            await axios({
-                method: "get",
-                url: URL_API + 'categories/' + rootState.events.eventTmp.id,
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token")
-                }
-            }).then(resp => {
-                commit("setCategories", resp.data.categories);
-            })
-
+            request.getWithAuth(URL_API + 'categories/' + rootState.events.eventTmp.id)
+                .then(resp => {
+                    commit("setCategories", resp.categories);
+                });
         },
 
         async getOrderDetails({ commit }, id) {
             const orderId = Object.values(id.id).toString();
-            let req = await axios({
-                method: "get",
-                url: URL_API + 'orders/' + orderId,
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token")
-                }
-            });
-            commit("setOrderDetails", req.data);
+
+            request.getWithAuth(URL_API + 'orders/' + orderId)
+                .then(resp => {
+                    commit("setOrderDetails", resp);
+                });
         },
 
         async postCategorie({ state, dispatch }, libelle) {
-            await axios({
-                method: "post",
-                url: URL_API + 'categories',
-                data: {
-                    event_id: state.events.eventTmp.id,
-                    libelle: libelle
-                },
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token"),
-                    'Content-Type': 'application/json'
-                }
+            request.postWithAuth(URL_API + 'categories', {
+                event_id: state.events.eventTmp.id,
+                libelle: libelle
             })
                 .then(resp => {
-                    popup.success(resp.data.message);
+                    popup.success(resp.message);
                     dispatch("getCategories");
                 })
-                .catch(httpErrorHandler);
+                .catch(err => {
+                    err.error = JSON.parse(err.error);
+                    popup.warning(err.error.message);
+                });
         },
 
         async putCategorie({ dispatch }, categorie) {
-            await axios({
-                method: "put",
-                url: URL_API + 'categories/update',
-                data: {
-                    id: categorie.id,
-                    libelle: categorie.libelle
-                },
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token")
-                }
-            }).then(resp => {
-                popup.success(resp.data.message);
-                dispatch("getCategories");
-            }).catch((httpErrorHandler))
+
+            request.putWithAuth(URL_API + 'categories/update', {
+                id: categorie.id,
+                libelle: categorie.libelle
+            })
+                .then(resp => {
+                    popup.success(resp.message);
+                    dispatch("getCategories");
+                })
+                .catch(err => {
+                    err.error = JSON.parse(err.error);
+                    popup.warning(err.error.message);
+                });
         },
 
         async deleteCategorie({ store }, id) {
-            await axios({
-                method: "delete",
-                url: URL_API + 'categories/delete',
-                data: {
-                    id: id
-                },
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token")
-                }
-            }).then(resp => {
-                if (resp.status === 200) {
+            request.deleteWithAuth(URL_API + `categories/delete/${id}`)
+                .then(resp => {
                     console.log(store);
-                    popup.success(resp.data.message);
-                }
-            }).catch((httpErrorHandler))
+                    popup.success(resp.message);
+                })
+                .catch(err => {
+                    console.error(err);
+                    err.error = JSON.parse(err.error);
+                    popup.warning(err.error.message);
+                });
         },
 
         async postPlat({ state, dispatch }, data) {
@@ -182,18 +150,16 @@ const store = createStore({
             formData.append("category_id", data.category_id);
             formData.append("image", data.file, data.file.name);
 
-            axios({
-                method: "post",
-                url: URL_API + 'plats',
-                data: formData,
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token")
-                }
-            })
+            request.postWithFile(URL_API + 'plats', formData)
                 .then(resp => {
-                    popup.success(resp.data.message);
+                    popup.success(resp.message);
                     dispatch("getCategories");
-                }).catch(httpErrorHandler)
+                })
+                .catch(err => {
+                    console.error(err);
+                    err.error = JSON.parse(err.error);
+                    popup.warning(err.error.message);
+                });
         },
 
         async putPlat({ state, dispatch }, data) {
@@ -207,64 +173,54 @@ const store = createStore({
             formData.append("category_id", data.categoryId);
             formData.append("image", data.file, data.file.name);
 
-            await axios({
-                method: "put",
-                url: URL_API + 'plats/update',
-                data: formData,
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token")
-                }
-            })
+            request.putWithFile(URL_API + 'plats/update', formData)
                 .then(resp => {
-                    popup.success(resp.data.message);
+                    popup.success(resp.message);
                     dispatch("getCategories");
-                }).catch((httpErrorHandler))
+                })
+                .catch(err => {
+                    console.error(err);
+                    err.error = JSON.parse(err.error);
+                    popup.warning(err.error.message);
+                });
         },
 
         async deletePlat({ store }, id) {
-            await axios({
-                method: "delete",
-                url: URL_API + 'plats/delete',
-                data: {
-                    id: id
-                },
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token")
-                }
-            }).then(resp => {
-                console.log(store);
-                popup.success(resp.data.message);
-            }).catch((httpErrorHandler))
+            request.deleteWithAuth(URL_API + `plats/delete/${id}`)
+                .then(resp => {
+                    console.log(store);
+                    popup.success(resp.message);
+                })
+                .catch(err => {
+                    console.error(err);
+                    err.error = JSON.parse(err.error);
+                    popup.warning(err.error.message);
+                });
         },
 
         async getListAssociate({ commit }) {
-            const req = await axios({
-                method: "get",
-                url: URL_API + "events/" + router.currentRoute.value.params.id + "/associate",
-                headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token"),
-                },
-            });
-            commit("setListAssociate", req.data.associates);
+            request.getWithAuth(URL_API + "events/" + router.currentRoute.value.params.id + "/associate")
+                .then(resp => {
+                    commit("setListAssociate", resp.associates);
+                })
+                .catch(err => {
+                    console.error(err);
+                    err.error = JSON.parse(err.error);
+                    popup.warning(err.error.message);
+                });
         },
 
         async deleteAssociate({ dispatch }, id) {
-            try {
-                const req = await axios({
-                    method: "delete",
-                    url: URL_API + "events/associate",
-                    data: {
-                        id: id
-                    },
-                    headers: {
-                        Authorization: "Bearer " + localStorage.getItem("token"),
-                    },
+            request.deleteWithAuth(URL_API + `events/associate/${id}`)
+                .then(resp => {
+                    popup.success(resp.message);
+                    dispatch("getListAssociate");
+                })
+                .catch(err => {
+                    console.error(err);
+                    err.error = JSON.parse(err.error);
+                    popup.warning(err.error.message);
                 });
-                popup.success(req.data.message);
-                dispatch("getListAssociate");
-            } catch (error) {
-                popup.error("Une erreur s'est produite pendant la suppression");
-            }
         }
     }
 });

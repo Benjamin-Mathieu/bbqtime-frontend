@@ -20,7 +20,7 @@ export const request = {
     getWithAuth: (url, data) => Http.get(encodeURI(url), data, headersWithAuth).then(responseBody),
     postWithAuth: (url, data) => Http.post(encodeURI(url), data, headersWithAuth).then(responseBody),
     putWithAuth: (url, data) => Http.put(encodeURI(url), data, headersWithAuth).then(responseBody),
-    deleteWithAuth: (url, data) => Http.post(encodeURI(url), data, headersWithAuth).then(responseBody),
+    deleteWithAuth: (url, data) => Http.delete(encodeURI(url), data, headersWithAuth).then(responseBody),
 
     postResetPwd: (url, data, headers) => Http.post(encodeURI(url), data, headers).then(responseBody),
 

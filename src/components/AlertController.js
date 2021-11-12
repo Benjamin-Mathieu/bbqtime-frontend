@@ -1,7 +1,6 @@
 import { alertController } from "@ionic/vue";
 import store from "../store/store";
-import axios from "axios";
-import httpErrorHandler from '../store/httpErrorHandler';
+import { request } from "../store/httpRequest";
 import popup from './ToastController';
 
 const URL_API = "http://192.168.1.47:3000/";
@@ -26,32 +25,43 @@ const showAlert = {
         const { role } = await alert.onDidDismiss();
         if (role === "valid") {
             if (type === "categorie") {
-                await store.dispatch("deleteCategorie", id);
-                store.dispatch("getCategories");
+                request.deleteWithAuth(URL_API + `categories/delete/${id}`)
+                    .then(resp => {
+                        popup.success(resp.message);
+                        store.dispatch("getCategories");
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        err.error = JSON.parse(err.error);
+                        popup.warning(err.error.message);
+                    });
             }
             if (type === "plat") {
-                await store.dispatch("deletePlat", id);
-                store.dispatch("getCategories");
+                request.deleteWithAuth(URL_API + `plats/delete/${id}`)
+                    .then(resp => {
+                        popup.success(resp.message);
+                        store.dispatch("getCategories");
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        err.error = JSON.parse(err.error);
+                        popup.warning(err.error.message);
+                    });
             }
             if (type === "platInShop") {
                 store.commit("removePlatInShop", id);
             }
             if (type === "event") {
-                await axios({
-                    method: "delete",
-                    url: URL_API + 'events/delete',
-                    data: {
-                        id: id
-                    },
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem("token")
-                    }
-                })
-                    .then(res => {
-                        popup.success(res.data.message);
+                request.deleteWithAuth(URL_API + `events/delete/${id}`)
+                    .then(resp => {
+                        popup.success(resp.message);
                         store.dispatch("getMyEvents");
                     })
-                    .catch(httpErrorHandler)
+                    .catch(err => {
+                        console.error(err);
+                        err.error = JSON.parse(err.error);
+                        popup.warning(err.error.message);
+                    });
             }
             if (type === "associate") {
                 store.dispatch("deleteAssociate", id);
