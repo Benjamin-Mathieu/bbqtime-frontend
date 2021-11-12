@@ -89,7 +89,7 @@ const modulEvents = {
         async getParticipateEvents({ commit }, page) {
             if (page === undefined) page = "1";
 
-            request.getWithAuth(URL_API + 'events/participate/' + page, {})
+            request.getWithAuth(URL_API + 'events/participate/' + page)
                 .then(resp => {
                     console.log(resp);
                     commit("setParticipateEvents", resp.events);
@@ -105,7 +105,7 @@ const modulEvents = {
         async getPublicEvents({ commit }, page) {
             if (page === undefined) page = "1";
 
-            request.getWithAuth(URL_API + 'events/public/' + page, {})
+            request.getWithAuth(URL_API + 'events/public/' + page)
                 .then(resp => {
                     console.log(resp);
                     commit("setPublicEvents", resp.events);
