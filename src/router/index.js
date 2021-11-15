@@ -56,7 +56,15 @@ const routes = [
   {
     path: '/add-event',
     name: 'AddEvent',
-    component: () => import('@/views/AddEvent.vue')
+    component: () => import('@/views/AddEvent.vue'),
+    beforeEnter: (to, from, next) => {
+      if (Object.keys(store.state.events.eventTmp).length > 0) {
+        store.commit("setEventTmp", {});
+        next();
+      } else {
+        next();
+      }
+    }
   },
   {
     path: '/account',

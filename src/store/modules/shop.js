@@ -2,7 +2,6 @@ import popup from '../../components/ToastController';
 import { request } from '../httpRequest';
 // import httpErrorHandler from '../httpErrorHandler';
 
-const URL_API = "http://192.168.1.47:3000/";
 
 const modulShop = {
     state: () => ({
@@ -64,7 +63,7 @@ const modulShop = {
 
     actions: {
         async postOrder({ commit, state, rootState }) {
-            request.postWithAuth(URL_API + 'orders', {
+            request.postWithAuth('orders', {
                 event_id: rootState.events.eventDetails.id,
                 plats: state.plats
             })

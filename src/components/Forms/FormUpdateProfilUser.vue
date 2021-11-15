@@ -46,7 +46,6 @@ import {
   IonCard,
   IonCardContent,
 } from "@ionic/vue";
-import popup from "../ToastController";
 
 export default defineComponent({
   name: "FormUpdateProfilUser",
@@ -89,6 +88,7 @@ export default defineComponent({
         password: this.password,
       };
       const isUpdated = await this.$store.dispatch("updateProfil", data);
+
       if (isUpdated) {
         this.pwdIsWrong = false;
         this.password = "";
@@ -96,7 +96,6 @@ export default defineComponent({
 
       if (isUpdated === false) {
         this.pwdIsWrong = true;
-        popup.warning("Mot de passe incorrect !");
       }
     },
   },

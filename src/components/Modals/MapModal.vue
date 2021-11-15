@@ -5,7 +5,7 @@
     </ion-toolbar>
   </ion-header>
   <ion-content>
-    <div id="mapid" v-if="this.$store.state.apiGouv.address"></div>
+    <div id="mapid"></div>
     <FormAddAddress></FormAddAddress>
   </ion-content>
 </template>
@@ -14,6 +14,7 @@
 import { defineComponent } from "vue";
 import { IonHeader, IonToolbar, IonContent, IonTitle } from "@ionic/vue";
 import FormAddAddress from "../Forms/FormAddAddress.vue";
+import Map from "../../services/map";
 
 export default defineComponent({
   name: "MapModal",
@@ -23,6 +24,10 @@ export default defineComponent({
     IonContent,
     IonTitle,
     FormAddAddress,
+  },
+
+  mounted() {
+    Map.openMap();
   },
 });
 </script>

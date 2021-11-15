@@ -1,18 +1,25 @@
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import icon from '../../public/assets/icon/place_red_24dp.svg';
+import { Geolocation } from '@capacitor/geolocation';
+
+const printCurrentPosition = async () => {
+    const coordinates = await Geolocation.getCurrentPosition();
+    return coordinates;
+};
 
 let mymap;
 
 class Map {
-    getMap(latitude, longitude) {
-        if (mymap) {
-            mymap.remove();
-        }
+    async openMap() {
+        const getPosition = await printCurrentPosition();
+        const longitude = getPosition.coords.longitude;
+        const latitude = getPosition.coords.latitude;
+
         mymap = L.map("mapid").setView([latitude, longitude], 18);
 
         let openStreetMapLayer = L.tileLayer(
-            "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
+            `https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.VUE_APP_TOKEN_LEAFLET}`,
             {
                 attribution:
                     '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -20,8 +27,38 @@ class Map {
                 id: "mapbox/satellite-v9",
                 tileSize: 512,
                 zoomOffset: -1,
-                accessToken:
-                    "pk.eyJ1IjoiYmVuamFtaW5tdGgiLCJhIjoiY2t0aWtjbGl4MTJzejJ2anltaDNrbWp1NiJ9.jk8rl_a8DFfjmNeRjB0-ig",
+                accessToken: process.env.VUE_APP_TOKEN_LEAFLET,
+            }
+        ).addTo(mymap);
+
+        let DefaultIcon = L.icon({
+            iconUrl: icon,
+            iconSize: [50, 95], // size of the icon
+        });
+        L.Marker.prototype.options.icon = DefaultIcon;
+
+        L.marker([latitude, longitude]).addTo(mymap);
+
+        mymap.addLayer(openStreetMapLayer);
+    }
+
+    async getMap(latitude, longitude) {
+        if (mymap) {
+            mymap.remove();
+        }
+
+        mymap = L.map("mapid").setView([latitude, longitude], 18);
+
+        let openStreetMapLayer = L.tileLayer(
+            `https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.VUE_APP_TOKEN_LEAFLET}`,
+            {
+                attribution:
+                    '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 100,
+                id: "mapbox/satellite-v9",
+                tileSize: 512,
+                zoomOffset: -1,
+                accessToken: process.env.VUE_APP_TOKEN_LEAFLET,
             }
         ).addTo(mymap);
 

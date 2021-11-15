@@ -3,17 +3,19 @@
     <Header></Header>
     <Sub :showShopButton="true" title="Vos commandes"></Sub>
     <ion-content>
-      <div v-if="this.$store.state.orders.length === 0 && loaded === true">
-        <ion-card>
-          <ion-card-title>
-            <h5 style="text-align: center">Pas de commande à afficher</h5>
-          </ion-card-title>
-        </ion-card>
-      </div>
+      <EmptyCard
+        v-if="this.$store.state.orders.length === 0 && this.loaded === true"
+        text="Pas de commande à afficher"
+      ></EmptyCard>
+
       <RefreshData callApi="getOrders"></RefreshData>
       <ion-card v-for="order in this.$store.state.orders" :key="order.id">
         <Skeleton v-if="loaded === false"></Skeleton>
-        <div v-if="loaded === true" class="event">
+        <div
+          v-if="loaded === true"
+          class="event"
+          @click="toggleDetails(order.id)"
+        >
           <div class="img-container">
             <img alt="event-img" :src="order.event.photo_url" />
           </div>
@@ -32,7 +34,7 @@
               </p>
               <p>{{ order.event.address + " " + order.event.city }}</p>
               <ion-item lines="none">
-                <ion-button size="small" @click="toggleDetails(order.id)">
+                <ion-button size="small">
                   <div
                     v-for="showDetail in this.showDetails"
                     :key="showDetail.id"
@@ -56,41 +58,36 @@
           </div>
         </div>
 
-        <div v-for="showDetail in this.showDetails" :key="showDetail.id">
-          <transition name="fade">
-            <div v-if="showDetail.id == order.id && showDetail.show">
-              <ion-list-header lines="inset">
-                <ion-label color="primary">Plats commandés</ion-label>
-              </ion-list-header>
-              <div class="list-plats">
-                <ion-list
-                  v-for="orderplat in order.orders_plats"
-                  :key="orderplat.id"
-                  lines="none"
-                >
-                  <ion-item>
-                    <ion-avatar slot="start">
-                      <img :src="orderplat.plat.photo_url" alt="img-plat" />
-                    </ion-avatar>
-                    <ion-label color="primary">
-                      {{
-                        orderplat.plat.libelle +
-                        ": " +
-                        orderplat.plat.price +
-                        "€"
-                      }}
-                    </ion-label>
-                    <ion-badge slot="end">
-                      {{ orderplat.quantity }}
-                    </ion-badge>
-                  </ion-item>
-                </ion-list>
-              </div>
-              <div class="total">
-                <p>Total commande: {{ order.cost }} €</p>
-              </div>
+        <div v-for="showDetail in showDetails" :key="showDetail.id">
+          <div v-if="showDetail.id == order.id && showDetail.show">
+            <ion-list-header lines="inset">
+              <ion-label color="primary">Plats commandés</ion-label>
+            </ion-list-header>
+            <div class="list-plats">
+              <ion-list
+                v-for="orderplat in order.orders_plats"
+                :key="orderplat.id"
+                lines="none"
+              >
+                <ion-item>
+                  <ion-avatar slot="start">
+                    <img :src="orderplat.plat.photo_url" alt="img-plat" />
+                  </ion-avatar>
+                  <ion-label color="primary">
+                    {{
+                      orderplat.plat.libelle + ": " + orderplat.plat.price + "€"
+                    }}
+                  </ion-label>
+                  <ion-badge slot="end">
+                    {{ orderplat.quantity }}
+                  </ion-badge>
+                </ion-item>
+              </ion-list>
             </div>
-          </transition>
+            <div class="total">
+              <p>Total commande: {{ order.cost }} €</p>
+            </div>
+          </div>
         </div>
       </ion-card>
     </ion-content>
@@ -122,6 +119,7 @@ import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
 import RefreshData from "../components/RefreshData.vue";
 import Skeleton from "../components/Skeletons/SkeletonEvent.vue";
+import EmptyCard from "../components/EmptyCard.vue";
 
 export default defineComponent({
   name: "Orders",
@@ -144,6 +142,7 @@ export default defineComponent({
     Footer,
     RefreshData,
     Skeleton,
+    EmptyCard,
   },
 
   data() {
@@ -177,10 +176,6 @@ export default defineComponent({
   },
 
   methods: {
-    getDetails(orderId) {
-      this.$store.dispatch("getOrderDetails", { id: orderId });
-    },
-
     toggleDetails(id) {
       let showDetail = this.showDetails.find((detail) => detail.id === id);
       showDetail.show = !showDetail.show;
@@ -227,15 +222,5 @@ export default defineComponent({
     font-weight: bold;
     font-size: 1.2em;
   }
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
 }
 </style>

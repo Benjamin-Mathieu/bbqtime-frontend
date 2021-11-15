@@ -26,7 +26,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 #empty-card {
-  height: 100%;
   text-align: center;
   b {
     color: #7e2727;

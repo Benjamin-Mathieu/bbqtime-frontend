@@ -16,107 +16,106 @@
         </ion-toolbar>
       </ion-header>
 
+      <div
+        class="no-event"
+        v-if="
+          loaded === true &&
+          selectedTab === 'inprogress' &&
+          this.$store.state.events.myEvents.length === 0
+        "
+      >
+        <EmptyCard text="Vous n'avez pas encore crée d'évènement"></EmptyCard>
+        <router-link :to="{ name: 'AddEvent' }">
+          <ion-button> Crée un évènement </ion-button>
+        </router-link>
+      </div>
+
+      <div
+        class="no-event"
+        v-if="
+          loaded === true &&
+          selectedTab === 'archived' &&
+          this.$store.state.events.archivedEvents.length === 0
+        "
+      >
+        <EmptyCard text="Pas d'évènement archivés pour le moment"></EmptyCard>
+      </div>
+
       <div class="inprogress-events" v-if="selectedTab === 'inprogress'">
-        <div
-          class="no-event"
-          v-if="
-            this.$store.state.events.myEvents.length === 0 && loaded === true
-          "
+        <RefreshData callApi="getMyEvents"></RefreshData>
+        <ion-card
+          v-for="event in this.$store.state.events.myEvents"
+          :key="event.id"
         >
-          <EmptyCard text="Vous n'avez pas encore crée d'évènement"></EmptyCard>
-          <router-link :to="{ name: 'AddEvent' }">
-            <ion-button> Crée un évènement </ion-button>
-          </router-link>
-        </div>
+          <Skeleton v-if="loaded === false"></Skeleton>
 
-        <div v-else>
-          <RefreshData callApi="getMyEvents"></RefreshData>
-          <ion-card
-            v-for="event in this.$store.state.events.myEvents"
-            :key="event.id"
+          <div
+            @click="redirectToManageEvent(event.id)"
+            v-if="loaded === true"
+            class="event"
           >
-            <Skeleton v-if="loaded === false"></Skeleton>
-
-            <div
-              @click="redirectToManageEvent(event.id)"
-              v-if="loaded === true"
-              class="event"
-            >
-              <div class="img-container">
-                <img alt="event-img" :src="event.photo_url" />
-              </div>
-              <div class="info">
-                <div class="actions-button">
-                  <ion-button
-                    @click.stop="showActions(event.id)"
-                    fill="clear"
-                    size="small"
-                  >
-                    <ion-icon :icon="ellipsisVertical"></ion-icon>
-                  </ion-button>
-                </div>
-                <b>{{ event.name }}</b>
-                <p
-                  v-if="
-                    event.user_id !== this.$store.getters.getUserInformation.id
-                  "
-                >
-                  Associé
-                </p>
-                <p>
-                  {{ event.description }}
-                </p>
-                <p>
-                  {{ event.zipcode + " " + event.address + " " + event.city }}
-                </p>
-              </div>
+            <div class="img-container">
+              <img alt="event-img" :src="event.photo_url" />
             </div>
-          </ion-card>
-        </div>
+            <div class="info">
+              <div class="actions-button">
+                <ion-button
+                  @click.stop="showActions(event.id)"
+                  fill="clear"
+                  size="small"
+                >
+                  <ion-icon :icon="ellipsisVertical"></ion-icon>
+                </ion-button>
+              </div>
+              <b>{{ event.name }}</b>
+              <p
+                v-if="
+                  event.user_id !== this.$store.getters.getUserInformation.id
+                "
+              >
+                Associé
+              </p>
+              <p>
+                {{ event.description }}
+              </p>
+              <p>
+                {{ event.zipcode + " " + event.address + " " + event.city }}
+              </p>
+            </div>
+          </div>
+        </ion-card>
       </div>
 
       <div class="archived-events" v-if="selectedTab === 'archived'">
-        <div
-          class="no-event"
-          v-if="
-            this.$store.state.events.archivedEvents.length === 0 &&
-            loaded === true
-          "
+        <RefreshData callApi="getArchivedEvents"></RefreshData>
+        <ion-card
+          v-for="event in this.$store.state.events.archivedEvents"
+          :key="event.id"
         >
-          <EmptyCard text="Pas d'évènement archivés pour le moment"></EmptyCard>
-        </div>
+          <Skeleton v-if="loaded === false"></Skeleton>
 
-        <div v-else>
-          <RefreshData callApi="getArchivedEvents"></RefreshData>
-          <ion-card
-            v-for="event in this.$store.state.events.archivedEvents"
-            :key="event.id"
-          >
-            <Skeleton v-if="loaded === false"></Skeleton>
-
-            <div v-if="loaded === true" class="event">
-              <div class="img-container">
-                <img alt="event-img" :src="event.photo_url" />
-              </div>
-              <div class="info">
-                <b>{{ event.name }}</b>
-                <p
-                  v-if="
-                    event.user_id !== this.$store.getters.getUserInformation.id
-                  "
-                >
-                  Associé
-                </p>
-                <p>
-                  {{ event.description }}
-                </p>
-                <p>
-                  {{ event.zipcode + " " + event.address + " " + event.city }}
-                </p>
-              </div>
+          <div v-if="loaded === true" class="event">
+            <div class="img-container">
+              <img alt="event-img" :src="event.photo_url" />
             </div>
-          </ion-card>
-        </div>
+            <div class="info">
+              <b>{{ event.name }}</b>
+              <p
+                v-if="
+                  event.user_id !== this.$store.getters.getUserInformation.id
+                "
+              >
+                Associé
+              </p>
+              <p>
+                {{ event.description }}
+              </p>
+              <p>
+                {{ event.zipcode + " " + event.address + " " + event.city }}
+              </p>
+            </div>
+          </div>
+        </ion-card>
       </div>
     </ion-content>
     <Footer></Footer>
