@@ -79,7 +79,7 @@ const modulEvents = {
     actions: {
 
         async getArchivedEvents({ commit }) {
-            request.getWithAuth('events/archive')
+            await request.getWithAuth('events/archive')
                 .then(resp => {
                     commit("setArchivedEvents", resp.events);
                 })
@@ -88,7 +88,7 @@ const modulEvents = {
         async getParticipateEvents({ commit }, page) {
             if (page === undefined) page = "1";
 
-            request.getWithAuth('events/participate/' + page)
+            await request.getWithAuth('events/participate/' + page)
                 .then(resp => {
                     commit("setParticipateEvents", resp.events);
                     const pagination = { count: resp.count, currentPage: resp.currentPage, totalPages: resp.totalPages };
@@ -103,7 +103,7 @@ const modulEvents = {
         async getPublicEvents({ commit }, page) {
             if (page === undefined) page = "1";
 
-            request.getWithAuth('events/public/' + page)
+            await request.getWithAuth('events/public/' + page)
                 .then(resp => {
                     commit("setPublicEvents", resp.events);
                     const pagination = { count: resp.count, currentPage: resp.currentPage, totalPages: resp.totalPages };
@@ -116,7 +116,7 @@ const modulEvents = {
         },
 
         async getMyEvents({ commit }) {
-            request.getWithAuth('events/myEvents')
+            await request.getWithAuth('events/myEvents')
                 .then(resp => {
                     commit("setMyEvents", resp.events)
                 });
@@ -128,7 +128,7 @@ const modulEvents = {
                 params = router.currentRoute.value.params.id;
             }
 
-            request.getWithAuth('events/' + (params !== undefined ? params : id))
+            await request.getWithAuth('events/' + (params !== undefined ? params : id))
                 .then(resp => {
                     commit("setEventDetails", resp.event);
                 })
@@ -139,8 +139,7 @@ const modulEvents = {
         },
 
         async duplicateEvent({ commit, state }, id) {
-
-            request.postWithAuth('events/duplicate', { id: id })
+            await request.postWithAuth('events/duplicate', { id: id })
                 .then(async resp => {
                     // URL TO OBJECT FILE
                     const response = await fetch(resp.event.photo_url);
@@ -162,7 +161,7 @@ const modulEvents = {
         },
 
         async joinEvent({ commit, dispatch, state }, password) {
-            request.getWithAuth('events/join/' + password)
+            await request.getWithAuth('events/join/' + password)
                 .then(resp => {
                     commit("setEventDetails", resp.event);
                     router.push({
@@ -179,7 +178,7 @@ const modulEvents = {
         },
 
         async getMyEventDetails({ commit }, id) {
-            request.getWithAuth('events/myEvents/' + id)
+            await request.getWithAuth('events/myEvents/' + id)
                 .then(resp => {
                     commit("setMyEventDetails", resp);
                 })
@@ -192,7 +191,7 @@ const modulEvents = {
         async getMyEventOrders({ commit }) {
             const params = router.currentRoute.value.params.id;
 
-            request.getWithAuth('events/myEvents/' + params + '/orders')
+            await request.getWithAuth('events/myEvents/' + params + '/orders')
                 .then(resp => {
                     commit("setMyEventOrders", resp.orders)
                 })
@@ -214,7 +213,7 @@ const modulEvents = {
             formData.append("password", event.password);
             formData.append("image", event.file, event.file.name);
 
-            request.postWithFile('events', formData)
+            await request.postWithFile('events', formData)
                 .then(async resp => {
                     // URL TO OBJECT FILE
                     const response = await fetch(resp.event.photo_url);
@@ -233,7 +232,7 @@ const modulEvents = {
         },
 
         async getEvent({ commit, state }, id) {
-            request.getWithAuth('events/' + id)
+            await request.getWithAuth('events/' + id)
                 .then(async resp => {
                     commit("setEventTmp", resp.event);
 
@@ -261,7 +260,7 @@ const modulEvents = {
             formData.append("password", event.password);
             formData.append("image", event.file, event.file.name);
 
-            request.putWithFile('events/update', formData)
+            await request.putWithFile('events/update', formData)
                 .then(async resp => {
                     // URL TO OBJECT FILE
                     const response = await fetch(resp.event.photo_url);
@@ -280,7 +279,7 @@ const modulEvents = {
         },
 
         async sendInvitation({ state }, email) {
-            request.postWithAuth('events/mail/invitation', {
+            await request.postWithAuth('events/mail/invitation', {
                 event_id: state.eventTmp.id,
                 email: email
             })
@@ -293,7 +292,7 @@ const modulEvents = {
         },
 
         async addAdmin({ state }, email) {
-            request.postWithAuth('events/addAssociate', {
+            await request.postWithAuth('events/addAssociate', {
                 event_id: state.eventTmp.id,
                 email: email
             })

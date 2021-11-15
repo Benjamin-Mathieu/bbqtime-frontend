@@ -63,7 +63,7 @@ const modulShop = {
 
     actions: {
         async postOrder({ commit, state, rootState }) {
-            request.postWithAuth('orders', {
+            await request.postWithAuth('orders', {
                 event_id: rootState.events.eventDetails.id,
                 plats: state.plats
             })

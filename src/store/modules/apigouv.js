@@ -29,8 +29,7 @@ const moduleApiGouv = {
 
     actions: {
         async getAddress({ commit, state }) {
-
-            request.getApiGouv('https://api-adresse.data.gouv.fr/search/?q=' + state.address, {}, {})
+            await request.getApiGouv('https://api-adresse.data.gouv.fr/search/?q=' + state.address, {}, {})
                 .then(async resp => {
                     await commit("setApiAddress", resp.features);
                     const latitude = state.respApiAddress[0].geometry.coordinates[1];

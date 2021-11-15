@@ -23,7 +23,7 @@ const showAlert = {
         const { role } = await alert.onDidDismiss();
         if (role === "valid") {
             if (type === "categorie") {
-                request.deleteWithAuth(`categories/delete/${id}`)
+                await request.deleteWithAuth(`categories/delete/${id}`)
                     .then(resp => {
                         popup.success(resp.message);
                         store.dispatch("getCategories");
@@ -35,7 +35,7 @@ const showAlert = {
                     });
             }
             if (type === "plat") {
-                request.deleteWithAuth(`plats/delete/${id}`)
+                await request.deleteWithAuth(`plats/delete/${id}`)
                     .then(resp => {
                         popup.success(resp.message);
                         store.dispatch("getCategories");
@@ -50,13 +50,12 @@ const showAlert = {
                 store.commit("removePlatInShop", id);
             }
             if (type === "event") {
-                request.deleteWithAuth(`events/delete/${id}`)
+                await request.deleteWithAuth(`events/delete/${id}`)
                     .then(resp => {
                         popup.success(resp.message);
                         store.dispatch("getMyEvents");
                     })
                     .catch(err => {
-                        console.error(err);
                         err.error = JSON.parse(err.error);
                         popup.warning(err.error.message);
                     });

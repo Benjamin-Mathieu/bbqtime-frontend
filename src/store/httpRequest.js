@@ -2,13 +2,13 @@ import { HTTP as Http } from '@ionic-native/http';
 
 const headersWithAuth = {
     "Accept": "application/json",
-    "Content-type": "application/json",
+    "Content-type": "application/x-www-form-urlencoded",
     "Authorization": `Bearer ${localStorage.getItem("token")}`
 };
 
 const headers = {
     "Accept": "application/json",
-    "Content-type": "application/json",
+    "Content-type": "application/x-www-form-urlencoded",
 };
 
 const URL_API = process.env.VUE_APP_URL_API;

@@ -91,7 +91,7 @@ const moduleAuth = {
 
         async loginUser({ dispatch, commit }, user) {
 
-            request.post(`users/login`, {
+            await request.post(`users/login`, {
                 email: user.email,
                 password: user.password
             }).then(resp => {
@@ -116,7 +116,7 @@ const moduleAuth = {
         },
 
         async userIsLogged({ commit, dispatch }) {
-            request.getWithAuth(`users/isLogged`, {})
+            await request.getWithAuth(`users/isLogged`, {})
                 .then(resp => {
                     if (resp.userIsLogged) {
                         dispatch("getDevice");
@@ -140,8 +140,7 @@ const moduleAuth = {
         },
 
         async registerUser({ state, dispatch }) {
-
-            request.post(`users`, {
+            await request.post(`users`, {
                 email: state.userTmp.email,
                 password: state.userTmp.password,
                 name: state.userTmp.name,
@@ -203,7 +202,7 @@ const moduleAuth = {
         },
 
         async resetPassword({ state }, password) {
-            request.postResetPwd('users/reset-password',
+            await request.postResetPwd('users/reset-password',
                 {
                     new_password: password
                 },

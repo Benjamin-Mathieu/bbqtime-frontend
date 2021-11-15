@@ -53,7 +53,7 @@ const store = createStore({
     },
     actions: {
         async getOrders({ commit }) {
-            request.getWithAuth('orders')
+            await request.getWithAuth('orders')
                 .then(resp => {
                     commit("setOrders", resp.orders);
                 });
@@ -62,7 +62,7 @@ const store = createStore({
         async putOrderStatus({ state }, data) {
             console.log(state.userIsLoggedIn);
 
-            request.putWithAuth('orders/' + data.id, { status: data.status })
+            await request.putWithAuth('orders/' + data.id, { status: data.status })
                 .then(resp => {
                     popup.success(resp.message);
                 }).catch(err => {
@@ -72,21 +72,21 @@ const store = createStore({
         },
 
         async getPlats({ commit, rootState }) {
-            request.getWithAuth('categories/' + rootState.events.eventTmp.id)
+            await request.getWithAuth('categories/' + rootState.events.eventTmp.id)
                 .then(resp => {
                     commit("setPlats", resp.plats);
                 });
         },
 
         async getCategories({ commit, rootState }) {
-            request.getWithAuth('categories/' + rootState.events.eventTmp.id)
+            await request.getWithAuth('categories/' + rootState.events.eventTmp.id)
                 .then(resp => {
                     commit("setCategories", resp.categories);
                 });
         },
 
         async postCategorie({ state, dispatch }, libelle) {
-            request.postWithAuth('categories', {
+            await request.postWithAuth('categories', {
                 event_id: state.events.eventTmp.id,
                 libelle: libelle
             })
@@ -101,8 +101,7 @@ const store = createStore({
         },
 
         async putCategorie({ dispatch }, categorie) {
-
-            request.putWithAuth('categories/update', {
+            await request.putWithAuth('categories/update', {
                 id: categorie.id,
                 libelle: categorie.libelle
             })
@@ -117,7 +116,7 @@ const store = createStore({
         },
 
         async deleteCategorie({ store }, id) {
-            request.deleteWithAuth(`categories/delete/${id}`)
+            await request.deleteWithAuth(`categories/delete/${id}`)
                 .then(resp => {
                     console.log(store);
                     popup.success(resp.message);
@@ -139,7 +138,7 @@ const store = createStore({
             formData.append("category_id", data.category_id);
             formData.append("image", data.file, data.file.name);
 
-            request.postWithFile('plats', formData)
+            await request.postWithFile('plats', formData)
                 .then(resp => {
                     popup.success(resp.message);
                     dispatch("getCategories");
@@ -162,7 +161,7 @@ const store = createStore({
             formData.append("category_id", data.categoryId);
             formData.append("image", data.file, data.file.name);
 
-            request.putWithFile('plats/update', formData)
+            await request.putWithFile('plats/update', formData)
                 .then(resp => {
                     popup.success(resp.message);
                     dispatch("getCategories");
@@ -175,7 +174,7 @@ const store = createStore({
         },
 
         async deletePlat({ store }, id) {
-            request.deleteWithAuth(`plats/delete/${id}`)
+            await request.deleteWithAuth(`plats/delete/${id}`)
                 .then(resp => {
                     console.log(store);
                     popup.success(resp.message);
@@ -188,7 +187,7 @@ const store = createStore({
         },
 
         async getListAssociate({ commit }) {
-            request.getWithAuth("events/" + router.currentRoute.value.params.id + "/associate")
+            await request.getWithAuth("events/" + router.currentRoute.value.params.id + "/associate")
                 .then(resp => {
                     commit("setListAssociate", resp.associates);
                 })
@@ -200,7 +199,7 @@ const store = createStore({
         },
 
         async deleteAssociate({ dispatch }, id) {
-            request.deleteWithAuth(`events/associate/${id}`)
+            await request.deleteWithAuth(`events/associate/${id}`)
                 .then(resp => {
                     popup.success(resp.message);
                     dispatch("getListAssociate");
