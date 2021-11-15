@@ -85,15 +85,6 @@ const store = createStore({
                 });
         },
 
-        async getOrderDetails({ commit }, id) {
-            const orderId = Object.values(id.id).toString();
-
-            request.getWithAuth('orders/' + orderId)
-                .then(resp => {
-                    commit("setOrderDetails", resp);
-                });
-        },
-
         async postCategorie({ state, dispatch }, libelle) {
             request.postWithAuth('categories', {
                 event_id: state.events.eventTmp.id,

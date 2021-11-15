@@ -7,8 +7,10 @@
       </ion-button>
     </ion-toolbar>
   </ion-header>
-  <ion-content class="ion-padding">
-    <FormEvent></FormEvent>
+  <ion-content>
+    <div id="form-container">
+      <FormEvent></FormEvent>
+    </div>
   </ion-content>
 </template>
 
@@ -45,4 +47,12 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+#form-container {
+  text-align: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
 </style>

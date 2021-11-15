@@ -13,7 +13,7 @@ function OneSignalInit() {
   OneSignal.setLogLevel(6, 0);
 
   // NOTE: Update the setAppId value below with your OneSignal AppId.
-  OneSignal.setAppId("092181b2-f290-4f65-84f4-4878262da5d9");
+  OneSignal.setAppId(encodeURI("092181b2-f290-4f65-84f4-4878262da5d9"));
   OneSignal.setNotificationOpenedHandler(function (jsonData) {
     console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
   });
