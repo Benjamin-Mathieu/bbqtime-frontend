@@ -267,14 +267,8 @@ export default defineComponent({
     };
   },
 
-  async ionViewWillEnter() {
-    await this.$store.commit("setEventTmp", {});
+  ionViewWillEnter() {
     this.$store.commit("setCurrentStep", 1);
-
-    // if (Object.keys(this.$store.state.events.eventTmp).length > 0) {
-    //   this.disabledStep2 = false;
-    //   this.disabledStep3 = false;
-    // }
   },
 
   ionViewDidLeave() {

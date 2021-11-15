@@ -76,8 +76,7 @@ export default defineComponent({
     this.$store.dispatch("getEvent", this.$route.params.id);
   },
 
-  async ionViewWillLeave() {
-    this.$store.commit("setEventTmp", {});
+  ionViewWillLeave() {
     this.$store.commit("setCategories", {});
   },
 
@@ -102,12 +101,12 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 #container {
-  // text-align: center;
-  // position: absolute;
-  // left: 0;
-  // right: 0;
-  // top: 50%;
-  // transform: translateY(-50%);
+  text-align: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 45%;
+  transform: translateY(-50%);
 
   img {
     width: 100%;
