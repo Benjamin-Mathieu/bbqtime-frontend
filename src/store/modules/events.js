@@ -3,7 +3,6 @@ import { request } from '../httpRequest';
 import popup from '../../components/ToastController';
 import router from "../../router/index";
 
-const URL_API = "http://192.168.1.47:3000/";
 
 const modulEvents = {
     state: () => ({
@@ -80,7 +79,7 @@ const modulEvents = {
     actions: {
 
         async getArchivedEvents({ commit }) {
-            request.getWithAuth(URL_API + 'events/archive')
+            request.getWithAuth('events/archive')
                 .then(resp => {
                     commit("setArchivedEvents", resp.events);
                 })
@@ -89,9 +88,8 @@ const modulEvents = {
         async getParticipateEvents({ commit }, page) {
             if (page === undefined) page = "1";
 
-            request.getWithAuth(URL_API + 'events/participate/' + page)
+            request.getWithAuth('events/participate/' + page)
                 .then(resp => {
-                    console.log(resp);
                     commit("setParticipateEvents", resp.events);
                     const pagination = { count: resp.count, currentPage: resp.currentPage, totalPages: resp.totalPages };
                     commit("setPagination", pagination);
@@ -105,9 +103,8 @@ const modulEvents = {
         async getPublicEvents({ commit }, page) {
             if (page === undefined) page = "1";
 
-            request.getWithAuth(URL_API + 'events/public/' + page)
+            request.getWithAuth('events/public/' + page)
                 .then(resp => {
-                    console.log(resp);
                     commit("setPublicEvents", resp.events);
                     const pagination = { count: resp.count, currentPage: resp.currentPage, totalPages: resp.totalPages };
                     commit("setPagination", pagination);
@@ -119,7 +116,7 @@ const modulEvents = {
         },
 
         async getMyEvents({ commit }) {
-            request.getWithAuth(URL_API + 'events/myEvents')
+            request.getWithAuth('events/myEvents')
                 .then(resp => {
                     commit("setMyEvents", resp.events)
                 });
@@ -131,7 +128,7 @@ const modulEvents = {
                 params = router.currentRoute.value.params.id;
             }
 
-            request.getWithAuth(URL_API + 'events/' + (params !== undefined ? params : id))
+            request.getWithAuth('events/' + (params !== undefined ? params : id))
                 .then(resp => {
                     commit("setEventDetails", resp.event);
                 })
@@ -143,7 +140,7 @@ const modulEvents = {
 
         async duplicateEvent({ commit, state }, id) {
 
-            request.postWithAuth(URL_API + 'events/duplicate', { id: id })
+            request.postWithAuth('events/duplicate', { id: id })
                 .then(async resp => {
                     // URL TO OBJECT FILE
                     const response = await fetch(resp.event.photo_url);
@@ -165,11 +162,9 @@ const modulEvents = {
         },
 
         async joinEvent({ commit, dispatch, state }, password) {
-            request.getWithAuth(URL_API + 'events/join/' + password)
+            request.getWithAuth('events/join/' + password)
                 .then(resp => {
                     commit("setEventDetails", resp.event);
-                    console.log("resp.data.event", resp.event);
-                    console.log("state.eventDetails.id", state.eventDetails.id);
                     router.push({
                         name: "Categories",
                         params: { id: state.eventDetails.id },
@@ -184,7 +179,7 @@ const modulEvents = {
         },
 
         async getMyEventDetails({ commit }, id) {
-            request.getWithAuth(URL_API + 'events/myEvents/' + id)
+            request.getWithAuth('events/myEvents/' + id)
                 .then(resp => {
                     commit("setMyEventDetails", resp);
                 })
@@ -197,7 +192,7 @@ const modulEvents = {
         async getMyEventOrders({ commit }) {
             const params = router.currentRoute.value.params.id;
 
-            request.getWithAuth(URL_API + 'events/myEvents/' + params + '/orders')
+            request.getWithAuth('events/myEvents/' + params + '/orders')
                 .then(resp => {
                     commit("setMyEventOrders", resp.orders)
                 })
@@ -219,7 +214,7 @@ const modulEvents = {
             formData.append("password", event.password);
             formData.append("image", event.file, event.file.name);
 
-            request.postWithFile(URL_API + 'events', formData)
+            request.postWithFile('events', formData)
                 .then(async resp => {
                     // URL TO OBJECT FILE
                     const response = await fetch(resp.event.photo_url);
@@ -238,12 +233,9 @@ const modulEvents = {
         },
 
         async getEvent({ commit, state }, id) {
-            request.getWithAuth(URL_API + 'events/' + id)
+            request.getWithAuth('events/' + id)
                 .then(async resp => {
-
-                    console.log("resp in getevent =>", resp);
                     commit("setEventTmp", resp.event);
-                    console.log("store in get event", state.eventTmp);
 
                     // URL TO OBJECT FILE
                     const response = await fetch(resp.event.photo_url);
@@ -269,7 +261,7 @@ const modulEvents = {
             formData.append("password", event.password);
             formData.append("image", event.file, event.file.name);
 
-            request.putWithFile(URL_API + 'events/update', formData)
+            request.putWithFile('events/update', formData)
                 .then(async resp => {
                     // URL TO OBJECT FILE
                     const response = await fetch(resp.event.photo_url);
@@ -288,7 +280,7 @@ const modulEvents = {
         },
 
         async sendInvitation({ state }, email) {
-            request.postWithAuth(URL_API + 'events/mail/invitation', {
+            request.postWithAuth('events/mail/invitation', {
                 event_id: state.eventTmp.id,
                 email: email
             })
@@ -301,7 +293,7 @@ const modulEvents = {
         },
 
         async addAdmin({ state }, email) {
-            request.postWithAuth(URL_API + 'events/addAssociate', {
+            request.postWithAuth('events/addAssociate', {
                 event_id: state.eventTmp.id,
                 email: email
             })

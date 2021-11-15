@@ -4,8 +4,6 @@ import router from "../../router/index";
 import OneSignal from 'onesignal-cordova-plugin';
 import { request } from '../httpRequest';
 
-const URL_API = "http://192.168.1.47:3000/";
-
 const moduleAuth = {
     state: () => ({
         token: null,
@@ -61,9 +59,9 @@ const moduleAuth = {
         },
 
         async setExternalUserId({ getters }) {
-            const externalUserId = getters.getUserInformation.id;
+            let externalUserId = getters.getUserInformation.id;
             console.log("extenraluserid =>", externalUserId);
-            await OneSignal.setExternalUserId(externalUserId, (results) => {
+            await OneSignal.setExternalUserId(encodeURI(externalUserId), (results) => {
                 // The results will contain push and email success statuses
                 console.log('Results of setting external user id');
                 console.log(results);
@@ -93,7 +91,7 @@ const moduleAuth = {
 
         async loginUser({ dispatch, commit }, user) {
 
-            request.post(`${URL_API}users/login`, {
+            request.post(`users/login`, {
                 email: user.email,
                 password: user.password
             }).then(resp => {
@@ -118,7 +116,7 @@ const moduleAuth = {
         },
 
         async userIsLogged({ commit, dispatch }) {
-            request.getWithAuth(`${URL_API}users/isLogged`, {})
+            request.getWithAuth(`users/isLogged`, {})
                 .then(resp => {
                     if (resp.userIsLogged) {
                         dispatch("getDevice");
@@ -143,7 +141,7 @@ const moduleAuth = {
 
         async registerUser({ state, dispatch }) {
 
-            request.post(`${URL_API}users`, {
+            request.post(`users`, {
                 email: state.userTmp.email,
                 password: state.userTmp.password,
                 name: state.userTmp.name,
@@ -164,7 +162,7 @@ const moduleAuth = {
         async sendCode({ state }) {
             let isSend;
 
-            await request.post(URL_API + 'users/send-code', {
+            await request.post('users/send-code', {
                 email: state.resetPassword.email,
             })
                 .then(resp => {
@@ -184,7 +182,7 @@ const moduleAuth = {
         async verifCode({ state, commit }, code) {
             let codeIsOk;
 
-            await request.post(URL_API + 'users/check-code',
+            await request.post('users/check-code',
                 {
                     email: state.resetPassword.email,
                     code: code
@@ -205,7 +203,7 @@ const moduleAuth = {
         },
 
         async resetPassword({ state }, password) {
-            request.postResetPwd(URL_API + 'users/reset-password',
+            request.postResetPwd('users/reset-password',
                 {
                     new_password: password
                 },
@@ -229,7 +227,7 @@ const moduleAuth = {
         async updateProfil({ commit }, data) {
             let isUpdate;
 
-            await request.putWithAuth(URL_API + 'users/update', data)
+            await request.putWithAuth('users/update', data)
                 .then(resp => {
                     popup.success(resp.message);
                     commit("setUserInformation", JSON.stringify(resp.informations));
