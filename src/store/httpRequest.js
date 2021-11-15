@@ -26,7 +26,7 @@ export const request = {
 
     postResetPwd: (url, data, headers) => Http.post(encodeURI(URL_API + url), data, headers).then(responseBody),
 
-    getApiGouv: (url, data, headers) => Http.get(encodeURI(URL_API + url), data, headers).then(responseBody),
+    getApiGouv: (url, data, headers) => Http.get(encodeURI(url), data, headers).then(responseBody),
 
     postWithFile: (url, data) => Http.sendRequest(encodeURI(URL_API + url), {
         method: "post",
