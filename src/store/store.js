@@ -159,7 +159,9 @@ const store = createStore({
             formData.append("stock", data.stock);
             formData.append("event_id", state.events.eventTmp.id);
             formData.append("category_id", data.categoryId);
-            formData.append("image", data.file, data.file.name);
+            if (data.file !== null) {
+                formData.append("image", data.file, data.file.name);
+            }
 
             await request.putWithFile('plats/update', formData)
                 .then(resp => {

@@ -69,7 +69,9 @@
           </ion-button>
         </ion-item>
         <ion-item lines="none">
-          <ion-button type="submit" size="small">Mettre à jour</ion-button>
+          <ion-button :disabled="disabledButton" type="submit" size="small"
+            >Mettre à jour</ion-button
+          >
         </ion-item>
       </ion-card-content>
     </ion-card>
@@ -118,6 +120,7 @@ export default defineComponent({
       file: null,
       img: this.plat.photo_url,
       categoryId: this.plat.category_id,
+      disabledButton: false,
     };
   },
   methods: {
@@ -130,19 +133,20 @@ export default defineComponent({
       this.img = URL.createObjectURL(this.file);
     },
 
-    async fileUrlToFileObject() {
-      if (this.file === null) {
-        const response = await fetch(this.img);
-        const data = await response.blob();
-        const metadata = {
-          type: "image/jpeg",
-        };
-        this.file = new File([data], "test.jpg", metadata);
-      }
-    },
+    // async fileUrlToFileObject() {
+    //   if (this.file === null) {
+    //     const response = await fetch(this.img);
+    //     const data = await response.blob();
+    //     const metadata = {
+    //       type: "image/jpeg",
+    //     };
+    //     this.file = new File([data], "test.jpg", metadata);
+    //   }
+    // },
 
     async updatePlat() {
-      await this.fileUrlToFileObject();
+      // await this.fileUrlToFileObject();
+      this.disabledButton = true;
 
       const plat = {
         id: this.plat.id,
@@ -153,13 +157,9 @@ export default defineComponent({
         file: this.file,
         categoryId: this.categoryId,
       };
-      this.$store.dispatch("putPlat", plat);
 
-      this.name = "";
-      this.price = "";
-      this.description = "";
-      this.stock = "";
-      this.img = null;
+      await this.$store.dispatch("putPlat", plat);
+      this.disabledButton = false;
       modalController.dismiss();
     },
   },

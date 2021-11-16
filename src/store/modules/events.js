@@ -138,16 +138,16 @@ const modulEvents = {
                 });
         },
 
-        async duplicateEvent({ commit, state }, id) {
+        async duplicateEvent({ state, commit }, id) {
             await request.postWithAuth('events/duplicate', { id: id })
                 .then(async resp => {
                     // URL TO OBJECT FILE
-                    const response = await fetch(resp.event.photo_url);
-                    const blob = await response.blob();
-                    const file = new File([blob], "image.jpg", { type: blob.type });
+                    // const response = await fetch(resp.event.photo_url);
+                    // const blob = await response.blob();
+                    // const file = new File([blob], "image.jpg", { type: blob.type });
 
                     await commit("setEventTmp", resp.event);
-                    state.eventTmp.fileFromServer = file;
+                    // state.eventTmp.fileFromServer = file;
                     state.eventTmp.date = new Date().toISOString();
                     popup.success(resp.message);
                     router.push({
@@ -201,7 +201,7 @@ const modulEvents = {
                 });
         },
 
-        async postEvent({ state, commit }, event) {
+        async postEvent({ commit, state }, event) {
             let formData = new FormData();
             formData.append("name", event.name);
             formData.append("address", event.address);
@@ -215,13 +215,13 @@ const modulEvents = {
 
             await request.postWithFile('events', formData)
                 .then(async resp => {
-                    // URL TO OBJECT FILE
+                    // URL TO Blob
                     const response = await fetch(resp.event.photo_url);
                     const blob = await response.blob();
-                    const file = new File([blob], "image.jpg", { type: blob.type });
+                    // const file = new File([blob], "image.jpg", { type: blob.type });
 
                     await commit("setEventTmp", resp.event);
-                    state.eventTmp.fileFromServer = file;
+                    state.eventTmp.fileFromServer = blob;
                     popup.success(resp.message);
                     commit("setCurrentStep", 2);
                 })
@@ -239,15 +239,15 @@ const modulEvents = {
                     // URL TO OBJECT FILE
                     const response = await fetch(resp.event.photo_url);
                     const blob = await response.blob();
-                    const file = new File([blob], "image.jpg", { type: blob.type });
-                    state.eventTmp.fileFromServer = file;
+                    // const file = new File([blob], "image.jpg", { type: blob.type });
+                    state.eventTmp.fileFromServer = blob;
                 }).catch(err => {
                     err.error = JSON.parse(err.error);
                     popup.warning(err.error.message);
                 });
         },
 
-        async putEvent({ state, commit }, event) {
+        async putEvent({ commit, state }, event) {
             let formData = new FormData();
             formData.append("id", event.id);
             formData.append("name", event.name);
@@ -265,10 +265,10 @@ const modulEvents = {
                     // URL TO OBJECT FILE
                     const response = await fetch(resp.event.photo_url);
                     const blob = await response.blob();
-                    const file = new File([blob], "image.jpg", { type: blob.type });
+                    // const file = new File([blob], "image.jpg", { type: blob.type });
 
                     await commit("setEventTmp", resp.event);
-                    state.eventTmp.fileFromServer = file;
+                    state.eventTmp.fileFromServer = blob;
                     popup.success(resp.message);
                     commit("setCurrentStep", 2);
                 })
