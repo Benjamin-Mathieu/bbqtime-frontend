@@ -51,11 +51,6 @@ export default defineComponent({
   .img-container {
     width: 40%;
     padding: 0.5em;
-    img {
-      border-radius: 5px;
-      height: 100%;
-      object-fit: fill;
-    }
   }
 
   .preview-container {

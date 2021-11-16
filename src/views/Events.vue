@@ -340,6 +340,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+ion-toolbar {
+  padding-top: 0px !important;
+}
+
 ion-item {
   --detail-icon-color: green;
   --detail-icon-opacity: 0.7;

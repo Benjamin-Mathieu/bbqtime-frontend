@@ -1,6 +1,7 @@
 <template>
   <ion-menu color="primary" side="start" menu-id="nav" content-id="main">
     <ion-content @click="closeMenu()" class="menu">
+      <div id="container">
       <ion-list-header>
         <router-link :to="{ name: 'Home' }">
           <img src="../../../public/assets/logo1.png" alt="logo-bbqtime" />
@@ -72,6 +73,7 @@
           </ion-button>
         </div>
       </ion-list>
+      </div>
     </ion-content>
   </ion-menu>
 </template>
@@ -127,6 +129,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+#container {
+  padding-top: 2em;
+}
+
 ion-item {
   --background: #e5e5e5;
   p {

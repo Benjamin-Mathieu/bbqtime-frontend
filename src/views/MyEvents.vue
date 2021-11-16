@@ -218,6 +218,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+ion-toolbar {
+  padding-top: 0px !important;
+}
+
 ion-item {
   --padding-start: 0px;
 }

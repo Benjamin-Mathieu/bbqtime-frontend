@@ -1,7 +1,7 @@
 <template>
   <form class="form" @submit.prevent="getAddress()">
     <ion-item>
-      <ion-label position="floating">Tapez l'adresse:</ion-label>
+      <ion-label position="stacked">Tapez l'adresse:</ion-label>
       <ion-button @click="closeModal()" slot="end">
         <ion-icon :icon="checkmark"></ion-icon>
       </ion-button>
