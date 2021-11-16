@@ -56,7 +56,9 @@
         </ion-row>
       </ion-grid>
       <div class="signup-button">
-        <ion-button size="small" type="submit">Créer le compte</ion-button>
+        <ion-button :disabled="disabledButton" size="small" type="submit"
+          >Créer le compte</ion-button
+        >
       </div>
     </ion-card>
   </form>
@@ -104,6 +106,7 @@ export default defineComponent({
       showPassword: false,
       typeInputPassword: "password",
       icon: eyeOutline,
+      disabledButton: false,
     };
   },
 
@@ -126,7 +129,8 @@ export default defineComponent({
     },
 
     async registerUser() {
-      const check = await this.checkIfPasswordsMatches();
+      this.disabledButton = true;
+      const check = this.checkIfPasswordsMatches();
 
       if (check) {
         const newUser = {
@@ -136,8 +140,12 @@ export default defineComponent({
           firstname: this.firstname,
           phone: this.phone,
         };
+
         this.$store.commit("setUserTmp", newUser);
-        this.$store.dispatch("registerUser");
+        await this.$store.dispatch("registerUser");
+        this.disabledButton = false;
+      } else {
+        this.disabledButton = false;
       }
     },
   },

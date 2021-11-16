@@ -72,7 +72,9 @@
         </ion-item>
       </ion-card-content>
       <ion-item lines="none">
-        <ion-button type="submit" size="small">Ajouter</ion-button>
+        <ion-button :disabled="disabledButton" type="submit" size="small"
+          >Ajouter</ion-button
+        >
       </ion-item>
     </ion-card>
   </form>
@@ -121,6 +123,7 @@ export default defineComponent({
       categorieId: "",
       noFileSelected: false,
       noCategorySelected: false,
+      disabledButton: false,
     };
   },
 
@@ -163,6 +166,7 @@ export default defineComponent({
     },
 
     async addPlat() {
+      this.disabledButton = true;
       const check1 = await this.checkIfUserSelectFile();
       const check2 = await this.checkIfUserSelectCategory();
 
@@ -176,12 +180,15 @@ export default defineComponent({
           category_id: this.categorieId,
         };
         await this.$store.dispatch("postPlat", plat);
+        this.disabledButton = false;
 
         this.name = "";
         this.price = "";
         this.description = "";
         this.stock = "";
         modalController.dismiss();
+      } else {
+        this.disabledButton = false;
       }
     },
   },

@@ -342,6 +342,7 @@ export default defineComponent({
       await this.$store.dispatch("putEvent", event);
       this.disabledButton = false;
       this.showSpinner = false;
+      modalController.dismiss();
     },
 
     async openMapModal() {

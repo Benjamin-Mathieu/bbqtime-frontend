@@ -8,7 +8,13 @@
         </ion-item>
       </ion-card-content>
       <ion-item lines="none">
-        <ion-button type="submit" slot="end" size="small">Ajouter</ion-button>
+        <ion-button
+          :disabled="disabledButton"
+          type="submit"
+          slot="end"
+          size="small"
+          >Ajouter</ion-button
+        >
       </ion-item>
     </ion-card>
   </form>
@@ -40,11 +46,14 @@ export default defineComponent({
   data() {
     return {
       libelle: "",
+      disabledButton: false,
     };
   },
   methods: {
     async addCategorie() {
+      this.disabledButton = true;
       await this.$store.dispatch("postCategorie", this.libelle);
+      this.disabledButton = false;
       this.libelle = "";
       modalController.dismiss();
     },

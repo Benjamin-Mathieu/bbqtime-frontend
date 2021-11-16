@@ -64,13 +64,16 @@ export default defineComponent({
   },
 
   methods: {
-    updateCategorie() {
+    async updateCategorie() {
+      this.disabledButton = true;
+
       const data = {
         id: this.id,
         libelle: this.editLibelle,
       };
-      this.$store.dispatch("putCategorie", data);
-      this.editLibelle = "";
+
+      await this.$store.dispatch("putCategorie", data);
+      this.disabledButton = false;
       modalController.dismiss();
     },
   },
