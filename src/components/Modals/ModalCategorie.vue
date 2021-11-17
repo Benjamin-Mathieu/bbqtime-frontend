@@ -37,18 +37,7 @@ export default defineComponent({
     FormAddCategorie,
   },
 
-  data() {
-    return {
-      libelle: "",
-    };
-  },
   methods: {
-    async addCategorie() {
-      await this.$store.dispatch("postCategorie", this.libelle);
-      this.libelle = "";
-      modalController.dismiss();
-    },
-
     async closeModal() {
       await this.$store.dispatch("getCategories");
       modalController.dismiss();

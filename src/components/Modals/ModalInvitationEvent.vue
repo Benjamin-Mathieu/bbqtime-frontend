@@ -23,7 +23,6 @@ import {
   IonIcon,
   modalController,
 } from "@ionic/vue";
-import { addCircleOutline, removeCircleOutline } from "ionicons/icons";
 import FormMail from "../Forms/FormMail.vue";
 
 export default defineComponent({
@@ -36,12 +35,6 @@ export default defineComponent({
     IonButton,
     IonIcon,
     FormMail,
-  },
-  setup() {
-    return {
-      addCircleOutline,
-      removeCircleOutline,
-    };
   },
 
   methods: {
