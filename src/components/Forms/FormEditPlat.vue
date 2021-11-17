@@ -15,7 +15,8 @@
           <ion-input
             type="decimal"
             inputmode="decimal"
-            v-model.number="price"
+            maxlength="4"
+            v-model="price"
             required
           ></ion-input>
         </ion-item>
@@ -144,14 +145,26 @@ export default defineComponent({
     //   }
     // },
 
+    async convertPriceToDecimal(price) {
+      price = price.replace(",", ".");
+      return parseFloat(price);
+    },
+
     async updatePlat() {
       // await this.fileUrlToFileObject();
       this.disabledButton = true;
+      let priceInDecimal;
+
+      if(this.price.includes(",")) {
+        priceInDecimal = await this.convertPriceToDecimal(this.price);
+      } else {
+        priceInDecimal = this.price;
+      }
 
       const plat = {
         id: this.plat.id,
         libelle: this.name,
-        price: this.price,
+        price: priceInDecimal,
         description: this.description,
         stock: this.stock,
         file: this.file,
