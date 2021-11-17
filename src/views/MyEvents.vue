@@ -41,7 +41,13 @@
         <EmptyCard text="Pas d'évènement archivés pour le moment"></EmptyCard>
       </div>
 
-      <div class="inprogress-events" v-if="selectedTab === 'inprogress'">
+      <div
+        class="inprogress-events"
+        v-if="
+          selectedTab === 'inprogress' &&
+          this.$store.state.events.myEvents.length > 0
+        "
+      >
         <RefreshData callApi="getMyEvents"></RefreshData>
         <ion-card
           v-for="event in this.$store.state.events.myEvents"
