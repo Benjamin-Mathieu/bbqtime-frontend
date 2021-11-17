@@ -3,10 +3,11 @@ import popup from '../../components/ToastController';
 import router from "../../router/index";
 import OneSignal from 'onesignal-cordova-plugin';
 import { request } from '../httpRequest';
+import { HTTP as Http } from '@ionic-native/http';
 
 const moduleAuth = {
     state: () => ({
-        token: null,
+        token: localStorage.getItem('token') || null,
         userInformation: null,
         userIsLoggedIn: false,
         userTmp: null,
@@ -17,11 +18,9 @@ const moduleAuth = {
     mutations: {
         setToken(state, token) {
             state.token = token;
-            localStorage.setItem("token", token);
         },
         setUserInformation(state, userInformation) {
             state.userInformation = userInformation;
-            localStorage.setItem("userInformation", userInformation);
         },
         setUserIsLoggedIn(state, userIsLoggedIn) {
             state.userIsLoggedIn = userIsLoggedIn
@@ -90,7 +89,6 @@ const moduleAuth = {
         },
 
         async loginUser({ dispatch, commit }, user) {
-
             await request.post(`users/login`, {
                 email: user.email,
                 password: user.password
@@ -101,6 +99,8 @@ const moduleAuth = {
                 commit("setToken", resp.token);
                 commit("setUserInformation", JSON.stringify(resp.informations));
                 dispatch("setExternalUserId");
+                localStorage.setItem("token", resp.token);
+
                 popup.success(resp.message);
                 router.push({ name: "Home" });
 
@@ -116,17 +116,20 @@ const moduleAuth = {
         },
 
         async userIsLogged({ commit, dispatch }) {
-            await request.getWithAuth(`users/isLogged`, {})
-                .then(resp => {
-                    if (resp.userIsLogged) {
-                        dispatch("getDevice");
-                        commit("setUserIsLoggedIn", true);
-                        commit("setToken", localStorage.getItem("token"));
-                        commit("setUserInformation", JSON.stringify(resp.informations));
-                        dispatch("setExternalUserId");
-                        popup.success(resp.message);
-                    }
-                });
+            await Http.get("users/isLogged", "", {
+                "Accept": "application/json",
+                "Content-type": "application/x-www-form-urlencoded",
+                "Authorization": `Bearer ${localStorage.getItem("token")}`
+            }).then(resp => {
+                if (resp.userIsLogged) {
+                    dispatch("getDevice");
+                    commit("setUserIsLoggedIn", true);
+                    commit("setToken", localStorage.getItem("token"));
+                    commit("setUserInformation", JSON.stringify(resp.informations));
+                    dispatch("setExternalUserId");
+                    popup.success(resp.message);
+                }
+            });
         },
 
         async logoutUser({ commit }) {

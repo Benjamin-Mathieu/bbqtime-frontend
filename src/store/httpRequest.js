@@ -1,10 +1,11 @@
 import { HTTP as Http } from '@ionic-native/http';
+import store from "../store/store";
 
-const headersWithAuth = {
+const headersWithAuth = () => ({
     "Accept": "application/json",
     "Content-type": "application/x-www-form-urlencoded",
-    "Authorization": `Bearer ${localStorage.getItem("token")}`
-};
+    "Authorization": `Bearer ${store.state.auth.token}`
+});
 
 const headers = {
     "Accept": "application/json",
@@ -19,10 +20,10 @@ export const request = {
     get: (url, data) => Http.get(encodeURI(URL_API + url), data, headers).then(responseBody),
     post: (url, data) => Http.post(encodeURI(URL_API + url), data, headers).then(responseBody),
 
-    getWithAuth: (url, data) => Http.get(encodeURI(URL_API + url), data, headersWithAuth).then(responseBody),
-    postWithAuth: (url, data) => Http.post(encodeURI(URL_API + url), data, headersWithAuth).then(responseBody),
-    putWithAuth: (url, data) => Http.put(encodeURI(URL_API + url), data, headersWithAuth).then(responseBody),
-    deleteWithAuth: (url, data) => Http.delete(encodeURI(URL_API + url), data, headersWithAuth).then(responseBody),
+    getWithAuth: (url, data) => Http.get(encodeURI(URL_API + url), data, headersWithAuth()).then(responseBody),
+    postWithAuth: (url, data) => Http.post(encodeURI(URL_API + url), data, headersWithAuth()).then(responseBody),
+    putWithAuth: (url, data) => Http.put(encodeURI(URL_API + url), data, headersWithAuth()).then(responseBody),
+    deleteWithAuth: (url, data) => Http.delete(encodeURI(URL_API + url), data, headersWithAuth()).then(responseBody),
 
     postResetPwd: (url, data, headers) => Http.post(encodeURI(URL_API + url), data, headers).then(responseBody),
 
