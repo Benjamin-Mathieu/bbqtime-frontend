@@ -233,7 +233,9 @@ export default defineComponent({
   },
 
   async ionViewWillEnter() {
-    this.$store.dispatch("getOrders");
+    if (this.$store.state.auth.userIsLoggedIn)
+      this.$store.dispatch("getOrders");
+
     switch (this.selectedTypeEvent) {
       case "public":
         this.loaded = false;

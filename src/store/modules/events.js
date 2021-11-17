@@ -100,19 +100,32 @@ const modulEvents = {
                 })
         },
 
-        async getPublicEvents({ commit }, page) {
+        async getPublicEvents({ commit, rootState }, page) {
             if (page === undefined) page = "1";
 
-            await request.getWithAuth('events/public/' + page)
-                .then(resp => {
-                    commit("setPublicEvents", resp.events);
-                    const pagination = { count: resp.count, currentPage: resp.currentPage, totalPages: resp.totalPages };
-                    commit("setPagination", pagination);
-                })
-                .catch(err => {
-                    err.error = JSON.parse(err.error);
-                    popup.warning(err.error.message);
-                })
+            if (rootState.auth.userIsLoggedIn) {
+                await request.getWithAuth('events/public/' + page)
+                    .then(resp => {
+                        commit("setPublicEvents", resp.events);
+                        const pagination = { count: resp.count, currentPage: resp.currentPage, totalPages: resp.totalPages };
+                        commit("setPagination", pagination);
+                    })
+                    .catch(err => {
+                        err.error = JSON.parse(err.error);
+                        popup.warning(err.error.message);
+                    });
+            } else {
+                await request.get('events/public/' + page)
+                    .then(resp => {
+                        commit("setPublicEvents", resp.events);
+                        const pagination = { count: resp.count, currentPage: resp.currentPage, totalPages: resp.totalPages };
+                        commit("setPagination", pagination);
+                    })
+                    .catch(err => {
+                        err.error = JSON.parse(err.error);
+                        popup.warning(err.error.message);
+                    });
+            }
         },
 
         async getMyEvents({ commit }) {
