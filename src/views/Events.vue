@@ -75,7 +75,10 @@
 
       <div
         class="participate-events"
-        v-if="this.selectedTypeEvent === 'participated'"
+        v-if="
+          this.selectedTypeEvent === 'participated' &&
+          this.$store.state.auth.userIsLoggedIn
+        "
       >
         <RefreshData callApi="getParticipateEvents"></RefreshData>
 
@@ -122,7 +125,7 @@
         </router-link>
       </div>
 
-      <div class="pagination">
+      <div v-if="loaded === true" class="pagination">
         <ion-button
           v-if="this.$store.state.events.pagination.currentPage > 1"
           @click="prevPage()"

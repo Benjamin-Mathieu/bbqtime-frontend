@@ -44,8 +44,7 @@
       <div
         class="inprogress-events"
         v-if="
-          selectedTab === 'inprogress' &&
-          this.$store.state.events.myEvents.length > 0
+          selectedTab === 'inprogress' && this.$store.state.auth.userIsLoggedIn
         "
       >
         <RefreshData callApi="getMyEvents"></RefreshData>
@@ -92,7 +91,12 @@
         </ion-card>
       </div>
 
-      <div class="archived-events" v-if="selectedTab === 'archived'">
+      <div
+        class="archived-events"
+        v-if="
+          selectedTab === 'archived' && this.$store.state.auth.userIsLoggedIn
+        "
+      >
         <RefreshData callApi="getArchivedEvents"></RefreshData>
         <ion-card
           v-for="event in this.$store.state.events.archivedEvents"
