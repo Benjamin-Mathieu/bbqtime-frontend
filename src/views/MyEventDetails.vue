@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <Header></Header>
-    <Sub :title="'Détails / ' + nameEvent"></Sub>
+    <Sub :title="'Détails / ' + this.$store.state.events.eventTmp.name"></Sub>
     <ion-content>
       <div id="container">
         <RefreshData callApi="getMyEventOrders"></RefreshData>
@@ -16,7 +16,7 @@
 
         <ion-card
           v-if="
-            Object.keys(this.$store.state.events.myEventOrders).length === 0
+            Object.keys(this.$store.state.events.myEventOrders).length === 0 && loaded
           "
         >
           <ion-card-header> Pas de commande en cours </ion-card-header>
@@ -196,8 +196,6 @@
                 </div>
                 <div class="info">
                   <p>{{ plat.libelle }}</p>
-                </div>
-                <div class="price">
                   <ion-badge slot="end">{{ plat.total }} €</ion-badge>
                 </div>
               </div>
@@ -263,14 +261,16 @@ export default defineComponent({
     IonSegment,
     IonSegmentButton,
   },
+  
   data() {
     return {
       tab: "gestion",
       toggleStatusOrder: "pending",
       interval: null,
-      nameEvent: "",
+      loaded: false
     };
   },
+
   computed: {
     isCreator() {
       let isCreator = null;
@@ -286,20 +286,24 @@ export default defineComponent({
       return isCreator;
     },
   },
+
   async ionViewWillEnter() {
     await this.$store.dispatch("getMyEventDetails", this.$route.params.id);
     await this.$store.dispatch("getMyEventOrders");
-    this.nameEvent = this.$store.state.events.myEventDetails.event.name;
+    this.loaded = true;
   },
+
   ionViewDidEnter() {
     this.interval = setInterval(
       () => this.$store.dispatch("getMyEventOrders"),
       5000
     );
   },
+
   ionViewWillLeave() {
     clearInterval(this.interval);
   },
+
   methods: {
     selectedValue(ev, orderId) {
       const order = {
