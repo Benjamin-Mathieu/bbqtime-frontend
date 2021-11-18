@@ -12,7 +12,7 @@
       <ion-segment-button value="categorie">
         <ion-label>Catégories</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="plats">
+      <ion-segment-button :disabled="noCategory" value="plats">
         <ion-label>Plats</ion-label>
       </ion-segment-button>
     </ion-segment>
@@ -150,17 +150,20 @@ export default defineComponent({
     IonCol,
     IonCardSubtitle,
   },
+  
   setup() {
     return {
       pencilOutline,
       trashBinOutline,
     };
   },
+  
   data() {
     return {
-      toggleForm: "categorie",
+      toggleForm: "categorie"
     };
   },
+  
   watch: {
     async toggleForm() {
       await this.$store.dispatch(
@@ -169,7 +172,12 @@ export default defineComponent({
       );
     },
   },
+  
   computed: {
+    noCategory() {
+      return this.$store.state.categories.length > 0 ? false : true;
+    },
+
     plats() {
       let plats = [];
       this.$store.state.categories.forEach((categorie) => {
@@ -180,10 +188,12 @@ export default defineComponent({
       return plats;
     },
   },
+
   methods: {
     closeModal() {
       modalController.dismiss();
     },
+    
     selectedValue(e) {
       this.toggleForm = e.target.value;
     },
