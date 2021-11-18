@@ -104,6 +104,7 @@
       <ion-item>
         <ion-button
           v-if="Object.keys(this.$store.state.events.eventTmp).length === 0"
+          :disabled="disabledButton"
           type="submit"
           size="small"
           slot="end"
