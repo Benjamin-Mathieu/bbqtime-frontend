@@ -29,12 +29,20 @@ const moduleApiGouv = {
 
     actions: {
         async getAddress({ commit, state }) {
-            await request.getApiGouv('https://api-adresse.data.gouv.fr/search/?q=' + state.address, {}, {})
+            await request.getApiGouv('https://api-adresse.data.gouv.fr/search/?q=' + state.address.replaceAll(" ", "+"), {}, {})
                 .then(async resp => {
                     await commit("setApiAddress", resp.features);
                     const latitude = state.respApiAddress[0].geometry.coordinates[1];
                     const longitude = state.respApiAddress[0].geometry.coordinates[0];
                     Map.getMap(latitude, longitude);
+                })
+                .catch(httpErrorHandler)
+        },
+
+        async reverseAddress({ commit }, coords) {
+            await request.getApiGouv(`https://api-adresse.data.gouv.fr/reverse/?lon=${coords.lon}&lat=${coords.lat}`)
+                .then(resp => {
+                    commit("setAddress", resp.features[0].properties.label);
                 })
                 .catch(httpErrorHandler)
         }

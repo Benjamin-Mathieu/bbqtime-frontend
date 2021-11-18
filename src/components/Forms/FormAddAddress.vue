@@ -59,15 +59,22 @@ export default defineComponent({
 
   data() {
     return {
-      address: "",
+      address:
+        this.$store.state.apiGouv.address !== ""
+          ? this.$store.state.apiGouv.address
+          : "",
       showList: true,
     };
   },
 
   watch: {
     address() {
-      this.$store.commit("setAddress", this.address.replaceAll(" ", "+"));
+      this.$store.commit("setAddress", this.address);
       this.$store.dispatch("getAddress");
+    },
+
+    "$store.state.apiGouv.address": function (e) {
+      this.address = e;
     },
   },
 

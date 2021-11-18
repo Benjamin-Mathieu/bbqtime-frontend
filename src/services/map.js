@@ -2,6 +2,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import icon from '../../public/assets/icon/place_red_24dp.svg';
 import { Geolocation } from '@capacitor/geolocation';
+import store from "../store/store";
 
 const printCurrentPosition = async () => {
     const coordinates = await Geolocation.getCurrentPosition();
@@ -9,37 +10,54 @@ const printCurrentPosition = async () => {
 };
 
 let mymap;
+let marker;
 
 class Map {
     async openMap() {
-        const getPosition = await printCurrentPosition();
-        const longitude = getPosition.coords.longitude;
-        const latitude = getPosition.coords.latitude;
+        let longitude, latitude;
 
-        mymap = L.map("mapid").setView([latitude, longitude], 18);
+        if (store.state.apiGouv.address !== "") {
+            let address = store.state.apiGouv.address;
 
-        let openStreetMapLayer = L.tileLayer(
-            `https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.VUE_APP_TOKEN_LEAFLET}`,
-            {
-                attribution:
-                    '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-                maxZoom: 100,
-                id: "mapbox/satellite-v9",
-                tileSize: 512,
-                zoomOffset: -1,
-                accessToken: process.env.VUE_APP_TOKEN_LEAFLET,
-            }
-        ).addTo(mymap);
+            store.commit("setAddress", address);
+            store.dispatch("getAddress");
+        } else if (store.state.events.eventTmp.address !== "") {
+            let address = (store.state.events.eventTmp.address + " " + store.state.events.eventTmp.zipcode + " " + store.state.events.eventTmp.city);
 
-        let DefaultIcon = L.icon({
-            iconUrl: icon,
-            iconSize: [50, 95], // size of the icon
-        });
-        L.Marker.prototype.options.icon = DefaultIcon;
+            store.commit("setAddress", address);
+            store.dispatch("getAddress");
+        }
+        else {
+            const getPosition = await printCurrentPosition();
+            longitude = getPosition.coords.longitude;
+            latitude = getPosition.coords.latitude;
 
-        L.marker([latitude, longitude]).addTo(mymap);
+            mymap = L.map("mapid").setView([latitude, longitude], 18);
 
-        mymap.addLayer(openStreetMapLayer);
+            let openStreetMapLayer = L.tileLayer(
+                `https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.VUE_APP_TOKEN_LEAFLET}`,
+                {
+                    attribution:
+                        '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                    maxZoom: 100,
+                    id: "mapbox/satellite-v9",
+                    tileSize: 512,
+                    zoomOffset: -1,
+                    accessToken: process.env.VUE_APP_TOKEN_LEAFLET,
+                }
+            ).addTo(mymap);
+
+            let DefaultIcon = L.icon({
+                iconUrl: icon,
+                iconSize: [50, 95], // size of the icon
+            });
+            L.Marker.prototype.options.icon = DefaultIcon;
+
+            marker = new L.Marker([latitude, longitude]);
+
+            mymap.addLayer(openStreetMapLayer);
+            mymap.addLayer(marker);
+        }
     }
 
     async getMap(latitude, longitude) {
@@ -61,6 +79,7 @@ class Map {
                 accessToken: process.env.VUE_APP_TOKEN_LEAFLET,
             }
         ).addTo(mymap);
+        mymap.addLayer(openStreetMapLayer);
 
         let DefaultIcon = L.icon({
             iconUrl: icon,
@@ -68,24 +87,19 @@ class Map {
         });
         L.Marker.prototype.options.icon = DefaultIcon;
 
-        L.marker([latitude, longitude]).addTo(mymap);
+        marker = new L.Marker([latitude, longitude]);
+        mymap.addLayer(marker);
 
-        mymap.addLayer(openStreetMapLayer);
+        mymap.on("click", function (e) {
+            const coords = {
+                lat: e.latlng.lat,
+                lon: e.latlng.lng
+            }
 
-        // Place marker
-        // mymap.on("click", function (e) {
-        //     var myIcon = L.icon({
-        //         iconUrl: "../../public/assets/icon/location_on_black_24dp.svg",
-        //         iconSize: [38, 95],
-        //         iconAnchor: [22, 94],
-        //         popupAnchor: [-3, -76],
-        //         shadowUrl: "my-icon-shadow.png",
-        //         shadowSize: [68, 95],
-        //         shadowAnchor: [22, 94],
-        //     });
-
-        //     L.marker([e.latlng.lat, e.latlng.lng], { icon: myIcon }).addTo(mymap);
-        // });
+            mymap.removeLayer(marker);
+            marker = new L.marker([e.latlng.lat, e.latlng.lng]).addTo(mymap);
+            store.dispatch("reverseAddress", coords);
+        });
     }
 }
 
