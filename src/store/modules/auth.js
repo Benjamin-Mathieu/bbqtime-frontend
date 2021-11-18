@@ -116,18 +116,19 @@ const moduleAuth = {
         },
 
         async userIsLogged({ commit, dispatch }) {
-            await Http.get("users/isLogged", "", {
+            await Http.get(process.env.VUE_APP_URL_API + "users/isLogged", "", {
                 "Accept": "application/json",
                 "Content-type": "application/x-www-form-urlencoded",
                 "Authorization": `Bearer ${localStorage.getItem("token")}`
             }).then(resp => {
-                if (resp.userIsLogged) {
+                resp.data = JSON.parse(resp.data);
+                if (resp.data.userIsLogged) {
                     dispatch("getDevice");
                     commit("setUserIsLoggedIn", true);
                     commit("setToken", localStorage.getItem("token"));
-                    commit("setUserInformation", JSON.stringify(resp.informations));
+                    commit("setUserInformation", JSON.stringify(resp.data.informations));
                     dispatch("setExternalUserId");
-                    popup.success(resp.message);
+                    popup.success(resp.data.message);
                 }
             });
         },
