@@ -60,7 +60,25 @@ export default defineComponent({
       modalController.dismiss();
     },
 
+    async checkPermissions() {
+      const status = await Filesystem.checkPermissions();
+      if (status.publicStorage !== "granted") {
+        await this.requestPermissions();
+      }
+    },
+
+    async requestPermissions() {
+      const permission = await Filesystem.requestPermissions();
+      if (permission.publicStorage === "denied") {
+        popup.warning(
+          "Vous devez acceptez l'autorisation à vos fichiers dans les paramètres de l'application"
+        );
+      }
+    },
+
     async save() {
+      await this.checkPermissions();
+
       const event = this.$store.state.events.eventTmp;
       const file = await Filesystem.appendFile({
         path: `${event.name}-${event.id}.png`,
