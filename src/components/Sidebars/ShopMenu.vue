@@ -5,7 +5,7 @@
         <p>Votre panier est vide</p>
       </div>
 
-      <div v-else>
+      <div class="container" v-else>
         <!-- List of Plat in Shop -->
         <ion-list lines="none">
           <ion-item-sliding
@@ -157,6 +157,15 @@ ion-select::part(icon) {
 
 p {
   font-weight: 600;
+}
+
+.container {
+  text-align: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .total {

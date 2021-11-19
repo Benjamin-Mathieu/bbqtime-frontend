@@ -126,12 +126,14 @@ export default defineComponent({
 <style lang="scss" scoped>
 .container {
   display: flex;
+  height: 130px;
 
   .img-container {
     width: 40%;
     padding: 0.5em;
     img {
       height: 100%;
+      width: 100%;
       object-fit: fill;
       border-radius: 5px;
     }
