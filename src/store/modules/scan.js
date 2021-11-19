@@ -1,7 +1,5 @@
-import router from "../../router/index";
 import popup from '../../components/ToastController';
 import { BarcodeScanner } from "@capacitor-community/barcode-scanner";
-import { Filesystem, Directory } from "@capacitor/filesystem";
 import { Camera } from '@capacitor/camera';
 
 const modulScan = {
@@ -44,23 +42,6 @@ const modulScan = {
                 })
                 .catch((err) => console.log(err)); // start scanning and wait for a result
         },
-
-        saveQrcode({ rootState }) {
-            const params = router.currentRoute.value.params.id;
-            rootState.events.myEvents.forEach(async (event) => {
-                if (event.id == params) {
-                    const file = await Filesystem.appendFile({
-                        path: `${event.name}-${event.id}.png`,
-                        data: event.qrcode,
-                        directory: Directory.Documents,
-                    });
-                    console.log("file =>", file);
-                    if (file) {
-                        popup.success("Qrcode télécharger sur votre appareil");
-                    }
-                }
-            });
-        }
     }
 }
 export default modulScan;

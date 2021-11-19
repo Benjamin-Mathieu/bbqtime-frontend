@@ -31,6 +31,8 @@ import {
   modalController,
 } from "@ionic/vue";
 import { download } from "ionicons/icons";
+import popup from "../../components/ToastController";
+import { Filesystem, Directory } from "@capacitor/filesystem";
 
 export default defineComponent({
   name: "ModalQrCode",
@@ -57,8 +59,18 @@ export default defineComponent({
     async closeModal() {
       modalController.dismiss();
     },
+
     async save() {
-      this.$store.dispatch("saveQrcode");
+      const event = this.$store.state.events.eventTmp;
+      const file = await Filesystem.appendFile({
+        path: `${event.name}-${event.id}.png`,
+        data: event.qrcode,
+        directory: Directory.Documents,
+      });
+      console.log("file =>", file);
+      if (file) {
+        popup.success("Qrcode télécharger sur votre appareil");
+      }
     },
   },
 });
