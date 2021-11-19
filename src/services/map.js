@@ -21,6 +21,11 @@ let mymap;
 let marker;
 
 class Map {
+
+    async initMap() {
+        if (mymap) mymap.remove()
+    }
+
     async openMap() {
         if (store.state.apiGouv.address !== "") {
             let address = store.state.apiGouv.address;
@@ -39,9 +44,7 @@ class Map {
     }
 
     async getMapOnUserPosition() {
-        if (mymap) {
-            mymap.remove();
-        }
+        await this.initMap();
         let longitude, latitude;
 
         const getPosition = await printCurrentPosition();
@@ -87,9 +90,7 @@ class Map {
     }
 
     async getMap(latitude, longitude) {
-        if (mymap) {
-            mymap.remove();
-        }
+        await this.initMap();
 
         mymap = L.map("mapid").setView([latitude, longitude], 18);
 

@@ -2,11 +2,17 @@
   <form class="form">
     <ion-item>
       <ion-label position="stacked">Adresse</ion-label>
-      <ion-input
-        type="text"
-        v-model="address"
-        @ionFocus="showList = true"
-      ></ion-input>
+      <ion-input type="text" v-model="address"></ion-input>
+      <span class="hide-button">
+        <ion-button
+          size="large"
+          @click.stop="toggleList()"
+          fill="clear"
+          slot="end"
+        >
+          <ion-icon :icon="chevronDown"></ion-icon>
+        </ion-button>
+      </span>
     </ion-item>
     <ion-item v-if="showList === true">
       <ion-list lines="none">
@@ -15,9 +21,10 @@
           v-for="selectAddress in this.$store.state.apiGouv.respApiAddress"
           :key="selectAddress.id"
         >
-          <ion-label @click="address = selectAddress.properties.label">{{
-            selectAddress.properties.label
-          }}</ion-label>
+          <ion-label @click="address = selectAddress.properties.label">
+            {{ selectAddress.properties.label }}
+          </ion-label>
+          <ion-spinner v-if="showSpinner" name="circles"></ion-spinner>
         </ion-item>
       </ion-list>
     </ion-item>
@@ -36,9 +43,10 @@ import {
   IonIcon,
   IonButton,
   IonList,
+  IonSpinner,
   modalController,
 } from "@ionic/vue";
-import { checkmark } from "ionicons/icons";
+import { checkmark, chevronDown } from "ionicons/icons";
 
 export default defineComponent({
   name: "FormAddAddress",
@@ -49,10 +57,12 @@ export default defineComponent({
     IonIcon,
     IonButton,
     IonList,
+    IonSpinner,
   },
   setup() {
     return {
       checkmark,
+      chevronDown,
     };
   },
 
@@ -60,17 +70,16 @@ export default defineComponent({
     return {
       address: "",
       showList: true,
+      showSpinner: false,
     };
   },
 
   watch: {
-    address() {
+    async address() {
+      this.showSpinner = true;
       this.$store.commit("setAddress", this.address);
-      this.$store.dispatch("getAddress");
-    },
-
-    "$store.state.apiGouv.address": function (e) {
-      this.address = e;
+      await this.$store.dispatch("getAddress");
+      this.showSpinner = false;
     },
   },
 
@@ -78,11 +87,20 @@ export default defineComponent({
     closeModal() {
       modalController.dismiss();
     },
+
+    toggleList() {
+      this.showList = !this.showList;
+    },
   },
 });
 </script>
 
 <style lang="scss" scoped>
+.hide-button {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
 .form {
   position: absolute;
   z-index: 1000;

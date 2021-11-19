@@ -44,7 +44,6 @@ const moduleApiGouv = {
         async reverseAddress({ commit }, coords) {
             await request.getApiGouv(`https://api-adresse.data.gouv.fr/reverse/?lon=${coords.lon}&lat=${coords.lat}`)
                 .then(resp => {
-                    console.log("resp reverse => ", resp);
                     if (resp.features.length === 0) {
                         popups.warning("Aucune addresse n'est lié à cette endroit, veuillez saisir une adresse ou placez de nouveau le curseur sur la carte");
                     } else {

@@ -27,7 +27,7 @@
         }}
       </ion-item>
       <ion-item v-else>
-        Adresse: {{ this.$store.getters.getAddress.label }}
+        Adresse: {{ this.$store.state.apiGouv.address }}
       </ion-item>
       <ion-item :class="{ 'no-date-selected': noDateSelected }">
         <ion-label>Date</ion-label>
