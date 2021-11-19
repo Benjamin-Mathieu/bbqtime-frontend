@@ -65,7 +65,7 @@ const modulShop = {
         async postOrder({ commit, state, rootState }) {
             await request.postWithAuth('orders', {
                 event_id: rootState.events.eventDetails.id,
-                plats: state.plats
+                plats: JSON.stringify(state.plats)
             })
                 .then(resp => {
                     popup.success(resp.message);
