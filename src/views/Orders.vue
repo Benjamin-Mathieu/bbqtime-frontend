@@ -189,6 +189,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .event {
   display: flex;
+  max-height: 180px;
 
   .img-container {
     width: 40%;
@@ -196,6 +197,7 @@ export default defineComponent({
     img {
       border-radius: 5px;
       height: 100%;
+      width: 100%;
       object-fit: fill;
     }
   }
