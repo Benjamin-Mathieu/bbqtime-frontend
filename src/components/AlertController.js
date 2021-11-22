@@ -54,6 +54,7 @@ const showAlert = {
                     .then(resp => {
                         popup.success(resp.message);
                         store.dispatch("getMyEvents");
+                        store.dispatch("getArchivedEvents");
                     })
                     .catch(err => {
                         err.error = JSON.parse(err.error);

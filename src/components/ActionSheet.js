@@ -3,7 +3,7 @@ import store from "../store/store";
 import showAlert from './AlertController';
 import showModal from "./Modals/ModalController";
 
-const showActions = {
+export const showActions = {
   async event(id) {
     const result = await ActionSheet.showActions({
       title: 'Choisissez une option',
@@ -44,6 +44,35 @@ const showActions = {
   },
 }
 
+export const showArchivedActions = {
+  async event(id) {
+    const result = await ActionSheet.showActions({
+      title: 'Choisissez une option',
+      options: [
+        {
+          title: 'Copier',
+        },
+        {
+          title: 'Supprimer',
+          style: ActionSheetButtonStyle.Destructive,
+        },
+        {
+          title: 'Fermer',
+          style: ActionSheetButtonStyle.Cancel
+        }
+      ],
+    });
+    switch (result.index) {
+      case 0:
+        actions.duplicate(id);
+        break;
+      case 1:
+        showAlert.validDelete(id, "Voulez-vous supprimez cet évènement", "event");
+        break;
+    }
+  },
+}
+
 const actions = {
   async duplicate(id) {
     await store.dispatch("getEvent", id);
@@ -60,5 +89,3 @@ const actions = {
     showModal.qrCode();
   }
 }
-
-export default showActions;

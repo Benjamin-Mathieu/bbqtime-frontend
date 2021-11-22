@@ -65,7 +65,7 @@
             <div class="info">
               <div class="actions-button">
                 <ion-button
-                  @click.stop="showActions(event.id)"
+                  @click.stop="actions(event.id)"
                   fill="clear"
                   size="small"
                 >
@@ -109,6 +109,15 @@
               <img alt="event-img" :src="event.photo_url" />
             </div>
             <div class="info">
+              <div class="actions-button">
+                <ion-button
+                  @click.stop="actionsArchived(event.id)"
+                  fill="clear"
+                  size="small"
+                >
+                  <ion-icon :icon="ellipsisVertical"></ion-icon>
+                </ion-button>
+              </div>
               <b>{{ event.name }}</b>
               <p
                 v-if="
@@ -153,7 +162,7 @@ import Footer from "../components/Footer.vue";
 import RefreshData from "../components/RefreshData.vue";
 import Skeleton from "../components/Skeletons/SkeletonEvent.vue";
 import { copyOutline, ellipsisVertical } from "ionicons/icons";
-import ShowActions from "../components/ActionSheet";
+import { showActions, showArchivedActions } from "../components/ActionSheet";
 
 export default defineComponent({
   name: "MyEvents",
@@ -209,8 +218,12 @@ export default defineComponent({
   },
 
   methods: {
-    async showActions(id) {
-      ShowActions.event(id);
+    actions(id) {
+      showActions.event(id);
+    },
+
+    actionsArchived(id) {
+      showArchivedActions.event(id);
     },
 
     redirectToManageEvent(id) {
