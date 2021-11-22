@@ -1,4 +1,3 @@
-import Map from "../../services/map";
 import httpErrorHandler from "../httpErrorHandler";
 import { request } from '../httpRequest';
 import popups from "../../components/ToastController";
@@ -33,10 +32,7 @@ const moduleApiGouv = {
         async getAddress({ commit, state }) {
             await request.getApiGouv('https://api-adresse.data.gouv.fr/search/?q=' + state.address.replaceAll(" ", "+"), {}, {})
                 .then(async resp => {
-                    await commit("setApiAddress", resp.features);
-                    const latitude = state.respApiAddress[0].geometry.coordinates[1];
-                    const longitude = state.respApiAddress[0].geometry.coordinates[0];
-                    Map.getMap(latitude, longitude);
+                    commit("setApiAddress", resp.features);
                 })
                 .catch(httpErrorHandler)
         },

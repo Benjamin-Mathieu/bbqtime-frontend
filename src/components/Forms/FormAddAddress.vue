@@ -21,7 +21,7 @@
           v-for="selectAddress in this.$store.state.apiGouv.respApiAddress"
           :key="selectAddress.id"
         >
-          <ion-label @click="address = selectAddress.properties.label">
+          <ion-label @click="changeMap(selectAddress.properties.label)">
             {{ selectAddress.properties.label }}
           </ion-label>
           <ion-spinner v-if="showSpinner" name="circles"></ion-spinner>
@@ -47,6 +47,7 @@ import {
   modalController,
 } from "@ionic/vue";
 import { checkmark, chevronDown } from "ionicons/icons";
+import Map from "../../services/map";
 
 export default defineComponent({
   name: "FormAddAddress",
@@ -86,6 +87,18 @@ export default defineComponent({
   methods: {
     closeModal() {
       modalController.dismiss();
+    },
+
+    changeMap(selectedAdress) {
+      console.log({ selectedAdress });
+      this.address = selectedAdress;
+      const latitude =
+        this.$store.state.apiGouv.respApiAddress[0].geometry.coordinates[1];
+      const longitude =
+        this.$store.state.apiGouv.respApiAddress[0].geometry.coordinates[0];
+      console.log("lat", latitude, "lon", longitude);
+      Map.getMap(latitude, longitude);
+      this.showList = false;
     },
 
     toggleList() {

@@ -16,8 +16,8 @@ const printCurrentPosition = async () => {
 };
 
 const requestPermissions = async () => {
-    const permissions = await Geolocation.requestPermissions({permissions: 'coarseLocation'});
-    
+    const permissions = await Geolocation.requestPermissions({ permissions: 'coarseLocation' });
+
     if (permissions.location == "denied" || permissions.location == "prompt-with-rationale") {
         popups.warning("Vous devez autorisé la géolocalisation dans les paramètres de l'application !");
     }
@@ -33,16 +33,24 @@ class Map {
     }
 
     async openMap() {
-        if (store.state.apiGouv.address !== "") {
-            let address = store.state.apiGouv.address;
+        let lat;
+        let lon;
 
-            store.commit("setAddress", address);
-            store.dispatch("getAddress");
+        if (store.state.apiGouv.address !== "") {
+            lat = store.state.apiGouv.respApiAddress[0].geometry.coordinates[1];
+            lon = store.state.apiGouv.respApiAddress[0].geometry.coordinates[0];
+
+            this.getMap(lat, lon);
         } else if (Object.keys(store.state.events.eventTmp).length > 0) {
             let address = (store.state.events.eventTmp.address + " " + store.state.events.eventTmp.zipcode + " " + store.state.events.eventTmp.city);
 
             store.commit("setAddress", address);
-            store.dispatch("getAddress");
+            await store.dispatch("getAddress");
+
+            lat = store.state.apiGouv.respApiAddress[0].geometry.coordinates[1];
+            lon = store.state.apiGouv.respApiAddress[0].geometry.coordinates[0];
+
+            this.getMap(lat, lon);
         }
         else {
             this.getMapOnUserPosition();
