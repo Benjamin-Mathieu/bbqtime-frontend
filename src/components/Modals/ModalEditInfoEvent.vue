@@ -38,6 +38,11 @@ export default defineComponent({
     IonIcon,
     FormEvent,
   },
+
+  unmounted() {
+    this.$store.commit("setApiAddress", {});
+  },
+
   methods: {
     closeModal() {
       modalController.dismiss();
