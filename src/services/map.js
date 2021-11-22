@@ -3,12 +3,15 @@ import L from "leaflet";
 import icon from '../../public/assets/icon/place_red_24dp.svg';
 import { Geolocation } from '@capacitor/geolocation';
 import store from "../store/store";
+import popups from "../components/ToastController";
 
 const printCurrentPosition = async () => {
     const status = await checkPermissions();
     if (status.location === "granted") {
         const coordinates = await Geolocation.getCurrentPosition();
         return coordinates;
+    } else {
+        requestPermissions();
     }
 };
 
@@ -17,13 +20,24 @@ const checkPermissions = async () => {
     return status;
 }
 
+const requestPermissions = async () => {
+    try {
+        const permissions = await Geolocation.requestPermissions();
+        if (permissions.location == "denied" || permissions.location == "prompt-with-rationale") {
+            popups.warning("Vous devez autorisé la géolocalisation dans les paramètres de l'application !");
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 let mymap;
 let marker;
 
 class Map {
 
     async initMap() {
-        if (mymap) mymap.remove()
+        if (mymap) await mymap.remove()
     }
 
     async openMap() {
