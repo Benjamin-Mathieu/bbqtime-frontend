@@ -21,11 +21,15 @@
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>NSCameraUsageDescription</key>
-	<string></string>
+	<string>Demande accès caméra</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string></string>
+	<string>Demande accès fichiers</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string></string>
+	<string>Demande accès fichiers</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>BBQ Time - Demande accès GPS</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>BBQ Time - Demande accès GPS</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
