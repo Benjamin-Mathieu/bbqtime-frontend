@@ -183,8 +183,9 @@ const modulEvents = {
                     });
                     popup.success(resp.message);
                 })
-                .catch(() => {
-                    popup.error("Aucun évènement n'est lié à ce QR Code, réessayez !");
+                .catch(err => {
+                    err = JSON.parse(err.error);
+                    popup.error(err.message);
                     if (router.currentRoute.value.name == "Scan") dispatch("scan");
                 });
         },
