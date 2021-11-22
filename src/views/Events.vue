@@ -191,7 +191,6 @@ import Sub from "../components/Sub.vue";
 import Footer from "../components/Footer.vue";
 import RefreshData from "../components/RefreshData.vue";
 import Skeleton from "../components/Skeletons/SkeletonEvent.vue";
-import ShowActions from "../components/ActionSheet";
 import EmptyCard from "../components/EmptyCard";
 
 export default defineComponent({
@@ -280,10 +279,6 @@ export default defineComponent({
   },
 
   methods: {
-    async showActions(id) {
-      ShowActions.event(id);
-    },
-
     redirectToEvent(id) {
       this.$router.push({ name: "Categories", params: { id: id } });
     },
