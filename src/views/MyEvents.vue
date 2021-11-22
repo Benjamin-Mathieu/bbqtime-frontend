@@ -104,7 +104,11 @@
         >
           <Skeleton v-if="loaded === false"></Skeleton>
 
-          <div v-if="loaded === true" class="event">
+          <div
+            v-if="loaded === true"
+            @click="redirectToBudget(event.id)"
+            class="event"
+          >
             <div class="img-container">
               <img alt="event-img" :src="event.photo_url" />
             </div>
@@ -231,6 +235,10 @@ export default defineComponent({
         name: "ManageEvent",
         params: { id: id },
       });
+    },
+
+    redirectToBudget(id) {
+      this.$router.push({ name: "Budget", params: { id: id } });
     },
 
     selectedValue(e) {
