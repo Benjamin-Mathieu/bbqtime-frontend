@@ -6,7 +6,7 @@ import store from "../store/store";
 import popups from "../components/ToastController";
 
 const printCurrentPosition = async () => {
-    const status = await checkPermissions();
+    const status = await Geolocation.checkPermissions();
     if (status.location === "granted") {
         const coordinates = await Geolocation.getCurrentPosition();
         return coordinates;
@@ -15,19 +15,11 @@ const printCurrentPosition = async () => {
     }
 };
 
-const checkPermissions = async () => {
-    const status = await Geolocation.checkPermissions();
-    return status;
-}
-
 const requestPermissions = async () => {
-    try {
-        const permissions = await Geolocation.requestPermissions();
-        if (permissions.location == "denied" || permissions.location == "prompt-with-rationale") {
-            popups.warning("Vous devez autorisé la géolocalisation dans les paramètres de l'application !");
-        }
-    } catch (error) {
-        console.error(error);
+    const permissions = await Geolocation.requestPermissions({permissions: 'coarseLocation'});
+    
+    if (permissions.location == "denied" || permissions.location == "prompt-with-rationale") {
+        popups.warning("Vous devez autorisé la géolocalisation dans les paramètres de l'application !");
     }
 }
 
