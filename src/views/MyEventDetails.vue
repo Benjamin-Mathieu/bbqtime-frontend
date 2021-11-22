@@ -1,7 +1,9 @@
 <template>
   <ion-page>
     <Header></Header>
-    <Sub :title="'Détails / ' + this.$store.state.events.eventTmp.name"></Sub>
+    <Sub
+      :title="'Détails / ' + this.$store.state.events.myEventDetails.event.name"
+    ></Sub>
     <ion-content>
       <div id="container">
         <RefreshData callApi="getMyEventOrders"></RefreshData>
@@ -16,7 +18,8 @@
 
         <ion-card
           v-if="
-            Object.keys(this.$store.state.events.myEventOrders).length === 0 && loaded
+            Object.keys(this.$store.state.events.myEventOrders).length === 0 &&
+            loaded
           "
         >
           <ion-card-header> Pas de commande en cours </ion-card-header>
@@ -261,13 +264,13 @@ export default defineComponent({
     IonSegment,
     IonSegmentButton,
   },
-  
+
   data() {
     return {
       tab: "gestion",
       toggleStatusOrder: "pending",
       interval: null,
-      loaded: false
+      loaded: false,
     };
   },
 
