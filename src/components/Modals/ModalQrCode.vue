@@ -33,6 +33,8 @@ import {
 import { download } from "ionicons/icons";
 import popup from "../../components/ToastController";
 import { Filesystem, Directory } from "@capacitor/filesystem";
+import { FileOpener } from "@ionic-native/file-opener"
+
 
 export default defineComponent({
   name: "ModalQrCode",
@@ -78,17 +80,15 @@ export default defineComponent({
 
     async save() {
       await this.checkPermissions();
-
       const event = this.$store.state.events.eventTmp;
-      const file = await Filesystem.appendFile({
+
+      const QrcodeFile = await Filesystem.writeFile({
         path: `${event.name}-${event.id}.png`,
         data: event.qrcode,
         directory: Directory.Documents,
       });
-      console.log("file =>", file);
-      if (file) {
-        popup.success("Qrcode télécharger sur votre appareil");
-      }
+
+      FileOpener.showOpenWithDialog(QrcodeFile.uri, "image/png");
     },
   },
 });
