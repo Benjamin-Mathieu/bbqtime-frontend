@@ -1,14 +1,9 @@
 <template>
   <ion-page>
     <Header></Header>
-    <Sub :title="'Budget'"></Sub>
+    <Sub title="Budget"></Sub>
     <ion-content>
       <div id="container">
-        <ion-toolbar>
-          <ion-title>{{
-            this.$store.state.events.myEventDetails.event.name
-          }}</ion-title>
-        </ion-toolbar>
         <ion-card class="commandes">
           <ion-card-header>
             <ion-card-title color="primary">Commandes</ion-card-title>
@@ -73,8 +68,6 @@ import {
   IonBadge,
   IonLabel,
   IonItemDivider,
-  IonToolbar,
-  IonTitle,
 } from "@ionic/vue";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
@@ -91,8 +84,6 @@ export default defineComponent({
     IonBadge,
     IonLabel,
     IonItemDivider,
-    IonToolbar,
-    IonTitle,
     Sub,
     Header,
     Footer,
