@@ -304,13 +304,14 @@ const modulEvents = {
                 });
         },
 
-        async addAdmin({ state }, email) {
+        async addAdmin({ state, dispatch }, email) {
             await request.postWithAuth('events/addAssociate', {
                 event_id: state.eventTmp.id,
                 email: email
             })
                 .then(resp => {
                     popup.success(resp.message);
+                    dispatch("getListAssociate");
                 }).catch(err => {
                     err.error = JSON.parse(err.error);
                     popup.warning(err.error.message);

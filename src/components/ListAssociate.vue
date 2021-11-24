@@ -1,32 +1,29 @@
 <template>
-  <ion-list v-if="this.$store.state.listAssociate.length > 0" inset>
+  <ion-list>
     <ion-list-header>
       <ion-label color="primary">Liste associés </ion-label>
     </ion-list-header>
-    <ion-item-sliding
-      v-for="associate in this.$store.state.listAssociate"
-      :key="associate.id"
-    >
-      <ion-item>
-        <ion-label>
-          {{ associate.user.firstname + " | " + associate.user.email }}
-        </ion-label>
-      </ion-item>
-      <ion-item-options>
-        <ion-item-option
-          @click="
-            removeAssociate(
-              associate.id,
-              associate.user.name,
-              associate.user.firstname
-            )
-          "
-        >
-          Supprimer
-          <ion-icon slot="end" name="close"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
+    <div v-if="associateInEvent">
+      <ion-item-sliding
+        v-for="associate in this.$store.state.listAssociate"
+        :key="associate.id"
+      >
+        <ion-item>
+          <ion-label>
+            {{ associate.user.firstname + " | " + associate.user.email }}
+          </ion-label>
+        </ion-item>
+        <ion-item-options>
+          <ion-item-option @click="removeAssociate(associate.id)">
+            Supprimer
+            <ion-icon slot="end" name="close"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </div>
+    <ion-item v-else>
+      <ion-label>Aucun associé pour le moment</ion-label>
+    </ion-item>
   </ion-list>
 </template>
 
@@ -61,13 +58,15 @@ export default defineComponent({
     this.$store.dispatch("getListAssociate");
   },
 
+  computed: {
+    associateInEvent() {
+      return this.$store.state.listAssociate.length > 0 ? true : false;
+    },
+  },
+
   methods: {
-    removeAssociate(id, name, firstname) {
-      AlertController.validDelete(
-        id,
-        `Voulez-vous supprimez ${name} ${firstname} de vos associés ?`,
-        "associate"
-      );
+    removeAssociate(id) {
+      AlertController.validDelete(id, `Êtes-vous sûr ?`, "associate");
     },
   },
 });
