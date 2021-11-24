@@ -145,8 +145,8 @@ import {
   IonIcon,
   modalController,
 } from "@ionic/vue";
-import MapModal from "../Modals/MapModal.vue";
 import { eyeOutline, eyeOffOutline } from "ionicons/icons";
+import showModal from "../Modals/ModalController";
 
 export default defineComponent({
   name: "FormEvent",
@@ -346,11 +346,8 @@ export default defineComponent({
       modalController.dismiss();
     },
 
-    async openMapModal() {
-      const modal = await modalController.create({
-        component: MapModal,
-      });
-      return modal.present();
+    openMapModal() {
+      showModal.map();
     },
   },
 });

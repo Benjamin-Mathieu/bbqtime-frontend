@@ -8,11 +8,19 @@ import ModalQrCode from "./ModalQrCode";
 import ModalInvitationEvent from "./ModalInvitationEvent";
 import ModalEditInfoEvent from "./ModalEditInfoEvent";
 import ModalEditCategoriePlat from "./ModalEditCategoriePlat";
+import ModalMap from "./MapModal";
 
 const showModal = {
     async addCategorie() {
         const modal = await modalController.create({
             component: ModalCategorie,
+        });
+        return modal.present();
+    },
+
+    async map() {
+        const modal = await modalController.create({
+            component: ModalMap,
         });
         return modal.present();
     },
