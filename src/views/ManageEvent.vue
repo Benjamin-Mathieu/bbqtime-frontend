@@ -7,9 +7,21 @@
 
       <div id="container">
         <ion-card>
-          <img :src="event.photo_url" />
+          <img v-if="loaded" :src="event.photo_url" />
+          <ion-skeleton-text
+            v-else
+            animated
+            style="width: 100%; height: 160px"
+          ></ion-skeleton-text>
           <ion-card-header>
-            <ion-card-title color="primary">{{ event.name }}</ion-card-title>
+            <ion-card-title v-if="loaded" color="primary">{{
+              event.name
+            }}</ion-card-title>
+            <ion-skeleton-text
+              v-else
+              animated
+              style="width: 100%; height: 2rem"
+            ></ion-skeleton-text>
           </ion-card-header>
           <ion-card-content>
             <div class="buttons">
@@ -66,14 +78,21 @@ export default defineComponent({
     ActionsButton,
   },
 
+  data() {
+    return {
+      loaded: false,
+    };
+  },
+
   computed: {
     event() {
       return this.$store.state.events.eventTmp;
     },
   },
 
-  ionViewWillEnter() {
-    this.$store.dispatch("getEvent", this.$route.params.id);
+  async ionViewWillEnter() {
+    await this.$store.dispatch("getEvent", this.$route.params.id);
+    this.loaded = true;
   },
 
   ionViewWillLeave() {
