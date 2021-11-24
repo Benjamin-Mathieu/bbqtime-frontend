@@ -1,9 +1,7 @@
 <template>
   <ion-page>
     <Header></Header>
-    <Sub
-      :title="'Détails / ' + this.$store.state.events.myEventDetails.event.name"
-    ></Sub>
+    <Sub :title="'Détails / ' + this.$store.state.events.eventTmp.name"></Sub>
     <ion-content>
       <div id="container">
         <RefreshData callApi="getMyEventOrders"></RefreshData>
