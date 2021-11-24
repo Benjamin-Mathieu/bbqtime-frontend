@@ -33,8 +33,7 @@ import {
 import { download } from "ionicons/icons";
 import popup from "../../components/ToastController";
 import { Filesystem, Directory } from "@capacitor/filesystem";
-import { FileOpener } from "@ionic-native/file-opener"
-
+import { FileOpener } from "@ionic-native/file-opener";
 
 export default defineComponent({
   name: "ModalQrCode",
