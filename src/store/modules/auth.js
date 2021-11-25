@@ -38,7 +38,7 @@ const moduleAuth = {
 
     getters: {
         getUserInformation(state) {
-            return JSON.parse(state.userInformation);
+            return state.userInformation;
         },
         getLoginStatus(state) {
             if (state.userIsLoggedIn) {
@@ -97,7 +97,7 @@ const moduleAuth = {
                 dispatch("getDevice");
                 commit("setUserIsLoggedIn", true);
                 commit("setToken", resp.token);
-                commit("setUserInformation", JSON.stringify(resp.informations));
+                commit("setUserInformation", resp.informations);
                 dispatch("setExternalUserId");
                 localStorage.setItem("token", resp.token);
 
@@ -126,7 +126,7 @@ const moduleAuth = {
                     dispatch("getDevice");
                     commit("setUserIsLoggedIn", true);
                     commit("setToken", localStorage.getItem("token"));
-                    commit("setUserInformation", JSON.stringify(resp.data.informations));
+                    commit("setUserInformation", resp.data.informations);
                     dispatch("setExternalUserId");
                     popup.success(resp.data.message);
                 }
