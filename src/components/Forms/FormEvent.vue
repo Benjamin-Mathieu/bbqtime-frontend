@@ -299,6 +299,9 @@ export default defineComponent({
         await this.$store.dispatch("postEvent", event);
         this.disabledButton = false;
         this.showSpinner = false;
+      } else {
+        this.disabledButton = false;
+        this.showSpinner = false;
       }
     },
 

@@ -2,7 +2,7 @@
   <form class="form">
     <ion-item>
       <ion-label position="stacked">Adresse</ion-label>
-      <ion-input type="text" v-model="address"></ion-input>
+      <ion-input type="text" v-model="address" :autofocus="true"></ion-input>
       <span class="hide-button">
         <ion-button
           size="large"
@@ -92,13 +92,13 @@ export default defineComponent({
     changeMap(selectedAdress) {
       console.log({ selectedAdress });
       this.address = selectedAdress;
-      const latitude =
+
+      let latitude =
         this.$store.state.apiGouv.respApiAddress[0].geometry.coordinates[1];
-      const longitude =
+      let longitude =
         this.$store.state.apiGouv.respApiAddress[0].geometry.coordinates[0];
-      console.log("lat", latitude, "lon", longitude);
+
       Map.getMap(latitude, longitude);
-      this.showList = false;
     },
 
     toggleList() {

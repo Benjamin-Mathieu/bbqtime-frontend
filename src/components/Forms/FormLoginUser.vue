@@ -72,8 +72,8 @@ export default defineComponent({
 
   data() {
     return {
-      email: "testpost@gmail.com",
-      password: "test",
+      email: "",
+      password: "",
       showPassword: false,
       typeInputPassword: "password",
       icon: eyeOutline,
@@ -91,6 +91,7 @@ export default defineComponent({
       this.disabledButton = false;
       this.showSpinner = false;
     },
+
     show() {
       this.showPassword = !this.showPassword;
       this.showPassword
