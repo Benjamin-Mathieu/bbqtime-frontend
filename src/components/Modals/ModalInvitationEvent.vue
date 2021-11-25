@@ -26,7 +26,7 @@ import {
 import FormMail from "../Forms/FormMail.vue";
 
 export default defineComponent({
-  name: "ModalAddAssociate",
+  name: "ModalInvitationEvent",
   components: {
     IonHeader,
     IonToolbar,

@@ -26,7 +26,7 @@ import {
 import FormAddCategorie from "../Forms/FormAddCategorie.vue";
 
 export default defineComponent({
-  name: "FormCategorie",
+  name: "ModalCategorie",
   components: {
     IonButton,
     IonTitle,

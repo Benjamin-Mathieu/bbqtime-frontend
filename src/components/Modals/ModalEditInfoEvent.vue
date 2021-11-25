@@ -28,7 +28,7 @@ import {
 import FormEvent from "../Forms/FormEvent.vue";
 
 export default defineComponent({
-  name: "ModalAddAssociate",
+  name: "ModalEditInfoEvent",
   components: {
     IonHeader,
     IonToolbar,
