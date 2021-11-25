@@ -23,25 +23,82 @@ const requestPermissions = async () => {
     }
 }
 
-let mymap;
-let marker;
-
 class Map {
 
-    async initMap() {
-        if (mymap) await mymap.remove()
+    constructor(mymap, marker) {
+        this.mymap = mymap;
+        this.marker = marker;
+    }
+
+    buildMap() {
+
+        let spinner = document.querySelector(".spinner");
+        spinner.style.display = "block"; // Show spinner 
+
+        this.mymap = L.map("mapid");
+
+        let openStreetMapLayer = L.tileLayer(
+            `https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.VUE_APP_TOKEN_LEAFLET}`,
+            {
+                attribution:
+                    '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 100,
+                id: "mapbox/streets-v11",
+                tileSize: 512,
+                zoomOffset: -1,
+            }
+        ).addTo(this.mymap);
+
+        this.mymap.addLayer(openStreetMapLayer);
+
+        // Show spinner until map load
+        this.mymap.on("load", function () {
+            console.log("load");
+            spinner.style.display = "none";
+        });
+
+        setTimeout(() => {
+            this.mymap.invalidateSize(); // fix size
+        }, 100)
+
+        // Custom marker
+        let DefaultIcon = L.icon({
+            iconUrl: icon,
+            iconSize: [50, 95], // size of the icon
+        });
+        L.Marker.prototype.options.icon = DefaultIcon;
+
+        // Moove marker
+        this.mymap.on("click", (e) => {
+            console.log("in click event", e);
+            const coords = {
+                lat: e.latlng.lat,
+                lon: e.latlng.lng
+            }
+            this.mymap.removeLayer(this.marker);
+            this.marker = new L.marker([e.latlng.lat, e.latlng.lng]).addTo(this.mymap);
+            store.dispatch("reverseAddress", coords);
+        });
+    }
+
+    initMap() {
+        this.mymap = null;
     }
 
     async openMap() {
+
         let lat;
         let lon;
 
-        if (store.state.apiGouv.address !== "") {
+        if (store.state.apiGouv.address !== "" && Object.keys(store.state.events.eventTmp).length === 0) {
+            console.log("openMap : in if");
             lat = store.state.apiGouv.respApiAddress[0].geometry.coordinates[1];
             lon = store.state.apiGouv.respApiAddress[0].geometry.coordinates[0];
 
             this.getMap(lat, lon);
         } else if (Object.keys(store.state.events.eventTmp).length > 0) {
+            console.log("openMap : in else if");
+
             let address = (store.state.events.eventTmp.address + " " + store.state.events.eventTmp.zipcode + " " + store.state.events.eventTmp.city);
 
             store.commit("setAddress", address);
@@ -53,93 +110,51 @@ class Map {
             this.getMap(lat, lon);
         }
         else {
+            console.log("openMap : in else");
+
             this.getMapOnUserPosition();
         }
     }
 
     async getMapOnUserPosition() {
-        await this.initMap();
-        let longitude, latitude;
-
         const getPosition = await printCurrentPosition();
-        longitude = getPosition.coords.longitude;
-        latitude = getPosition.coords.latitude;
+        let longitude = getPosition.coords.longitude;
+        let latitude = getPosition.coords.latitude;
 
-        mymap = L.map("mapid").setView([latitude, longitude], 18);
+        if (!this.mymap) {
+            this.buildMap();
+            this.mymap.setView([latitude, longitude], 18);
+        } else {
+            this.mymap.removeLayer(this.marker);
+            this.mymap.flyTo([latitude, longitude], 18);
+        }
 
-        let openStreetMapLayer = L.tileLayer(
-            `https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.VUE_APP_TOKEN_LEAFLET}`,
-            {
-                attribution:
-                    '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-                maxZoom: 100,
-                id: "mapbox/streets-v11",
-                tileSize: 512,
-                zoomOffset: -1,
-                accessToken: process.env.VUE_APP_TOKEN_LEAFLET,
-            }
-        ).addTo(mymap);
-
-        let DefaultIcon = L.icon({
-            iconUrl: icon,
-            iconSize: [50, 95], // size of the icon
-        });
-        L.Marker.prototype.options.icon = DefaultIcon;
-
-        marker = new L.Marker([latitude, longitude]);
-
-        mymap.addLayer(openStreetMapLayer);
-        mymap.addLayer(marker);
-
-        mymap.on("click", function (e) {
-            const coords = {
-                lat: e.latlng.lat,
-                lon: e.latlng.lng
-            }
-
-            mymap.removeLayer(marker);
-            marker = new L.marker([e.latlng.lat, e.latlng.lng]).addTo(mymap);
-            store.dispatch("reverseAddress", coords);
-        });
+        console.log("size", this.mymap.getSize());
+        // Add marker
+        this.marker = new L.Marker([latitude, longitude]);
+        this.mymap.addLayer(this.marker);
     }
 
     async getMap(latitude, longitude) {
-        await this.initMap();
+        console.log("in getMap(): lat", latitude, "lon ", longitude);
 
-        mymap = L.map("mapid").setView([latitude, longitude], 18);
+        if (!this.mymap) {
+            this.buildMap();
+            this.mymap.setView([latitude, longitude], 18);
+        } else {
+            console.log("in getMap() else");
 
-        let openStreetMapLayer = L.tileLayer(
-            `https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${process.env.VUE_APP_TOKEN_LEAFLET}`,
-            {
-                attribution:
-                    '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-                maxZoom: 100,
-                id: "mapbox/streets-v11",
-                tileSize: 512,
-                zoomOffset: -1,
-                accessToken: process.env.VUE_APP_TOKEN_LEAFLET,
-            }
-        ).addTo(mymap);
-        mymap.addLayer(openStreetMapLayer);
+            this.mymap.removeLayer(this.marker);
+            this.mymap.setView([latitude, longitude], 18);
+        }
 
-        let DefaultIcon = L.icon({
-            iconUrl: icon,
-            iconSize: [50, 95], // size of the icon
-        });
-        L.Marker.prototype.options.icon = DefaultIcon;
+        console.log("center => ", this.mymap.getCenter());
+        console.log("map size", this.mymap.getSize());
 
-        marker = new L.Marker([latitude, longitude]);
-        mymap.addLayer(marker);
 
-        mymap.on("click", function (e) {
-            const coords = {
-                lat: e.latlng.lat,
-                lon: e.latlng.lng
-            }
-            mymap.removeLayer(marker);
-            marker = new L.marker([e.latlng.lat, e.latlng.lng]).addTo(mymap);
-            store.dispatch("reverseAddress", coords);
-        });
+        // Place marker
+        this.marker = new L.Marker([latitude, longitude]);
+        this.mymap.addLayer(this.marker);
     }
 }
 

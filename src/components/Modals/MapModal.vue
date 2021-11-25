@@ -14,6 +14,9 @@
           <ion-icon :icon="locateSharp"></ion-icon>
         </ion-button>
       </div>
+      <div class="spinner">
+        <ion-spinner color="primary"></ion-spinner>
+      </div>
     </div>
 
     <FormAddAddress></FormAddAddress>
@@ -29,7 +32,8 @@ import {
   IonTitle,
   IonIcon,
   IonButton,
-  modalController
+  IonSpinner,
+  modalController,
 } from "@ionic/vue";
 import FormAddAddress from "../Forms/FormAddAddress.vue";
 import Map from "../../services/map";
@@ -45,6 +49,7 @@ export default defineComponent({
     FormAddAddress,
     IonIcon,
     IonButton,
+    IonSpinner,
   },
 
   setup() {
@@ -55,6 +60,10 @@ export default defineComponent({
 
   mounted() {
     Map.openMap();
+  },
+
+  unmounted() {
+    Map.initMap();
   },
 
   methods: {
@@ -72,8 +81,18 @@ export default defineComponent({
 <style lang="scss" scoped>
 #mapid {
   height: 100%;
-  width: 100%;
-  margin: auto;
+
+  .spinner {
+    position: absolute;
+    z-index: 1000;
+    text-align: center;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 40%;
+    transform: translateY(-50%) scale(1.5);
+    display: block;
+  }
 
   .locate-button {
     position: absolute;
