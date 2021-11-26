@@ -19,6 +19,8 @@
         </ion-toolbar>
       </ion-header>
 
+      <OpenMapButton></OpenMapButton>
+
       <div class="public-events" v-if="this.selectedTypeEvent === 'public'">
         <RefreshData callApi="getPublicEvents"></RefreshData>
 
@@ -192,6 +194,7 @@ import Footer from "../components/Footer.vue";
 import RefreshData from "../components/RefreshData.vue";
 import Skeleton from "../components/Skeletons/SkeletonEvent.vue";
 import EmptyCard from "../components/EmptyCard";
+import OpenMapButton from "../components/Buttons/OpenMapButton.vue";
 
 export default defineComponent({
   name: "Events",
@@ -213,6 +216,7 @@ export default defineComponent({
     Skeleton,
     RefreshData,
     EmptyCard,
+    OpenMapButton,
   },
 
   data() {
