@@ -5,7 +5,8 @@ import popups from "../../components/ToastController";
 const moduleApiGouv = {
     state: () => ({
         address: "",
-        respApiAddress: {}
+        respApiAddress: {},
+        publicEvents: []
     }),
 
     mutations: {
@@ -16,6 +17,10 @@ const moduleApiGouv = {
         setApiAddress(state, respApi) {
             state.respApiAddress = respApi;
         },
+
+        setInfoPublicEvents(state, events) {
+            state.publicEvents.push(events);
+        },
     },
 
     getters: {
@@ -25,7 +30,7 @@ const moduleApiGouv = {
             } else {
                 return state.respApiAddress;
             }
-        },
+        }
     },
 
     actions: {
@@ -49,6 +54,41 @@ const moduleApiGouv = {
                     }
                 })
                 .catch(httpErrorHandler)
+        },
+
+        async getCoordsPublicEvents({ commit, rootState, state }) {
+            console.log("in action getCoords");
+            let events = [];
+            if (state.publicEvents.length > 0) {
+                console.log("in if .length > 0");
+                state.publicEvents = [];
+            }
+
+            await rootState.events.allPublicEvents.forEach(publicEvent => {
+                events.push({
+                    informations: {
+                        name: publicEvent.name,
+                        date: publicEvent.date,
+                        fullAddress: `${publicEvent.address} ${publicEvent.city} ${publicEvent.zipcode}`,
+                        id: publicEvent.id
+                    }
+                });
+            });
+
+            console.log("events in action => ", events);
+
+            events.forEach(async (event) => {
+                await request.getApiGouv('https://api-adresse.data.gouv.fr/search/?q=' + event.informations.fullAddress)
+                    .then(async resp => {
+                        commit("setInfoPublicEvents", {
+                            coords: resp.features[0].geometry.coordinates,
+                            informations: event.informations
+                        });
+                    })
+                    .catch(httpErrorHandler)
+            });
+
+            console.log("state.publicEvents => ", state.publicEvents);
         }
     }
 }
