@@ -9,6 +9,7 @@ import ModalInvitationEvent from "./ModalInvitationEvent";
 import ModalEditInfoEvent from "./ModalEditInfoEvent";
 import ModalEditCategoriePlat from "./ModalEditCategoriePlat";
 import ModalMap from "./MapModal";
+import ModalMapEvents from "./MapEventsModal";
 
 const showModal = {
     async addCategorie() {
@@ -21,6 +22,13 @@ const showModal = {
     async map() {
         const modal = await modalController.create({
             component: ModalMap,
+        });
+        return modal.present();
+    },
+
+    async mapEvents() {
+        const modal = await modalController.create({
+            component: ModalMapEvents,
         });
         return modal.present();
     },
