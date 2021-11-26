@@ -10,6 +10,7 @@ const modulEvents = {
         currentStep: 1,
         participateEvents: [],
         publicEvents: [],
+        allPublicEvents: [],
         myEvents: [],
         myEventOrders: {},
         myEventDetails: [],
@@ -29,6 +30,10 @@ const modulEvents = {
 
         setParticipateEvents(state, participateEvents) {
             state.participateEvents = participateEvents;
+        },
+
+        setAllPublicEvents(state, all) {
+            state.allPublicEvents = all;
         },
 
         setPublicEvents(state, publicEvents) {
@@ -98,6 +103,18 @@ const modulEvents = {
                     err.error = JSON.parse(err.error);
                     popup.warning(err.error.message);
                 })
+        },
+
+        async getAllPublicEvents({ commit }) {
+            await request.get('events/allpublic')
+                .then(resp => {
+                    console.log("resp request get", resp);
+                    commit("setAllPublicEvents", resp.publicEvents);
+                })
+                .catch(err => {
+                    err.error = JSON.parse(err.error);
+                    popup.warning(err.error.message);
+                });
         },
 
         async getPublicEvents({ commit, rootState }, page) {
