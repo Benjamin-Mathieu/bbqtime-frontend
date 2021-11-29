@@ -59,6 +59,7 @@
             name="image"
             @change="pickImage"
             ref="fileInput"
+            accept=".jpeg, jpg, .png"
           />
 
           <ion-button
@@ -155,7 +156,7 @@ export default defineComponent({
       this.disabledButton = true;
       let priceInDecimal;
 
-      if(this.price.includes(",")) {
+      if (this.price.includes(",")) {
         priceInDecimal = await this.convertPriceToDecimal(this.price);
       } else {
         priceInDecimal = this.price;

@@ -61,6 +61,7 @@
             name="image"
             @change="pickImage"
             ref="fileInput"
+            accept=".jpeg, jpg, .png"
           />
 
           <ion-button
@@ -177,12 +178,11 @@ export default defineComponent({
       const check1 = await this.checkIfUserSelectFile();
       const check2 = await this.checkIfUserSelectCategory();
 
-      if(this.price.includes(",")) {
+      if (this.price.includes(",")) {
         priceInDecimal = await this.convertPriceToDecimal(this.price);
       } else {
         priceInDecimal = this.price;
       }
-      
 
       if (check1 && check2) {
         const plat = {
