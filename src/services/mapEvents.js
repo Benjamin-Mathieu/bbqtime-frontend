@@ -5,6 +5,7 @@ import { Geolocation } from '@capacitor/geolocation';
 import store from "../store/store";
 import popups from "../components/ToastController";
 import router from "../router/index";
+import { modalController } from "@ionic/vue";
 
 const printCurrentPosition = async () => {
     const status = await Geolocation.checkPermissions();
@@ -24,6 +25,24 @@ const requestPermissions = async () => {
     }
 }
 
+const convertDate = async (dateToConvert) => {
+    const date = new Date(dateToConvert);
+    const d = date.getDate();
+    const m = date.getMonth() + 1;
+    const y = date.getFullYear();
+    const h = date.getUTCHours();
+    let min = date.getMinutes();
+    if (min < 10) min = "0" + min;
+
+    const converted_date = `${d}/${m}/${y} à ${h}:${min}`
+    return converted_date;
+}
+
+const onJoinClick = async (id) => {
+    await router.push({ name: "Categories", params: { id: id } });
+    modalController.dismiss();
+}
+
 class MapEvents {
 
     constructor(mymap) {
@@ -31,7 +50,6 @@ class MapEvents {
     }
 
     buildMap() {
-
         let spinner = document.querySelector(".spinner");
         spinner.style.display = "block"; // Show spinner 
 
@@ -53,12 +71,12 @@ class MapEvents {
 
         // Show spinner until map load
         this.mymap.on("load", function () {
-            console.log("load");
+            console.log("mymap.on load");
             spinner.style.display = "none";
         });
 
         this.mymap.on("unload", function () {
-            console.log("unload");
+            console.log("mymap.on unload");
             store.commit("setCoordinatesPublicEvents", []); // init array of coordinates
         })
 
@@ -103,45 +121,36 @@ class MapEvents {
     }
 
     async placeMarkers() {
-        try {
-            let publicEvents = store.state.apiGouv.publicEvents;
-            console.log("length publicEvents", store.state.apiGouv.publicEvents.length);
+        let publicEvents = store.state.apiGouv.publicEvents;
+        console.log("publicEvents in mapEvents => ", publicEvents);
 
-            console.log("publicEvents in mapEvents => ", publicEvents);
+        for (let index = 0; index < publicEvents.length; index++) {
+            const date = await convertDate(publicEvents[index].informations.date);
 
-            let arrayMarkers = [];
-
-            for (let index = 0; index < publicEvents.length; index++) {
-                let marker = new L.marker([publicEvents[index].coords[1], publicEvents[index].coords[0]])
-                    .bindPopup(`
+            let marker = new L.marker([publicEvents[index].coords[1], publicEvents[index].coords[0]])
+                .addTo(this.mymap)
+                .bindPopup(`
                 <ion-list class="popup">
                     <ion-list-header>${publicEvents[index].informations.name}</ion-list-header>
                     <p>
-                        Date : ${publicEvents[index].informations.date}</br>
+                        Date : ${date}</br>
                         Lieu : ${publicEvents[index].informations.fullAddress}</br>
+                        Description:  ${publicEvents[index].informations.description}
                         ${publicEvents[index].informations.id}
                     </p>
-                    <ion-button @click='join()'>Go</ion-button>
+                    <ion-button size="small" fill="outline" id="join">Rejoindre</ion-button>
                 </ion-list>`)
 
-                arrayMarkers.push(marker);
-            }
+            marker.addEventListener("popupopen", () => {
+                document.getElementById("join").addEventListener("click", () => onJoinClick(publicEvents[index].informations.id));
+            });
 
-            L.layerGroup(arrayMarkers).addTo(this.mymap);
-        } catch (error) {
-            console.error("une erreur => ", error);
+            marker.addEventListener("click", () => {
+                const marker_pos = marker.getLatLng();
+                this.mymap.flyTo([marker_pos.lat, marker_pos.lng], 16);
+            });
         }
     }
-
-    redirectToEvent(id) {
-        console.log("id event redirect", id);
-        let form = `<form method="get" onsubmit="${router.push({ name: "Categories", params: { id: id } })}">
-        <button type="submit">Go</button>
-     </form>`
-        return form;
-
-    }
-
 }
 
 export default new MapEvents;

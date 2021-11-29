@@ -57,7 +57,6 @@ export default defineComponent({
   mounted() {
     MapEvents.openMap();
     console.log("inmounted");
-    console.log("querySelct", document.querySelectorAll("#event"));
   },
 
   unmounted() {
@@ -71,12 +70,6 @@ export default defineComponent({
 
     locate() {
       MapEvents.centerMapOnUserPosition();
-    },
-
-    join() {
-      console.log("clicked");
-      modalController.dismiss();
-      // this.$router.push({ name: "Categories", params: { id: id } });
     },
   },
 });

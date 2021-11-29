@@ -69,6 +69,7 @@ const moduleApiGouv = {
                     informations: {
                         name: publicEvent.name,
                         date: publicEvent.date,
+                        description: publicEvent.description,
                         fullAddress: `${publicEvent.address} ${publicEvent.city} ${publicEvent.zipcode}`,
                         id: publicEvent.id
                     }
