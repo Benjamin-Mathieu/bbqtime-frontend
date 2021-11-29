@@ -6,6 +6,7 @@ import store from "../store/store";
 import popups from "../components/ToastController";
 import router from "../router/index";
 import { modalController } from "@ionic/vue";
+import { Diagnostic } from "@ionic-native/diagnostic";
 
 const printCurrentPosition = async () => {
     const status = await Geolocation.checkPermissions();
@@ -97,12 +98,19 @@ class MapEvents {
     }
 
     async centerMapOnUserPosition() {
-        const getPosition = await printCurrentPosition();
-        let longitude = getPosition.coords.longitude;
-        let latitude = getPosition.coords.latitude;
+        const isGpsEnabled = await Diagnostic.isLocationEnabled();
+        console.log("diag", isGpsEnabled);
+        if (!isGpsEnabled) {
+            popups.warning("Votre GPS est désactivé sur votre appareil");
+            this.mymap.setView([46.227638, 2.213749], 5);
+        } else {
+            const getPosition = await printCurrentPosition();
+            let longitude = getPosition.coords.longitude;
+            let latitude = getPosition.coords.latitude;
 
-        console.log("my position lon", longitude, "lat", latitude);
-        this.mymap.setView([latitude, longitude], 8);
+            console.log("my position lon", longitude, "lat", latitude);
+            this.mymap.setView([latitude, longitude], 12);
+        }
     }
 
     async openMap() {
@@ -110,13 +118,7 @@ class MapEvents {
             this.buildMap();
         }
 
-        const getPosition = await printCurrentPosition();
-        let longitude = getPosition.coords.longitude;
-        let latitude = getPosition.coords.latitude;
-
-        console.log("my position lon", longitude, "lat", latitude);
-        this.mymap.setView([latitude, longitude], 8);
-
+        await this.centerMapOnUserPosition();
         await this.placeMarkers();
     }
 
@@ -130,16 +132,15 @@ class MapEvents {
             let marker = new L.marker([publicEvents[index].coords[1], publicEvents[index].coords[0]])
                 .addTo(this.mymap)
                 .bindPopup(`
-                <ion-list class="popup">
-                    <ion-list-header>${publicEvents[index].informations.name}</ion-list-header>
+                <div class="popup">
+                    <h5 text-align="center">${publicEvents[index].informations.name}</h5>
                     <p>
-                        Date : ${date}</br>
-                        Lieu : ${publicEvents[index].informations.fullAddress}</br>
-                        Description:  ${publicEvents[index].informations.description}
-                        ${publicEvents[index].informations.id}
+                        <b>Date :</b> ${date}</br></br>
+                        <b>Lieu :</b> ${publicEvents[index].informations.fullAddress}</br></br>
+                        <b>Description :</b>  ${publicEvents[index].informations.description}
                     </p>
                     <ion-button size="small" fill="outline" id="join">Rejoindre</ion-button>
-                </ion-list>`)
+                </div>`)
 
             marker.addEventListener("popupopen", () => {
                 document.getElementById("join").addEventListener("click", () => onJoinClick(publicEvents[index].informations.id));
