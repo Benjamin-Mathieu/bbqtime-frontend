@@ -7,7 +7,7 @@
     ></Sub>
 
     <ion-content class="has-header" :fullscreen="true">
-      <ion-grid>
+      <ion-grid v-if="loaded">
         <ion-row>
           <ion-col
             v-for="categorie in this.$store.state.events.eventDetails
@@ -36,7 +36,7 @@
         </ion-row>
       </ion-grid>
     </ion-content>
-    <Footer :showDetails="true"></Footer>
+    <Footer v-if="loaded" :showDetails="true"></Footer>
   </ion-page>
 </template>
 
@@ -69,8 +69,16 @@ export default defineComponent({
     Header,
     Footer,
   },
-  ionViewWillEnter() {
-    this.$store.dispatch("getEventDetails");
+
+  data() {
+    return {
+      loaded: false,
+    };
+  },
+
+  async ionViewWillEnter() {
+    await this.$store.dispatch("getEventDetails");
+    this.loaded = true;
   },
 });
 </script>
