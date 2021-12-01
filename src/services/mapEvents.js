@@ -50,7 +50,7 @@ class MapEvents {
         this.mymap = mymap;
     }
 
-    buildMap() {
+    async buildMap() {
         let spinner = document.querySelector(".spinner");
         spinner.style.display = "block"; // Show spinner 
 
@@ -113,44 +113,53 @@ class MapEvents {
         }
     }
 
-    async openMap() {
-        if (!this.mymap) {
-            this.buildMap();
+    async loadMap() {
+        try {
+            await store.dispatch("getAllPublicEvents");
+            await this.buildMap();
+            await this.centerMapOnUserPosition();
+            await this.placeMarkers();
+        } catch (error) {
+            console.error("error", error);
         }
 
-        await this.centerMapOnUserPosition();
-        await this.placeMarkers();
     }
 
     async placeMarkers() {
-        let publicEvents = store.state.apiGouv.publicEvents;
-        console.log("publicEvents in mapEvents => ", publicEvents);
+        let publicEvents = store.state.events.allPublicEvents;
+        console.log("publicEvents in mapEvents => ", publicEvents, publicEvents.length);
+        let markers = [];
 
         for (let index = 0; index < publicEvents.length; index++) {
-            const date = await convertDate(publicEvents[index].informations.date);
+            console.log("in for loop");
+            const date = await convertDate(publicEvents[index].date);
 
-            let marker = new L.marker([publicEvents[index].coords[1], publicEvents[index].coords[0]])
-                .addTo(this.mymap)
+            let marker = new L.marker([publicEvents[index].latitude, publicEvents[index].longitude])
                 .bindPopup(`
                 <div class="popup">
-                    <h5 text-align="center">${publicEvents[index].informations.name}</h5>
+                    <h5 text-align="center">${publicEvents[index].name}</h5>
                     <p>
                         <b>Date :</b> ${date}</br></br>
-                        <b>Lieu :</b> ${publicEvents[index].informations.fullAddress}</br></br>
-                        <b>Description :</b>  ${publicEvents[index].informations.description}
+                        <b>Lieu :</b> ${publicEvents[index].address}, ${publicEvents[index].city} ${publicEvents[index].zipcode}</br></br>
+                        <b>Description :</b>  ${publicEvents[index].description}
                     </p>
                     <ion-button size="small" fill="outline" id="join">Rejoindre</ion-button>
-                </div>`)
+                </div>`);
 
-            marker.addEventListener("popupopen", () => {
-                document.getElementById("join").addEventListener("click", () => onJoinClick(publicEvents[index].informations.id));
+            marker.on("popupopen", () => {
+                document.getElementById("join").addEventListener("click", () => onJoinClick(publicEvents[index].id));
             });
 
             marker.addEventListener("click", () => {
                 const marker_pos = marker.getLatLng();
                 this.mymap.flyTo([marker_pos.lat, marker_pos.lng], 16);
             });
+
+            markers.push(marker);
         }
+        console.log("markers", markers);
+        L.layerGroup(markers).addTo(this.mymap);
+
     }
 }
 

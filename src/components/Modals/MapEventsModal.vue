@@ -55,8 +55,7 @@ export default defineComponent({
   },
 
   mounted() {
-    MapEvents.openMap();
-    console.log("inmounted");
+    MapEvents.loadMap();
   },
 
   unmounted() {

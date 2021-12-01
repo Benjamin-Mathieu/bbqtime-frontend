@@ -26,9 +26,7 @@ export default defineComponent({
   },
 
   methods: {
-    async openMap() {
-      await this.$store.dispatch("getAllPublicEvents");
-      await this.$store.dispatch("getCoordsPublicEvents");
+    openMap() {
       ShowModal.mapEvents();
     },
   },
