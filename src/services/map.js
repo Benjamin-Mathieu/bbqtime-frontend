@@ -4,6 +4,7 @@ import icon from '../../public/assets/icon/place_red_24dp.svg';
 import { Geolocation } from '@capacitor/geolocation';
 import store from "../store/store";
 import popups from "../components/ToastController";
+import { Diagnostic } from "@ionic-native/diagnostic";
 
 const printCurrentPosition = async () => {
     const status = await Geolocation.checkPermissions();
@@ -90,49 +91,46 @@ class Map {
         let lat;
         let lon;
 
-        if (store.state.apiGouv.address !== "" && Object.keys(store.state.events.eventTmp).length === 0) {
+        if (store.state.apiGouv.address !== "" && Object.keys(store.state.events.eventTmp).length === 0) { // if address is changed during edit
             console.log("openMap : in if");
             lat = store.state.apiGouv.respApiAddress[0].geometry.coordinates[1];
             lon = store.state.apiGouv.respApiAddress[0].geometry.coordinates[0];
 
             this.getMap(lat, lon);
-        } else if (Object.keys(store.state.events.eventTmp).length > 0) {
+        } else if (Object.keys(store.state.events.eventTmp).length > 0) { // if map open when event is already created
             console.log("openMap : in else if");
-
-            let address = (store.state.events.eventTmp.address + " " + store.state.events.eventTmp.zipcode + " " + store.state.events.eventTmp.city);
-
-            store.commit("setAddress", address);
-            await store.dispatch("getAddress");
-
-            lat = store.state.apiGouv.respApiAddress[0].geometry.coordinates[1];
-            lon = store.state.apiGouv.respApiAddress[0].geometry.coordinates[0];
-
-            this.getMap(lat, lon);
+            this.getMap(store.state.events.eventTmp.latitude, store.state.events.eventTmp.longitude);
         }
         else {
             console.log("openMap : in else");
-
             this.getMapOnUserPosition();
         }
     }
 
     async getMapOnUserPosition() {
-        const getPosition = await printCurrentPosition();
-        let longitude = getPosition.coords.longitude;
-        let latitude = getPosition.coords.latitude;
-
-        if (!this.mymap) {
-            this.buildMap();
-            this.mymap.setView([latitude, longitude], 18);
+        const isGpsEnabled = await Diagnostic.isLocationEnabled();
+        console.log("diag", isGpsEnabled);
+        if (!isGpsEnabled) {
+            popups.warning("Votre GPS est désactivé sur votre appareil");
+            this.mymap.setView([46.227638, 2.213749], 5);
         } else {
-            this.mymap.removeLayer(this.marker);
-            this.mymap.flyTo([latitude, longitude], 18);
-        }
+            const getPosition = await printCurrentPosition();
+            let longitude = getPosition.coords.longitude;
+            let latitude = getPosition.coords.latitude;
 
-        console.log("size", this.mymap.getSize());
-        // Add marker
-        this.marker = new L.Marker([latitude, longitude]);
-        this.mymap.addLayer(this.marker);
+            if (!this.mymap) {
+                this.buildMap();
+                this.mymap.setView([latitude, longitude], 18);
+            } else {
+                this.mymap.removeLayer(this.marker);
+                this.mymap.flyTo([latitude, longitude], 18);
+            }
+
+            console.log("size", this.mymap.getSize());
+            // Add marker
+            this.marker = new L.Marker([latitude, longitude]);
+            this.mymap.addLayer(this.marker);
+        }
     }
 
     async getMap(latitude, longitude) {
@@ -147,10 +145,6 @@ class Map {
             this.mymap.removeLayer(this.marker);
             this.mymap.setView([latitude, longitude], 18);
         }
-
-        console.log("center => ", this.mymap.getCenter());
-        console.log("map size", this.mymap.getSize());
-
 
         // Place marker
         this.marker = new L.Marker([latitude, longitude]);
