@@ -54,6 +54,7 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonCardContent,
+  IonSkeletonText,
 } from "@ionic/vue";
 import Sub from "../components/Sub.vue";
 import Header from "../components/Header.vue";
@@ -72,6 +73,7 @@ export default defineComponent({
     IonCardHeader,
     IonCardTitle,
     IonCardContent,
+    IonSkeletonText,
     Sub,
     Header,
     Footer,
