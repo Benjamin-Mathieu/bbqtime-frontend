@@ -1,24 +1,13 @@
-# bbqtime-front
+# BBQ Time
+
 
 ## Project setup
-```
-npm install
-```
+ `npm install`
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+Add file ".env" to root of the project which contains :
+`VUE_APP_URL_API= "url of your api"`
+`VUE_APP_TOKEN_LEAFLET = "your token leaflet"`
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## Run project
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- `npm run app` or `ionic cap run -l --external`
