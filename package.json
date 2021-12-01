@@ -1,13 +1,24 @@
 {
   "name": "bbqtime",
+  "description": "BBQ Time",
   "version": "0.0.1",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Benjamin-Mathieu/bbqtime-frontend"
+  },
+  "author": "Benjamin Mathieu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Benjamin-Mathieu/bbqtime-frontend/issues"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "app": "ionic cap run android -l --external"
   },
   "dependencies": {
     "@capacitor-community/barcode-scanner": "^2.0.1",
@@ -62,6 +73,5 @@
     "sass": "^1.43.4",
     "sass-loader": "^10.1.1",
     "vue-jest": "^5.0.0-0"
-  },
-  "description": "An Ionic project"
+  }
 }
