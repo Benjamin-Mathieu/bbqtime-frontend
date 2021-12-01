@@ -1,6 +1,6 @@
 import { alertController } from "@ionic/vue";
 import store from "../store/store";
-import { request } from "../store/httpRequest";
+import { request } from "../utils/httpRequest";
 import popup from './ToastController';
 
 const showAlert = {
