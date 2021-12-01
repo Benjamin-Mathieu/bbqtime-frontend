@@ -37,6 +37,16 @@ const moduleApiGouv = {
                 .catch(httpErrorHandler)
         },
 
+        /** 
+        * @typedef {Object} coords
+        * @property {String} lon
+        * @property {String} lat
+        */
+
+        /** 
+        * @param {Object} coords
+        */
+
         async reverseAddress({ commit }, coords) {
             await request.getApiGouv(`https://api-adresse.data.gouv.fr/reverse/?lon=${coords.lon}&lat=${coords.lat}`)
                 .then(resp => {

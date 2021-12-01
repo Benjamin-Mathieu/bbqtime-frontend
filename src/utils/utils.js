@@ -1,6 +1,11 @@
 import { Geolocation } from '@capacitor/geolocation';
 import popups from "../components/ToastController";
 
+
+/** 
+* @returns {Array} with coordinates lat, lon
+*/
+
 export const printCurrentPosition = async () => {
     const status = await Geolocation.checkPermissions();
     if (status.location === "granted") {
@@ -18,6 +23,11 @@ const requestPermissions = async () => {
         popups.warning("Vous devez autorisé la géolocalisation dans les paramètres de l'application !");
     }
 }
+
+/**
+* @param {Datetime} dateToConvert
+* @returns {String} Date : 28/10/1994
+*/
 
 export const convertDate = async (dateToConvert) => {
     const date = new Date(dateToConvert);

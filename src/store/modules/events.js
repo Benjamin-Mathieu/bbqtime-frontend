@@ -90,6 +90,10 @@ const modulEvents = {
                 })
         },
 
+        /** 
+        * @param {String} page
+        */
+
         async getParticipateEvents({ commit }, page) {
             if (page === undefined) page = "1";
 
@@ -116,6 +120,10 @@ const modulEvents = {
                     popup.warning(err.error.message);
                 });
         },
+
+        /** 
+        * @param {string} page
+        */
 
         async getPublicEvents({ commit, rootState }, page) {
             if (page === undefined) page = "1";
@@ -152,6 +160,10 @@ const modulEvents = {
                 });
         },
 
+        /** 
+        * @param {String} id
+        */
+
         async getEventDetails({ commit }, id) {
             let params;
             if (!id) {
@@ -167,6 +179,10 @@ const modulEvents = {
                     popup.warning(err.error.message);
                 });
         },
+
+        /** 
+        * @param {String} id
+        */
 
         async duplicateEvent({ state, commit }, id) {
             await request.postWithAuth('events/duplicate', { id: id })
@@ -190,6 +206,10 @@ const modulEvents = {
                 });
         },
 
+        /** 
+        * @param {String} password
+        */
+
         async joinEvent({ commit, dispatch, state }, password) {
             await request.getWithAuth('events/join/' + password)
                 .then(resp => {
@@ -206,6 +226,10 @@ const modulEvents = {
                     if (router.currentRoute.value.name == "Scan") dispatch("scan");
                 });
         },
+
+        /** 
+        * @param {String} id
+        */
 
         async getMyEventDetails({ commit }, id) {
             await request.getWithAuth('events/myEvents/' + id)
@@ -230,6 +254,23 @@ const modulEvents = {
                     popup.warning(err.error.message);
                 });
         },
+
+        /** 
+        * @typedef {Object} event
+        * @property {String} name
+        * @property {String} address
+        * @property {String} city
+        * @property {String} zipcode
+        * @property {Date.toISOString} date
+        * @property {String} description
+        * @property {Boolean} private
+        * @property {String} password
+        * @property {File} image
+        */
+
+        /** 
+        * @param {Object} event
+        */
 
         async postEvent({ commit, state }, event) {
             let formData = new FormData();
@@ -261,6 +302,11 @@ const modulEvents = {
                 });
         },
 
+
+        /** 
+        * @param {String} id
+        */
+
         async getEvent({ commit, state }, id) {
             await request.getWithAuth('events/' + id)
                 .then(async resp => {
@@ -276,6 +322,23 @@ const modulEvents = {
                     popup.warning(err.error.message);
                 });
         },
+
+        /** 
+        * @typedef {Object} event
+        * @property {String} name
+        * @property {String} address
+        * @property {String} city
+        * @property {String} zipcode
+        * @property {Date.toISOString} date
+        * @property {String} description
+        * @property {Boolean} private
+        * @property {String} password
+        * @property {File} image
+        */
+
+        /** 
+        * @param {Object} event
+        */
 
         async putEvent({ commit, state }, event) {
             let formData = new FormData();
@@ -308,6 +371,10 @@ const modulEvents = {
                 });
         },
 
+        /** 
+        * @param {String} email
+        */
+
         async sendInvitation({ state }, email) {
             await request.postWithAuth('events/mail/invitation', {
                 event_id: state.eventTmp.id,
@@ -320,6 +387,10 @@ const modulEvents = {
                     popup.warning(err.error.message);
                 });
         },
+
+        /** 
+        * @param {String} email
+        */
 
         async addAdmin({ state, dispatch }, email) {
             await request.postWithAuth('events/addAssociate', {
