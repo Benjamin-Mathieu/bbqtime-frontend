@@ -34,11 +34,12 @@
         <ion-datetime
           v-model="date"
           day-short-names="customDayShortNames"
-          display-format="DD MMM"
+          display-format="DD MMM YYYY"
           month-short-names="janvier, février, mars, avril, mai, juin, juillet, août, septembre, octobre, novembre, décembre"
           done-text="Valider"
           cancel-text="Fermer"
           :min="actualDate"
+          :max="yearPlusOne"
         ></ion-datetime>
       </ion-item>
       <ion-item :class="{ 'no-hours-selected': noHoursSelected }">
@@ -50,6 +51,7 @@
           done-text="Valider"
           cancel-text="Fermer"
           minuteValues="0,15,30,45"
+          :min="actualDate"
         ></ion-datetime>
       </ion-item>
 
@@ -203,6 +205,11 @@ export default defineComponent({
   computed: {
     actualDate() {
       return new Date().toISOString();
+    },
+
+    yearPlusOne() {
+      let date = new Date();
+      return date.getFullYear() + 1;
     },
   },
 
