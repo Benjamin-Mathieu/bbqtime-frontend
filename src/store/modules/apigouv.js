@@ -1,5 +1,5 @@
 import httpErrorHandler from "../httpErrorHandler";
-import { request } from '../httpRequest';
+import { request } from '../../utils/httpRequest';
 import popups from "../../components/ToastController";
 
 const moduleApiGouv = {

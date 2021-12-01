@@ -1,28 +1,11 @@
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import icon from '../../public/assets/icon/place_red_24dp.svg';
-import { Geolocation } from '@capacitor/geolocation';
 import store from "../store/store";
 import popups from "../components/ToastController";
 import { Diagnostic } from "@ionic-native/diagnostic";
+import { printCurrentPosition } from "../utils/utils";
 
-const printCurrentPosition = async () => {
-    const status = await Geolocation.checkPermissions();
-    if (status.location === "granted") {
-        const coordinates = await Geolocation.getCurrentPosition();
-        return coordinates;
-    } else {
-        requestPermissions();
-    }
-};
-
-const requestPermissions = async () => {
-    const permissions = await Geolocation.requestPermissions({ permissions: 'coarseLocation' });
-
-    if (permissions.location == "denied" || permissions.location == "prompt-with-rationale") {
-        popups.warning("Vous devez autorisé la géolocalisation dans les paramètres de l'application !");
-    }
-}
 
 class Map {
 

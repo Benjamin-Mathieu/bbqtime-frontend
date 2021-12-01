@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import { request } from "../store/httpRequest";
+import { request } from "../utils/httpRequest";
 import popup from '../components/ToastController';
 import modulAuth from "./modules/auth";
 import modulApiGouv from "./modules/apigouv";

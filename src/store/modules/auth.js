@@ -2,7 +2,7 @@
 import popup from '../../components/ToastController';
 import router from "../../router/index";
 import OneSignal from 'onesignal-cordova-plugin';
-import { request } from '../httpRequest';
+import { request } from '../../utils/httpRequest';
 import { HTTP as Http } from '@ionic-native/http';
 
 const moduleAuth = {

@@ -1,5 +1,5 @@
 import popup from '../../components/ToastController';
-import { request } from '../httpRequest';
+import { request } from '../../utils/httpRequest';
 // import httpErrorHandler from '../httpErrorHandler';
 
 
