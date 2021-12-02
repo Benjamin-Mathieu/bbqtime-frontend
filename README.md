@@ -1,5 +1,7 @@
 # BBQ Time
 
+## CLI Installation
+- `npm install -g @ionic/cli`
 
 ## Project setup
  `npm install`
