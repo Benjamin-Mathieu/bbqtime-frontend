@@ -19,6 +19,7 @@
         </ion-toolbar>
       </ion-header>
 
+      <SponsorSlide></SponsorSlide>
       <OpenMapButton></OpenMapButton>
 
       <div class="public-events" v-if="this.selectedTypeEvent === 'public'">
@@ -195,6 +196,7 @@ import RefreshData from "../components/RefreshData.vue";
 import Skeleton from "../components/Skeletons/SkeletonEvent.vue";
 import EmptyCard from "../components/EmptyCard";
 import OpenMapButton from "../components/Buttons/OpenMapButton.vue";
+import SponsorSlide from "../components/Slides/SponsorSlide.vue";
 
 export default defineComponent({
   name: "Events",
@@ -217,6 +219,7 @@ export default defineComponent({
     RefreshData,
     EmptyCard,
     OpenMapButton,
+    SponsorSlide
   },
 
   data() {

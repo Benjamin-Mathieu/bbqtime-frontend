@@ -278,6 +278,10 @@ const store = createStore({
                     err.error = JSON.parse(err.error);
                     popup.warning(err.error.message);
                 });
+        },
+
+        async getFilesUrlsOfSponsors() {
+            return await request.get("img/sponsors/urls");
         }
     }
 });
