@@ -9,21 +9,25 @@
             <img alt="plat-img" :src="plat.photo_url" />
           </div>
           <div class="info-plat">
-            <ion-item lines="none">
+            <ion-button
+              id="remove-plat-button"
+              fill="clear"
+              size="small"
+              @click="removePlat(plat)"
+            >
+              <ion-icon name="close"></ion-icon>
+            </ion-button>
+            <div>
               <ion-label>
                 <b>{{ plat.libelle }}</b>
               </ion-label>
-              <ion-button fill="clear" @click="removePlat(plat)">
-                <ion-icon name="close"></ion-icon>
-              </ion-button>
-            </ion-item>
-            <ion-item lines="none">
-              <ion-label>Quantité {{ plat.qty }}</ion-label>
-            </ion-item>
-            <ion-item lines="none">
-              <p>Total :</p>
-              <b>{{ plat.qty * plat.price + "€" }}</b>
-            </ion-item>
+            </div>
+            <div>
+              <ion-label>Quantité: {{ plat.qty }}</ion-label>
+            </div>
+            <div>
+              <b>Total: {{ (plat.qty * plat.price).toFixed(2) + "€" }}</b>
+            </div>
           </div>
         </div>
       </ion-card>
@@ -55,7 +59,6 @@ import {
   IonCardHeader,
   IonIcon,
   IonLabel,
-  IonItem,
   IonButton,
 } from "@ionic/vue";
 import Sub from "../components/Sub.vue";
@@ -72,7 +75,6 @@ export default defineComponent({
     IonCardHeader,
     IonIcon,
     IonLabel,
-    IonItem,
     IonButton,
     Sub,
     Header,
@@ -139,7 +141,19 @@ export default defineComponent({
     }
   }
   .info-plat {
+    #remove-plat-button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 2;
+    }
+
     width: 60%;
+    height: 100%;
+    padding: 1em 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
     b,
     p {
@@ -154,6 +168,7 @@ export default defineComponent({
   margin: 0 auto;
   width: 80%;
   font-weight: bold;
+  font-size: 1.1em;
   color: #7a1c1e;
   display: flex;
   flex-direction: column;

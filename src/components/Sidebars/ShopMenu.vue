@@ -36,7 +36,9 @@
                       </ion-select-option>
                     </ion-select>
                   </ion-item>
-                  <ion-item>{{ plat.price * plat.qty + "€" }} </ion-item>
+                  <ion-item
+                    >{{ (plat.price * plat.qty).toFixed(2) + "€" }}
+                  </ion-item>
                 </div>
               </div>
             </ion-item>

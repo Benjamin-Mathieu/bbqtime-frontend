@@ -43,9 +43,10 @@ const modulShop = {
                 state.plats.forEach((plat) => {
                     totalOrder += plat.price * plat.qty;
                 });
-                return totalOrder;
+                console.log("typeof totaltoder", typeof totalOrder);
+                return totalOrder.toFixed(2);
             } else {
-                return totalOrder;
+                return totalOrder.toFixed(2);
             }
 
         },
