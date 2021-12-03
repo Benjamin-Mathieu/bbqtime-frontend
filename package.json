@@ -18,7 +18,7 @@
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint",
-    "app": "ionic cap run android -l --external"
+    "app": "ionic cap run -l --external"
   },
   "dependencies": {
     "@capacitor-community/barcode-scanner": "^2.0.1",
