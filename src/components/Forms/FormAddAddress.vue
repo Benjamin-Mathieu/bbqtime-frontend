@@ -90,7 +90,6 @@ export default defineComponent({
     },
 
     changeMap(selectedAdress) {
-      console.log({ selectedAdress });
       this.address = selectedAdress;
 
       let latitude =

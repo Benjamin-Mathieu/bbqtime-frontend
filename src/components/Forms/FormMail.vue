@@ -66,18 +66,14 @@ export default defineComponent({
   methods: {
     addInput() {
       this.emails.push({ email: "" });
-      console.log("add =>", this.emails);
     },
 
     removeInput(index) {
-      console.log("index =>", index);
       this.emails.splice(index, 1);
-      console.log("splice =>", this.emails);
     },
 
     sendMail() {
       const listMails = JSON.parse(JSON.stringify(this.emails));
-      console.log(listMails, typeof listMails);
 
       listMails.forEach((objMail) => {
         this.$store.dispatch(this.callApi, objMail.email);

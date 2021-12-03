@@ -27,7 +27,6 @@ const modulShop = {
             state.plats = [];
         },
         removePlatInShop(state, plat) {
-            console.log(state, plat);
             for (let i = 0; i < state.plats.length; i++)
                 if (state.plats[i].id === plat.id) {
                     state.plats[i].qty = 0; //reset qty before remove to store
@@ -43,7 +42,6 @@ const modulShop = {
                 state.plats.forEach((plat) => {
                     totalOrder += plat.price * plat.qty;
                 });
-                console.log("typeof totaltoder", typeof totalOrder);
                 return totalOrder.toFixed(2);
             } else {
                 return totalOrder.toFixed(2);

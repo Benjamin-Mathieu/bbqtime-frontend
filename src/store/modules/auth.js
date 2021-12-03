@@ -103,7 +103,6 @@ const moduleAuth = {
                 email: user.email,
                 password: user.password
             }).then(resp => {
-                console.log("test result => ", resp);
                 dispatch("getDevice");
                 commit("setUserIsLoggedIn", true);
                 commit("setToken", resp.token);
@@ -179,7 +178,6 @@ const moduleAuth = {
                 email: state.resetPassword.email,
             })
                 .then(resp => {
-                    console.log("resp => ", resp);
                     popup.success(resp.message);
                     isSend = true;
                 })

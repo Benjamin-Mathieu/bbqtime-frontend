@@ -24,7 +24,6 @@ const modulScan = {
             // check permissions
             const checkPermissions = async () => {
                 const status = await BarcodeScanner.checkPermission({ force: true });
-                console.log("status =>", status);
                 if (status.granted) startScan;
 
                 if (status.denied) {
@@ -40,7 +39,7 @@ const modulScan = {
                         dispatch("joinEvent", res.content);
                     }
                 })
-                .catch((err) => console.log(err)); // start scanning and wait for a result
+                .catch((err) => console.error(err)); // start scanning and wait for a result
         },
     }
 }

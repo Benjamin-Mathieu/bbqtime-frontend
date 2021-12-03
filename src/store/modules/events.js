@@ -112,7 +112,6 @@ const modulEvents = {
         async getAllPublicEvents({ commit }) {
             await request.get('events/allpublic')
                 .then(resp => {
-                    console.log("resp request get", resp);
                     commit("setAllPublicEvents", resp.publicEvents);
                 })
                 .catch(err => {

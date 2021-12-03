@@ -53,8 +53,6 @@ const moduleApiGouv = {
                     if (resp.features.length === 0) {
                         popups.warning("Aucune addresse n'est lié à cette endroit, veuillez saisir une adresse ou placez de nouveau le curseur sur la carte");
                     } else {
-                        console.log("coords leaflet => ", coords);
-                        console.log("coord resp => ", resp.features[0].geometry.coordinates);
                         commit("setApiAddress", resp.features);
                     }
                 })

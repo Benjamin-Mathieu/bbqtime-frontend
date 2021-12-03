@@ -1,14 +1,11 @@
 <template>
   <swiper
     class="swiper"
-    :modules="modules"
     :loop="true"
     :autoplay="{
       delay: 4000,
       disableOnInteraction: false,
     }"
-    @swiper="onSwiper"
-    @slideChange="onSlideChange"
   >
     <swiper-slide v-for="img in imgs" :key="img">
       <img :src="img" alt="img-sponsor" />
@@ -40,7 +37,6 @@ export default defineComponent({
   },
 
   async mounted() {
-    console.log("mounted");
     const files = await this.$store.dispatch("getFilesUrlsOfSponsors");
     this.imgs = files.imgs;
   },

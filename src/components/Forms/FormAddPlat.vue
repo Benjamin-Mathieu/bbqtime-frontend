@@ -149,7 +149,7 @@ export default defineComponent({
           return true;
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
 
@@ -163,7 +163,7 @@ export default defineComponent({
           return true;
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
 

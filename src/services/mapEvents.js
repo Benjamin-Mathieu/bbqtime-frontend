@@ -41,12 +41,10 @@ class MapEvents {
 
         // Show spinner until map load
         this.mymap.on("load", function () {
-            console.log("mymap.on load");
             spinner.style.display = "none";
         });
 
         this.mymap.on("unload", function () {
-            console.log("mymap.on unload");
             store.commit("setCoordinatesPublicEvents", []); // init array of coordinates
         })
 
@@ -68,7 +66,6 @@ class MapEvents {
 
     async centerMapOnUserPosition() {
         const isGpsEnabled = await Diagnostic.isLocationEnabled();
-        console.log("diag", isGpsEnabled);
         if (!isGpsEnabled) {
             popups.warning("Votre GPS est désactivé sur votre appareil");
             this.mymap.setView([46.227638, 2.213749], 5);
@@ -77,7 +74,6 @@ class MapEvents {
             let longitude = getPosition.coords.longitude;
             let latitude = getPosition.coords.latitude;
 
-            console.log("my position lon", longitude, "lat", latitude);
             this.mymap.setView([latitude, longitude], 12);
         }
     }
@@ -96,11 +92,9 @@ class MapEvents {
 
     async placeMarkers() {
         let publicEvents = store.state.events.allPublicEvents;
-        console.log("publicEvents in mapEvents => ", publicEvents, publicEvents.length);
         let markers = [];
 
         for (let index = 0; index < publicEvents.length; index++) {
-            console.log("in for loop");
             const date = await convertDate(publicEvents[index].date);
 
             let marker = new L.marker([publicEvents[index].latitude, publicEvents[index].longitude])
@@ -126,7 +120,6 @@ class MapEvents {
 
             markers.push(marker);
         }
-        console.log("markers", markers);
         L.layerGroup(markers).addTo(this.mymap);
 
     }

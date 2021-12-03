@@ -180,7 +180,6 @@ export default defineComponent({
       let showDetail = this.showDetails.find((detail) => detail.id === id);
       showDetail.show = !showDetail.show;
       showDetail.activeIcon = !showDetail.activeIcon;
-      console.log("showdetails => ", this.showDetails);
     },
   },
 });
