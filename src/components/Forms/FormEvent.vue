@@ -350,10 +350,16 @@ export default defineComponent({
         password: this.password,
       };
 
-      await this.$store.dispatch("putEvent", event);
-      this.disabledButton = false;
-      this.showSpinner = false;
-      modalController.dismiss();
+      try {
+        await this.$store.dispatch("putEvent", event);
+        this.disabledButton = false;
+        this.showSpinner = false;
+        modalController.dismiss();
+      } catch (error) {
+        console.error(error);
+        this.disabledButton = false;
+        this.showSpinner = false;
+      }
     },
 
     openMapModal() {
