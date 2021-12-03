@@ -12,4 +12,6 @@ Add file ".env" to root of the project which contains :
 
 ## Run project
 
+- `ionic build`
+- `ionic cap sync`
 - `npm run app` or `ionic cap run -l --external`
