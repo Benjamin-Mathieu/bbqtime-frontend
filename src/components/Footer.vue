@@ -48,8 +48,10 @@ export default defineComponent({
   computed: {
     date() {
       const dateEvent = new Date(this.$store.state.events.eventDetails.date);
-      const date = dateEvent.getDate();
-      const month = dateEvent.getMonth();
+      let date = dateEvent.getDate();
+      if (date < 10) date = "0" + date;
+      let month = dateEvent.getMonth();
+      if (month < 10) month = "0" + month;
       const year = dateEvent.getFullYear();
 
       return `${date}/${month}/${year}`;

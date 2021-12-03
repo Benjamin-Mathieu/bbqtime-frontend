@@ -59,6 +59,16 @@ const store = createStore({
                 });
         },
 
+        /** 
+        * @typedef {Object} data
+        * @property {String} id
+        * @property {String} status
+        */
+
+        /** 
+        * @param {Object} data
+        */
+
         async putOrderStatus({ state }, data) {
             console.log(state.userIsLoggedIn);
 
@@ -85,6 +95,10 @@ const store = createStore({
                 });
         },
 
+        /** 
+        * @param {String} libelle
+        */
+
         async postCategorie({ state, dispatch }, libelle) {
             await request.postWithAuth('categories', {
                 event_id: state.events.eventTmp.id,
@@ -99,6 +113,16 @@ const store = createStore({
                     popup.warning(err.error.message);
                 });
         },
+
+        /** 
+        * @typedef {Object} categorie
+        * @property {String} id
+        * @property {String} libelle
+        */
+
+        /** 
+        * @param {Object} categorie
+        */
 
         async putCategorie({ dispatch }, categorie) {
             await request.putWithAuth('categories/update', {
@@ -115,6 +139,10 @@ const store = createStore({
                 });
         },
 
+        /** 
+        * @param {String} id
+        */
+
         async deleteCategorie({ store }, id) {
             await request.deleteWithAuth(`categories/delete/${id}`)
                 .then(resp => {
@@ -127,6 +155,21 @@ const store = createStore({
                     popup.warning(err.error.message);
                 });
         },
+
+        /** 
+        * @typedef {Object} data
+        * @property {String} libelle
+        * @property {Float} price
+        * @property {String} description
+        * @property {Int} stock
+        * @property {Int} event_id
+        * @property {Int} category_id
+        * @property {File} image
+        */
+
+        /** 
+        * @param {Object} data
+        */
 
         async postPlat({ state, dispatch }, data) {
             let formData = new FormData();
@@ -149,6 +192,21 @@ const store = createStore({
                     popup.warning(err.error.message);
                 });
         },
+
+        /** 
+        * @typedef {Object} data
+        * @property {String} libelle
+        * @property {Float} price
+        * @property {String} description
+        * @property {Int} stock
+        * @property {Int} event_id
+        * @property {Int} category_id
+        * @property {File} image
+        */
+
+        /** 
+        * @param {Object} data
+        */
 
         async putPlat({ state, dispatch }, data) {
             let formData = new FormData();
@@ -175,6 +233,10 @@ const store = createStore({
                 });
         },
 
+        /** 
+        * @param {String} id
+        */
+
         async deletePlat({ store }, id) {
             await request.deleteWithAuth(`plats/delete/${id}`)
                 .then(resp => {
@@ -188,6 +250,7 @@ const store = createStore({
                 });
         },
 
+
         async getListAssociate({ commit }) {
             await request.getWithAuth("events/" + router.currentRoute.value.params.id + "/associate")
                 .then(resp => {
@@ -199,6 +262,10 @@ const store = createStore({
                     popup.warning(err.error.message);
                 });
         },
+
+        /** 
+        * @param {String} id
+        */
 
         async deleteAssociate({ dispatch }, id) {
             await request.deleteWithAuth(`events/associate/${id}`)

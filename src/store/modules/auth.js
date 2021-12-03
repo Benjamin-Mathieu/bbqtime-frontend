@@ -88,6 +88,16 @@ const moduleAuth = {
             });
         },
 
+        /** 
+        * @typedef {Object} user
+        * @property {String} email
+        * @property {String} password
+        */
+
+        /** 
+        * @param {Object} user
+        */
+
         async loginUser({ dispatch, commit }, user) {
             await request.post(`users/login`, {
                 email: user.email,
@@ -182,6 +192,10 @@ const moduleAuth = {
             return isSend;
         },
 
+        /** 
+        * @param {Int} code
+        */
+
         async verifCode({ state, commit }, code) {
             let codeIsOk;
 
@@ -205,6 +219,10 @@ const moduleAuth = {
             return codeIsOk;
         },
 
+        /** 
+        * @param {String} password
+        */
+
         async resetPassword({ state }, password) {
             await request.postResetPwd('users/reset-password',
                 {
@@ -226,6 +244,18 @@ const moduleAuth = {
                     popup.warning(err.error.message);
                 });
         },
+
+        /** 
+        * @typedef {Object} data
+        * @property {String} firstname
+        * @property {String} name
+        * @property {String} phone
+        * @property {String} email
+        */
+
+        /** 
+        * @param {Object} data
+        */
 
         async updateProfil({ commit }, data) {
             let isUpdate;
